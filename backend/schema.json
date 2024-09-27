@@ -1,0 +1,108 @@
+{
+    "users": [
+        {
+            "_id": "objectId",
+            "firstName": "String",
+            "lastName": "String",
+            "email": "String",
+            "userType": "String", // e.g., "admin", "gymMember"
+            "admins": [
+                {
+                    "_id": "objectId",
+                    "gymId": "objectId",
+                    "adminType": "String", // e.g., "owner", "manager"
+                    "password": "String"
+                }
+            ],
+            "gymMembers": [
+                {
+                    "_id": "objectId",
+                    "gymId": "objectId",
+                    "gymMemberShipDealId": "objectId",
+                    "createdAt": "Date",
+                    "deletedAt": "Date",
+                    "deletedBy": "String",
+                    "expiryDate": "Date"
+                }
+            ],
+            "createdAt": "Date",
+            "deletedAt": "Date",
+            "deletedBy": "String"
+        }
+    ],
+    "gyms": [
+        {
+            "_id": "objectId",
+            "gymName": "String",
+            "address": {
+                "lat": "Number",
+                "lng": "Number",
+                "address": "String",
+                "city": "String",
+                "state": "String",
+                "country": "String",
+                "postalCode": "String"
+            },
+            "email": "String",
+            "phone": "Number",
+            "membershipDeals": [
+                {
+                    "_id": "objectId",
+                    "title": "String",
+                    "description": "String",
+                    "price": "Number"
+                }
+            ],
+            "equipments": [
+                {
+                    "_id": "objectId",
+                    "name": "String",
+                    "createdAt": "Date",
+                    "deletedAt": "Date",
+                    "deletedBy": "String",
+                    "modifiedAt": "Date",
+                    "modifiedByUserId": "objectId"
+                }
+            ],
+            "images": [
+                {
+                    "path": "String"
+                }
+            ],
+            "createdAt": "Date",
+            "deletedAt": "Date",
+            "deletedBy": "String",
+            "subscriptionDealsId": "objectId" // Reference to a subscription deal
+        }
+    ],
+    "subscriptionDeals": [
+        {
+            "_id": "objectId",
+            "title": "String",
+            "description": "String",
+            "price": "Number",
+            "createdAt": "Date",
+            "deletedAt": "Date",
+            "modifiedAt": "Date",
+            "modifiedByUserId": "objectId",
+            "deletedBy": "String"
+        }
+    ],
+    "transactions": [
+        {
+            "_id": "objectId",
+            "userId": "objectId", // Reference to the user making the transaction
+            "type": "String", // e.g., "payment", "refund"
+            "amount": "Number",
+            "currency": "String",
+            "date": "Date",
+            "status": "String", // e.g., "completed", "pending", "failed"
+            "description": "String",
+            "referenceId": "String",
+            "metadata": {
+                "location": "String",
+                "device": "String"
+            }
+        }
+    ]
+}
