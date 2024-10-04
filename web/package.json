@@ -13,7 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@vueuse/core": "^10.7.1",
+    "@vueuse/core": "^10.11.1",
     "apexcharts": "^3.45.1",
     "flatpickr": "^4.6.13",
     "jsvectormap": "^1.5.3",

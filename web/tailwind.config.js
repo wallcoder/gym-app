@@ -12,10 +12,28 @@ export default {
       '2xsm': '375px',
       xsm: '425px',
       '3xl': '2000px',
+
+      'smartphone': '320px',
+        'smartphone-md': '375px',
+
+        'smartphone-lg': '425px',
+        'smartphone-landscape': '480px',
+        'smartphone-xl': '600px',
+        'tablet': '768px',
+        'laptop': '1024px',
+        'desktop': '992px',
       ...defaultTheme.screens
     },
     extend: {
       colors: {
+        first: '#52AB99',
+        'first-light': '#59C7B1',
+        second: '#2C6777',
+        third: '#C8D8E5',
+        forth: '#F4F4F4',
+        fifth: '#ffffff',
+
+
         current: 'currentColor',
         transparent: 'transparent',
         white: '#FFFFFF',
