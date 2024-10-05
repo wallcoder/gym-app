@@ -2,10 +2,16 @@
 import { ref } from 'vue';
 import Hero from '../../components/Hero.vue'
 import Services from '../../components/Services.vue'
+import Action from '../../components/Action.vue'
+import Mobile from '../../components/Mobile.vue'
+import SignUp from '../../components/SignUp.vue'
 </script>
 <template>
     <Hero/>
     <Services />
+    <Action />
+    <Mobile />
+    <SignUp />
 </template>
 <style scoped>
 .hero {
