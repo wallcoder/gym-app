@@ -37,13 +37,45 @@ const gyms = ref([
         location: "Bombastic Town, Piltover",
         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
     },
+    {
+        id: 1,
+        name: "Lotus Gym",
+        rating: 4.2,
+        price: 1000,
+        location: "Ape Town, Karma Land",
+        imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
+    },
+    {
+        id: 2,
+        name: "Rogue Gym",
+        rating: 4.4,
+        price: 2000,
+        location: "Willow Creek, Piltover",
+        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+    },
+    {
+        id: 3,
+        name: "Bombastic Gym",
+        rating: 4.4,
+        price: 2000,
+        location: "Bombastic Town, Piltover",
+        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+    },
+    {
+        id: 3,
+        name: "Bombastic Gym",
+        rating: 4.4,
+        price: 2000,
+        location: "Bombastic Town, Piltover",
+        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+    },
 
 
 ])
 </script>
 
 <template>
-    <section class=" py-10 w-full font-semibold flex flex-col items-center tablet:px-0]  ">
+    <section class=" py-10 w-full font-semibold flex flex-col items-center tablet:px-[12%]  ">
         <h1 class="text-2xl tablet:text-3xl text-black text-center">Top Gyms Available in <span
                 class="text-first">Aizawl</span></h1>
         <div class="w-full flex flex-wrap justify-center   gym-card mt-8 ">
