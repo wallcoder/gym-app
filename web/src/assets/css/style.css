@@ -7,6 +7,34 @@
 *{
     user-select: auto;
 }
+*::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: white;
+  
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: rgb(170, 170, 170);
+    border-radius: 5px;
+    color: #fff3f9;
+  
+  }
+
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+}
+
+
 @layer base {
     body {
         @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body dark:text-bodydark dark:bg-boxdark-2;

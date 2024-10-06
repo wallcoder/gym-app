@@ -1,5 +1,20 @@
 <script setup>
 import Button from './Button.vue'
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useHomeStore } from '../stores/home';
+import { onClickOutside } from '@vueuse/core';
+const home = useHomeStore();
+const { modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp } = storeToRefs(home);
+const { closeModals } = home;
+const activateRegisterGym = ()=>{
+    isOpenRegisterGym.value = true
+}
+onMounted(() => {
+    onClickOutside(modal, () => {
+        closeModals()
+    });
+})
 </script>
 
 <template>
@@ -12,7 +27,7 @@ import Button from './Button.vue'
             <p class="text-center text-white my-2">Register your gym and expand your reach to more fitness enthusiasts! Join
                 our platform to enhance your visibility, connect with potential members, and promote your unique offerings.
                 Let us help you grow your fitness community!</p>
-            <Button content='Get Started' />
+            <Button content='Get Started' :handler="activateRegisterGym()"/>
         </div>
 
 

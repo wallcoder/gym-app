@@ -9,6 +9,17 @@ import VueApexCharts from 'vue3-apexcharts'
 
 import App from './App.vue'
 import router from './router'
+import axios from 'axios';
+
+
+axios.defaults.baseURL = 'http://localhost:3000';
+
+// Set default headers
+// axios.defaults.headers.common['Authorization'] = 'Bearer YOUR_TOKEN';
+// axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+// Set default timeout for requests
+axios.defaults.timeout = 10000; // 10 seconds
 
 const app = createApp(App)
 
