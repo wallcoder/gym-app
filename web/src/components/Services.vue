@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import GymCard from './GymCard.vue'
-import Button from './Button.vue'
+import ButtonLink from './ButtonLink.vue'
 
 const gyms = ref([
     {
@@ -100,7 +100,7 @@ const gyms = ref([
 
 
         </div>
-        <Button content="View All" />
+        <ButtonLink content="View All" link="" />
     </section>
 </template>
 

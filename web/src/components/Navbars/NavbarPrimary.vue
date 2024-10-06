@@ -52,7 +52,7 @@ const logoChange = computed(() => {
 </script>
 <template>
     <header
-        class="flex justify-between items-center laptop:px-[20%] tablet:px-[15%] bg-transparent  fixed w-full z-99999 transtion-all duration-200 ease-linear bg-white laptop:bg-transparent"
+        class="flex justify-between items-center text-lg laptop:px-[20%] tablet:px-[15%] bg-transparent  fixed w-full z-99999 transtion-all duration-200 ease-linear bg-white laptop:bg-transparent"
         :class="` ${background}`">
         <img :src="logoChange" alt="logo-white" class=" " :class="scroll ? 'w-[45px]' : 'w-[50px]'">
         <nav class="hidden laptop:block">
