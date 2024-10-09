@@ -4,11 +4,16 @@ import path from 'path';
 import db from './config/db.js'
 import sequelize from "./config/db.js";
 import { Gym } from "./models/Gym.js";
-import User from "./models/User.js";
+import {User} from "./models/User.js";
+import { Plan } from "./models/Gym.js";
+import { createPlan } from "./controllers/planController.js";
+
+import { OTP } from "./models/OTP.js";
 import bodyParser from 'body-parser'
 import bcrypt from 'bcrypt'
 import router from "./routes/routes.js";
 import cors from 'cors';
+
 
 const app = express();
 
@@ -28,11 +33,11 @@ const corsOptions = {
   app.use(router);
 
 
-app.use(express.json());
-app.use(bodyParser.urlencoded({extended: false}))
+  app.use(express.json());
+  app.use(bodyParser.urlencoded({extended: false}))
 
 // Synchronize the database
-sequelize.sync({ force: false })
+sequelize.sync({ alter: true })
   .then(() => {
     app.listen(3000, () => console.log("Listening at port 3000"));
   })
@@ -50,3 +55,4 @@ app.get('/', async (req, res)=>{
     }
     
 })
+

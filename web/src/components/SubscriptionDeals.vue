@@ -3,14 +3,19 @@ import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { RouterLink } from 'vue-router';
 import { useHomeStore } from '../stores/home';
+import { usePlanStore } from '../stores/plans';
 import { onClickOutside } from '@vueuse/core';
 import Button from '../components/Button.vue';
 import ButtonLink from '../components/ButtonLink.vue';
 
 const home = useHomeStore();
+const plan = usePlanStore();
 const { modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp } = storeToRefs(home);
+const { subscriptionPlans } = storeToRefs(plan)
+const { getSubscriptionPlans } = plan
 const { closeModals } = home;
 onMounted(() => {
+    getSubscriptionPlans()
     onClickOutside(modal, () => {
         closeModals()
     });
@@ -31,27 +36,18 @@ onMounted(() => {
                     <h1 class="text-xl font-semibold text-black mb-4">Choose Subscription Plans</h1>
 
 
-                    <div class="max-w-md mx-auto">
-                        <div class="relative z-0 w-full mb-5 group shadow-4 p-4 space-y-2">
-                            <h3 class="text-md font-semibold text-black">Listing Only</h3>
-                            <h4 class="font-semibold">&#8377;700/month</h4>
+                    <div class="max-w-md mx-auto" >
+                        <div v-for="s in subscriptionPlans" :key="s.id" class="relative z-0 w-full mb-5 group shadow-4 p-4 space-y-2">
+                            <h3 class="text-md font-semibold text-black">{{ s.planName }}</h3>
+                            <h4 class="font-semibold">&#8377;{{s.price}}/month</h4>
                             <p class="text-sm">
-                                List your gym on our app, with contact details displayed
-                                Member Registration will not be processed through our app.
+                                {{ s.planDescription }}
                             </p>
                             <RouterLink to="#" class="text-first font-semibold inline-block hover:underline">Register
                             </RouterLink>
                         </div>
-                        <div class="relative z-0 w-full mb-5 group shadow-4 p-4 space-y-2">
-                            <h3 class="text-md font-semibold text-black">Listing Only</h3>
-                            <h4 class="font-semibold">&#8377;1200/month</h4>
-                            <p class="text-sm">
-                                Our app will provide Gym Listing , membership registration and member management system.
-                            </p>
-                            <RouterLink to="#" class="text-first font-semibold inline-block hover:underline">Register
-                            </RouterLink>
-                        </div>
-                        
+                       
+
 
 
                     </div>
@@ -64,3 +60,4 @@ onMounted(() => {
 
 
 <style scoped></style>
+../stores/auth

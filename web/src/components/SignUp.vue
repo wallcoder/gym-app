@@ -1,24 +1,24 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useHomeStore } from '../stores/home';
-import { useSignUpStore } from '../stores/signUp';
+
 import { onClickOutside } from '@vueuse/core';
 import Button from '../components/Button.vue';
 
 const home = useHomeStore();
-const { modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp } = storeToRefs(home);
-const { closeModals } = home;
+const { modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, firstName, lastName, email, password, conPassword, message } = storeToRefs(home);
+const { closeModals, handleRegister } = home;
 
-const signUp = useSignUpStore();
-const { firstName, lastName, email, password, conPassword, message } = storeToRefs(signUp)
-const { handleRegister } = signUp;
+;
 
 onMounted(() => {
     onClickOutside(modal, () => {
         closeModals()
     });
 })
+
+
 </script>
 
 <template>
@@ -43,6 +43,7 @@ onMounted(() => {
                             <label for="floating_email"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email
                                 address*</label>
+                            <span class="text-red text-xs font-semibold">{{ message.email }}</span>
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
                             <input v-model="password" type="password" name="floating_password" id="floating_password"
@@ -50,6 +51,7 @@ onMounted(() => {
                                 placeholder=" " required />
                             <label for="floating_password"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password*</label>
+                            <span class="text-red text-xs font-semibold">{{ message.password }}</span>
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
                             <input v-model="conPassword" type="password" name="repeat_password"
@@ -59,6 +61,9 @@ onMounted(() => {
                             <label for="floating_repeat_password"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm
                                 password*</label>
+                            <span class="text-red text-xs font-semibold">{{ message.conPassword }}</span>
+
+
                         </div>
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-5 group">
@@ -90,3 +95,4 @@ onMounted(() => {
 
 
 <style scoped></style>
+../stores/auth
