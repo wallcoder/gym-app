@@ -3,7 +3,17 @@ import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
 // Define User Model
+const UserRole = sequelize.define('UserRole', {
+    roleName:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    roleDescription:{
+        type: DataTypes.STRING,
+        allowNull: true
+    }
 
+})
 const User = sequelize.define('User', {
     firstName: {
         type: DataTypes.STRING,
@@ -21,10 +31,28 @@ const User = sequelize.define('User', {
     password:{
         type: DataTypes.STRING,
         allowNull: false
+    },
+    
+    roleId: {
+        type: DataTypes.INTEGER,
+        references:{
+            model: UserRole,
+            key: 'id'
+        }
+    },
+
+    status: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 
 },{
     timestamps: true,
 })
 
-export default User;
+
+
+UserRole.hasMany(User, {foreignKey: 'roleId'})
+User.belongsTo(UserRole, {foreignKey: 'roleId'})
+
+export  {User, UserRole};

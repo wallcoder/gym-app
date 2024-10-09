@@ -15,6 +15,7 @@ import ButtonsView from '@/views/Admin/UiElements/ButtonsView.vue'
 
 import UserView from '@/views/User/UserView.vue';
 import HomeView from '@/views/User/HomeView.vue';
+import RegisterGymView from '@/views/User/RegisterGymView.vue';
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
         path: '',
         name: 'home',
         component: HomeView
+      },
+      {
+        path: '/gym-registration/:id',
+        name: 'gym-registration',
+        component: RegisterGymView
       }
     ],
     meta: {

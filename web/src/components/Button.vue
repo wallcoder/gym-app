@@ -15,6 +15,11 @@ const props = defineProps({
         default: ()=>{}
 
     },
+    disable:{
+        type: Boolean,
+        required: false,
+        default: false
+    },
     
     buttonType:{
         type: String,
@@ -25,5 +30,5 @@ const props = defineProps({
 </script>
 
 <template>
-    <button  :type="buttonType"  class="p-2 bg-first hover:bg-first-light font-semibold rounded-3xl text-white my-2 px-8 transition-all duration-200 ease-linear" :class="props.extraStyle" @click="handler()">{{ props.content }}</button>
+    <button :disabled="disable" :type="buttonType"  class="p-2 bg-first hover:bg-first-light font-semibold rounded-3xl text-white my-2 px-8 transition-all duration-200 ease-linear" :class="props.extraStyle" @click="handler()">{{ props.content }}</button>
 </template>

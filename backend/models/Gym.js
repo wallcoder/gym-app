@@ -1,49 +1,54 @@
-import mongoose from "mongoose";
-import Subscription from "./Subscription.js";
-
-const Schema = mongoose.Schema;
+import sequelize from "../config/db.js";
+import { DataTypes } from "sequelize";
 
 
-const membershipSchema = new Schema({
-    title: {type: String, required: true},
-    description: {type: String, required: true},
-    price: {type: Number, required: true},
-    gymId: {type: Schema.Types.ObjectId, ref: 'Gym'}
-
+// GYM
+export const Gym = sequelize.define('Gym', {
+    gymName: DataTypes.STRING,
+    gymPhone: DataTypes.STRING,
+    gymEmail: DataTypes.STRING,
+    gymApiKey: DataTypes.STRING,
+    gymApiSecretKey: DataTypes.STRING
     
+
+},{
+    timestamps: true
 })
 
 
-
-const gymSchema = new Schema({
-    gymName: {type: String, required: true},
-    address: {
-        lat: Number,
-        lng: Number,
-        address: String,
-        city: String,
-        state: String,
-        country: String,
-        postalCode: String
+// PLAN (MEMEBERSHIPS AND SUBSCRIPTION)
+export const Plan = sequelize.define('Plan', {
+    planName:{
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    
-    email: {type: String, required: true},
-    phone: {type: Number, required: true },
-    equipments: [{
-        name: {type: String, required: true}
-    }],
-    images: [{
-        path: {type: String, required: true}
-    }],
-    subscription: {
-        subscriptionId: {type: Schema.Types.ObjectId, ref: 'Subscription'},
-        expireDate: {type: Date, required: true}
+    planDescription:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    planType:{
+        type: DataTypes.ENUM('membership', 'subscription'),
+        allowNull: false
+
+    },
+    price:{
+        type:DataTypes.FLOAT,
+        allowNull: false
+    },
+    gymId:{
+        type:DataTypes.INTEGER,
+        references:{
+            model: Gym,
+            key: 'id'
+        },
+        allowNull: true
+    },
+    state:{
+        type:DataTypes.ENUM('active', 'inactive'),
+        allowNull: false
     }
-    
-    
-}, {timestamps: true});
 
-const Gym = mongoose.model('Gym', gymSchema);
-const Membership = mongoose.model('Membership', membershipSchema)
+}, {timestamps: true})
 
-export {Gym, Membership };
+Gym.hasMany(Plan, {foreignKey: 'gymId'})
+Plan.belongsTo(Gym, {foreignKey: 'gymId'})
