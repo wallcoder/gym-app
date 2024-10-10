@@ -27,11 +27,7 @@ const routes = [
         name: 'home',
         component: HomeView
       },
-      {
-        path: '/gym-registration/:id',
-        name: 'gym-registration',
-        component: RegisterGymView
-      }
+
     ],
     meta: {
       title: 'eCommerce Dashboard'
@@ -132,6 +128,11 @@ const routes = [
     meta: {
       title: 'Signup'
     }
+  },
+  {
+    path: '/gym-registration/:id',
+    name: 'gym-registration',
+    component: RegisterGymView
   }
 ]
 
