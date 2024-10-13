@@ -43,7 +43,7 @@ onMounted(() => {
                             <p class="text-sm">
                                 {{ s.planDescription }}
                             </p>
-                            <RouterLink to="#" class="text-first font-semibold inline-block hover:underline">Register
+                            <RouterLink :to="`/gym-registration/${s.id}`" class="text-first font-semibold inline-block hover:underline">Register
                             </RouterLink>
                         </div>
                        

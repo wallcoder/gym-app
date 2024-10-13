@@ -14,6 +14,7 @@ import AlertsView from '@/views/Admin/UiElements/AlertsView.vue'
 import ButtonsView from '@/views/Admin/UiElements/ButtonsView.vue'
 
 import UserView from '@/views/User/UserView.vue';
+import GymView from '@/views/User/GymView.vue';
 import HomeView from '@/views/User/HomeView.vue';
 import RegisterGymView from '@/views/User/RegisterGymView.vue';
 
@@ -27,6 +28,7 @@ const routes = [
         name: 'home',
         component: HomeView
       },
+      
 
     ],
     meta: {
@@ -130,10 +132,16 @@ const routes = [
     }
   },
   {
-    path: '/gym-registration/:id',
+    path: '/gym-registration/:planId',
     name: 'gym-registration',
-    component: RegisterGymView
-  }
+    component: RegisterGymView,
+    props: true
+  },
+  {
+    path: '/gyms/:id',
+    name: 'gym-view',
+    component: GymView
+  },
 ]
 
 const router = createRouter({

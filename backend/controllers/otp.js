@@ -15,7 +15,7 @@ cron.schedule('*/5 * * * *', async () => {
         }
       });
   
-      console.log(`Deleted ${result} expired OTPs`);
+    //   console.log(`Deleted ${result} expired OTPs`);
     } catch (error) {
       console.error('Error while deleting expired OTPs:', error);
     }

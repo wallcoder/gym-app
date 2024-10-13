@@ -1,24 +1,45 @@
-import mongoose from "mongoose";
+import sequelize from "../config/db.js";
 import { User } from "./User.js";
-import { Membership } from "./Gym.js";
-import Subscription from "./Subscription.js";
-const Schema = mongoose.Schema;
+import { Plan } from "./Gym.js";
+import { DataTypes } from "sequelize";
 
-const transactionSchema = new Schema({
-    userId: {type: Schema.Types.ObjectId, ref: 'User'},
-    transactionType: {type: String, required: true},
-    amount: {type: Number, required: true},
-    currency: {type: String, required: true},
-    status: {type: String, required: true},
-    referenceId: String,
-    method: String,
+export const Transaction = sequelize.define('Transaction', {
+    refId:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    userId:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id'
+        }
+    },
+    planId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Plan,
+            key: 'id'
+        }
+    },
+    transactionType:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    amount: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+    
+}, {timestamps: true})
 
-    membershipId: {type: Schema.Types.ObjectId, ref: 'Membership', required: false},
-    subscriptionId: {type: Schema.Types.ObjectId, ref: 'Subscription', required: false}
-
-})
-
-
-const Transaction = mongoose.model('Transaction', transactionSchema);
-
-export default Transaction;
+User.hasMany(Transaction, {foreignKey: 'userId'})
+Transaction.belongsTo(User, {foreignKey: 'userId'})
+Plan.hasMany(Transaction, {foreignKey: 'planId'})
+Transaction.belongsTo(Plan, {foreignKey: 'planId'})
