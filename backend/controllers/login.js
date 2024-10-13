@@ -41,3 +41,67 @@ export const authenticateToken = (req, res, next) => {
     });
 };
 
+
+export const findUserFromToken = async (req, res) => {
+    
+    const token = req.header('Authorization')?.split(' ')[1];
+    if (!token) {
+        return res.status(403).json({ message: "No token provided" });
+    }
+
+    try {
+        
+        const decodedToken = jwt.verify(token, secretKey);
+        const userId = decodedToken.userId;
+
+       
+        const userDetails = await User.findOne({
+            where: { id: userId },
+            include: [{ model: UserRole }]
+        });
+
+        if (!userDetails) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        
+        res.json({
+            id: userDetails.id,
+            firstName: userDetails.firstName,
+            lastName: userDetails.lastName,
+            email: userDetails.email,
+            role: userDetails.UserRole?.roleName // Assuming 'roleName' exists in the UserRole model
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(403).json({ message: "Invalid token" });
+    }
+};
+
+export const decodeToken = async (req, res)=>{
+    
+    const token = req.header('Authorization')?.split(' ')[1];
+    if (!token) {
+        return res.status(403).json({ message: "No token provided" });
+    }
+
+    try {
+        
+        const decodedToken = jwt.verify(token, secretKey);
+       
+
+        res.json({
+            userId: decodedToken.userId,
+            role: decodedToken.role,
+            firstName: decodedToken.firstName,
+            lastName: decodedToken.lastName,
+        })
+       
+        
+       
+    } catch (err) {
+        console.error(err);
+        return res.status(403).json({ message: "Invalid token" });
+    }
+
+}

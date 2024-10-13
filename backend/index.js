@@ -5,8 +5,11 @@ import db from './config/db.js'
 import sequelize from "./config/db.js";
 import { Gym } from "./models/Gym.js";
 import {User} from "./models/User.js";
+import { GymLocation } from "./models/Gym.js";
 import { Plan } from "./models/Gym.js";
-import { createPlan } from "./controllers/planController.js";
+import { PlanMapping } from "./models/Plans.js";
+import { Transaction } from "./models/Transaction.js";
+import { Platform } from "./models/Platform.js";
 
 import { OTP } from "./models/OTP.js";
 import bodyParser from 'body-parser'

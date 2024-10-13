@@ -1,77 +1,88 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import GymCard from './GymCard.vue'
 import ButtonLink from './ButtonLink.vue'
-
-const gyms = ref([
-    {
-        id: 1,
-        name: "Lotus Gym",
-        rating: 4.2,
-        price: 1000,
-        location: "Ape Town, Karma Land",
-        imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
-    },
-    {
-        id: 2,
-        name: "Rogue Gym",
-        rating: 4.4,
-        price: 2000,
-        location: "Willow Creek, Piltover",
-        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-    },
-    {
-        id: 3,
-        name: "Bombastic Gym",
-        rating: 4.4,
-        price: 2000,
-        location: "Bombastic Town, Piltover",
-        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-    },
-    {
-        id: 3,
-        name: "Bombastic Gym",
-        rating: 4.4,
-        price: 2000,
-        location: "Bombastic Town, Piltover",
-        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-    },
-    {
-        id: 1,
-        name: "Lotus Gym",
-        rating: 4.2,
-        price: 1000,
-        location: "Ape Town, Karma Land",
-        imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
-    },
-    {
-        id: 2,
-        name: "Rogue Gym",
-        rating: 4.4,
-        price: 2000,
-        location: "Willow Creek, Piltover",
-        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-    },
-    {
-        id: 3,
-        name: "Bombastic Gym",
-        rating: 4.4,
-        price: 2000,
-        location: "Bombastic Town, Piltover",
-        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-    },
-    {
-        id: 3,
-        name: "Bombastic Gym",
-        rating: 4.4,
-        price: 2000,
-        location: "Bombastic Town, Piltover",
-        imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-    },
+import {storeToRefs} from 'pinia'
+import {useGymStore} from '../stores/gyms'
+const gymStore = useGymStore();
+const {gyms}  = storeToRefs(gymStore)
+const {getGyms} = gymStore;
 
 
-])
+onMounted(()=>{
+    getGyms();
+})
+
+
+// const gyms = ref([
+//     {
+//         id: 1,
+//         name: "Lotus Gym",
+//         rating: 4.2,
+//         price: 1000,
+//         location: "Ape Town, Karma Land",
+//         imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 2,
+//         name: "Rogue Gym",
+//         rating: 4.4,
+//         price: 2000,
+//         location: "Willow Creek, Piltover",
+//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 3,
+//         name: "Bombastic Gym",
+//         rating: 4.4,
+//         price: 2000,
+//         location: "Bombastic Town, Piltover",
+//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 3,
+//         name: "Bombastic Gym",
+//         rating: 4.4,
+//         price: 2000,
+//         location: "Bombastic Town, Piltover",
+//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 1,
+//         name: "Lotus Gym",
+//         rating: 4.2,
+//         price: 1000,
+//         location: "Ape Town, Karma Land",
+//         imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 2,
+//         name: "Rogue Gym",
+//         rating: 4.4,
+//         price: 2000,
+//         location: "Willow Creek, Piltover",
+//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 3,
+//         name: "Bombastic Gym",
+//         rating: 4.4,
+//         price: 2000,
+//         location: "Bombastic Town, Piltover",
+//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+//     },
+//     {
+//         id: 3,
+//         name: "Bombastic Gym",
+//         rating: 4.4,
+//         price: 2000,
+//         location: "Bombastic Town, Piltover",
+//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
+//     },
+
+
+// ])
 </script>
 
 <template>
@@ -81,7 +92,7 @@ const gyms = ref([
         <div class="w-full flex flex-wrap justify-center   gym-card mt-8 ">
 
 
-            <RouterLink to="#" v-for="gym in gyms" :key="gym.id"
+            <RouterLink :to="`gyms/${gym.id}`" v-for="gym in gyms" :key="gym.id"
                 class="rounded-xl   smartphone-md:w-[210px] tablet:w-[250px] shadow-4 relative  main bg-white flex-grow-1 m-2 tablet:m-3 ">
                 <img :src="gym.imgPath" alt="gym" class="rounded-xl w-full h-[200px]" />
                 <div
@@ -91,7 +102,7 @@ const gyms = ref([
 
                 </div>
                 <div class="p-2 flex flex-col">
-                    <h2 class="text-black">{{ gym.name }}</h2>
+                    <h2 class="text-black">{{ gym.gymName }}</h2>
                     <h3 class="font-medium text-sm">{{ gym.location }}</h3>
                     <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i> {{ gym.rating }}
                     </h3>

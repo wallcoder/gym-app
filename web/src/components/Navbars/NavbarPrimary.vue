@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const home = useHomeStore();
 const { isOpenLogin, isOpenRegisterGym, isOpenSignUp, isLogin } = storeToRefs(home);
-const {handleLogout} = home;
+const { handleLogout } = home;
 
 // Check for token in localStorage to set isLogin state
 onMounted(() => {
@@ -58,18 +58,20 @@ const logoChange = computed(() => {
 <template>
   <header
     class="flex justify-between items-center text-lg laptop:px-[20%] tablet:px-[15%] bg-transparent fixed w-full z-99999 transition-all duration-200 ease-linear bg-white laptop:bg-transparent"
-    :class="` ${background}`"
-  >
-    <img :src="logoChange" alt="logo-white" class=" " :class="scroll ? 'w-[45px]' : 'w-[50px]'">
+    :class="` ${background}`">
+    <RouterLink to="/">
+      <img :src="logoChange" alt="logo-white" class=" " :class="scroll ? 'w-[45px]' : 'w-[50px]'">
+    </RouterLink>
     <nav class="hidden laptop:flex laptop:items-center">
       <span @click="isOpenRegisterGym = true" class="ml-16 font-medium bg hover:cursor-pointer">Register Gym</span>
       <span @click="isOpenLogin = true" class="ml-16 font-medium hover:cursor-pointer" v-if="!isLogin">Login</span>
       <span @click="isOpenSignUp = true" class="ml-16 font-medium hover:cursor-pointer" v-if="!isLogin">Sign up</span>
-      
+
       <!-- Profile Picture with Dropdown -->
-      <div class="relative ml-16 " v-if="isLogin" @mouseenter="isDropdownOpen = true" @mouseleave="isDropdownOpen = false">
+      <div class="relative ml-16 " v-if="isLogin" @mouseenter="isDropdownOpen = true"
+        @mouseleave="isDropdownOpen = false">
         <img src="../../assets/images/pp.jpg" alt="pp" class="w-[40px] h-[40px] rounded-full bg-gray cursor-pointer">
-        
+
         <!-- Dropdown Menu -->
         <div v-if="isDropdownOpen" class="absolute left-8  text-black mt-0 w-48 bg-white rounded-sm shadow-lg text-md">
           <ul>
@@ -82,19 +84,19 @@ const logoChange = computed(() => {
     </nav>
 
     <i class="fa-solid text-2xl text-black hover:cursor-pointer transition-all duration-200 ease-linear block laptop:hidden"
-       @click="toggleMenu()" :class="isOpenMenu ? 'fa-x' : 'fa-bars'"></i>
+      @click="toggleMenu()" :class="isOpenMenu ? 'fa-x' : 'fa-bars'"></i>
 
     <nav v-if="isOpenMenu"
-         class="hover:cursor-pointer flex flex-col bg-white text-black w-full h-[100vh] items-start absolute right-0 laptop:hidden transition-all duration-200 ease-linear"
-         :class="scroll ? 'top-16 ' : 'top-19'">
+      class="hover:cursor-pointer flex flex-col bg-white text-black w-full h-[100vh] items-start absolute right-0 laptop:hidden transition-all duration-200 ease-linear"
+      :class="scroll ? 'top-16 ' : 'top-19'">
       <span @click="isOpenRegisterGym = true"
-            class="hover:cursor-pointer font-medium bg-white hover:bg-first hover:text-white text-lg py-4 px-3 w-full transition-all duration-100 ease-linear">
+        class="hover:cursor-pointer font-medium bg-white hover:bg-first hover:text-white text-lg py-4 px-3 w-full transition-all duration-100 ease-linear">
         Register Gym</span>
       <span @click="isOpenLogin = true"
-            class="hover:cursor-pointer font-medium bg-white hover:bg-first hover:text-white text-lg py-4 px-3 w-full transition-all duration-100 ease-linear">
+        class="hover:cursor-pointer font-medium bg-white hover:bg-first hover:text-white text-lg py-4 px-3 w-full transition-all duration-100 ease-linear">
         Login</span>
       <span @click="isOpenSignUp = true"
-            class="hover:cursor-pointer font-medium bg-white hover:bg-first hover:text-white text-lg py-4 px-3 w-full transition-all duration-100 ease-linear">
+        class="hover:cursor-pointer font-medium bg-white hover:bg-first hover:text-white text-lg py-4 px-3 w-full transition-all duration-100 ease-linear">
         Sign up</span>
     </nav>
   </header>

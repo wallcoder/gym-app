@@ -19,12 +19,15 @@
     "axios": "^1.7.7",
     "flatpickr": "^4.6.13",
     "jsvectormap": "^1.5.3",
+    "leaflet": "^1.9.4",
     "node-cron": "^3.0.3",
     "pinia": "^2.1.7",
     "vue": "^3.3.11",
+    "vue-leaflet": "^0.1.0",
     "vue-router": "^4.2.5",
     "vue-toastify": "^2.0.1",
     "vue3-apexcharts": "^1.4.4",
+    "vue3-google-map": "^0.21.0",
     "vue3-toastify": "^0.2.3"
   },
   "devDependencies": {

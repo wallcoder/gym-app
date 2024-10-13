@@ -18,8 +18,13 @@ const { isOpenLogin, isOpenRegisterGym, isOpenSignUp, isLogin } = storeToRefs(ho
 const { handleLogout } = home;
 </script>
 <template>
-    <header class="flex justify-between items-center text-lg px-4 laptop:px-[20%] tablet:px-[15%] bg-white py-3">
-        <img src="../../assets/images/logo-black.png" alt="logo-black" class="w-[45px]">
+    <header class="flex justify-between items-center text-lg px-4 laptop:px-[14%] tablet:px-[15%] bg-white py-3">
+        
+        <RouterLink to="/" >
+            <img src="../../assets/images/logo-black.png" alt="logo-black" class="w-[45px]">
+        </RouterLink>
+        
+        
         <div class="relative ml-16 " @mouseenter="isDropdownOpen = true" @mouseleave="isDropdownOpen = false"
             v-if="isLogin">
             <img src="../../assets/images/pp.jpg" alt="pp" class="w-[40px] h-[40px] rounded-full bg-gray cursor-pointer">
