@@ -3,17 +3,19 @@ import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import GymCard from './GymCard.vue'
 import ButtonLink from './ButtonLink.vue'
-import {storeToRefs} from 'pinia'
-import {useGymStore} from '../stores/gyms'
+import { storeToRefs } from 'pinia'
+import { useGymStore } from '../stores/gyms'
+
+const api = import.meta.env.VITE_API
+console.log(api)
 const gymStore = useGymStore();
-const {gyms}  = storeToRefs(gymStore)
-const {getGyms} = gymStore;
+const { gyms } = storeToRefs(gymStore)
+const { getGyms } = gymStore;
 
-
-onMounted(()=>{
-    getGyms();
+onMounted(async () => {
+    await getGyms();
+    
 })
-
 
 // const gyms = ref([
 //     {
@@ -80,10 +82,10 @@ onMounted(()=>{
 //         location: "Bombastic Town, Piltover",
 //         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
 //     },
-
+    
 
 // ])
-</script>
+</script>   
 
 <template>
     <section class=" py-10 w-full font-semibold flex flex-col items-center tablet:px-[12%]  ">
@@ -93,18 +95,19 @@ onMounted(()=>{
 
 
             <RouterLink :to="`gyms/${gym.id}`" v-for="gym in gyms" :key="gym.id"
-                class="rounded-xl   smartphone-md:w-[210px] tablet:w-[250px] shadow-4 relative  main bg-white flex-grow-1 m-2 tablet:m-3 ">
-                <img :src="gym.imgPath" alt="gym" class="rounded-xl w-full h-[200px]" />
+                class="rounded-xl   smartphone-md:w-[210px] tablet:w-[350px] shadow-4 relative  main bg-white flex-grow-1 m-2 tablet:m-3 ">
+                <img :src="`${api}${gym.profileImage}`" alt="gym" class="rounded-xl w-full h-[200px]" />
                 <div
                     class="absolute inset-0 w-28  h-8 flex  items-center text-xs p-2 font-medium  bg-black bg-opacity-50 text-white rounded-xl">
-                    <h3>&#8377; {{ gym.price }}/month</h3>
+                    <h3>&#8377; {{ gym.Plans[0].price }}/{{ gym.Plans[0].duration == 1 ? '': gym.Plans[0].duration}}month</h3>
+                    
 
 
                 </div>
                 <div class="p-2 flex flex-col">
-                    <h2 class="text-black">{{ gym.gymName }}</h2>
-                    <h3 class="font-medium text-sm">{{ gym.location }}</h3>
-                    <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i> {{ gym.rating }}
+                    <h2 class="text-black">{{ gym.gymName }} </h2>
+                    <h3 class="font-medium text-sm">{{ gym.GymLocation.area }}, {{ gym.GymLocation.city }}</h3>
+                    <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i> 
                     </h3>
                 </div>
             </RouterLink>

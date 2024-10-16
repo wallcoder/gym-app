@@ -1,27 +1,27 @@
 <script setup>
 const props = defineProps({
-    content:{
+    content: {
         type: String,
         required: true
     },
-    extraStyle:{
+    extraStyle: {
         type: String,
         required: false
     },
-    handler:{
+    handler: {
         type: Function,
         required: false,
-        
-        default: ()=>{}
+
+        default: () => { }
 
     },
-    disable:{
+    disable: {
         type: Boolean,
         required: false,
         default: false
     },
-    
-    buttonType:{
+
+    buttonType: {
         type: String,
         required: false,
         default: 'Button'
@@ -30,5 +30,11 @@ const props = defineProps({
 </script>
 
 <template>
-    <button :disabled="disable" :type="buttonType"  class="p-2 bg-first hover:bg-first-light font-semibold rounded-3xl text-white my-2 px-8 transition-all duration-200 ease-linear" :class="props.extraStyle" @click="handler()">{{ props.content }}</button>
+    <button :disabled="disable" :type="buttonType" :class="[
+        'p-2 font-semibold rounded-3xl my-2 px-8 transition-all duration-200 ease-linear',
+        disable ? 'bg-gray text- cursor-not-allowed' : 'bg-first hover:bg-first-light text-white',
+        extraStyle
+    ]" @click="handler">
+        {{ content }}
+    </button>
 </template>

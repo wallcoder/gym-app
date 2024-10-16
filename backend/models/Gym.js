@@ -16,6 +16,10 @@ export const Gym = sequelize.define('Gym', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    profileImage: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     gymApiKey: {
         type: DataTypes.STRING,
         allowNull: true
@@ -90,9 +94,9 @@ export const Plan = sequelize.define('Plan', {
 }, { timestamps: true })
 
 export const GymLocation = sequelize.define('GymLocation', {
-    address: {
+    buildingNo: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     latitude: {
         type: DataTypes.FLOAT,
@@ -102,6 +106,19 @@ export const GymLocation = sequelize.define('GymLocation', {
     longitude: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    area: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    city: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    landmark: {
+        type: DataTypes.STRING,
+        allowNull: true
+
     },
     gymId: {
         type: DataTypes.INTEGER,
@@ -204,7 +221,7 @@ export const GymOpeningHours = sequelize.define('GymOpeningHour', {
         type: DataTypes.STRING,
         allowNull: false
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 export const GymImages = sequelize.define('GymImages', {
     gymId: {
@@ -218,12 +235,12 @@ export const GymImages = sequelize.define('GymImages', {
     gymImgPath: {
         type: DataTypes.STRING,
         allowNull: false,
-        
-    }
-}, {timestamps: true})
 
-Gym.hasMany(GymImages, {foreignKey: 'gymId'})
-GymImages.belongsTo(Gym, {foreignKey: 'gymId'})
+    }
+}, { timestamps: true })
+
+Gym.hasMany(GymImages, { foreignKey: 'gymId' })
+GymImages.belongsTo(Gym, { foreignKey: 'gymId' })
 
 Gym.hasOne(GymOpeningHours, { foreignKeyKey: 'gymId' })
 GymOpeningHours.belongsTo(Gym, { foreignKey: 'gymId' })

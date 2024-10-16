@@ -1,22 +1,45 @@
 <script setup>
 import Hero from '../../components/Hero.vue';
-import {storeToRefs} from 'pinia';
+import { storeToRefs } from 'pinia';
 import NavbarSecond from '../../components/Navbars/NavbarSecond.vue';
 import { reactive, ref, onMounted } from 'vue';
 import L from 'leaflet'; // Import Leaflet
 import Button from '../../components/Button.vue';
 import ButtonLink from '../../components/ButtonLink.vue';
-import {usePlanStore} from '../../stores/plans'
-import {useGymRegStore} from '../../stores/gymReg'
-import {useTokenStore} from '../../stores/token'
+import { usePlanStore } from '../../stores/plans'
+import { useGymRegStore } from '../../stores/gymReg'
+import { useTokenStore } from '../../stores/token'
 
 const token = useTokenStore()
-const {decodeToken, fetchUser} = token
+const { decodeToken, fetchUser } = token
 const gymReg = useGymRegStore()
-const {formData, handleRegister} = gymReg;
+const { formData, handleRegister, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout } = gymReg;
+const { message, isFormValid } = storeToRefs(gymReg)
 const plan = usePlanStore()
-const {getSubscriptionPlanById} = plan;
-const {subPlan} = storeToRefs(plan)
+const { getSubscriptionPlanById } = plan;
+const { subPlan } = storeToRefs(plan)
+
+const allFeatures = [{
+    id: 1,
+    name: 'AC'
+
+},
+{
+    id: 2,
+    name: 'Parking'
+
+}]
+
+const allWorkouts = [{
+    id: 1,
+    name: 'Weightlifting'
+},
+{
+    id: 2,
+    name: 'Cardio'
+}]
+
+
 
 
 const props = defineProps({
@@ -24,14 +47,14 @@ const props = defineProps({
         type: String,
         required: true
     },
-    
+
 
 })
 const step = ref(1);
 
 
 const nextStep = () => {
-    if (step.value < 3) {
+    if (step.value < 2) {
         step.value++;
     }
 };
@@ -53,7 +76,7 @@ let marker;
 
 // Initialize the map
 onMounted(() => {
-    
+
     getSubscriptionPlanById(props.planId)
     decodeToken();
     // Check if the browser supports geolocation
@@ -98,101 +121,442 @@ onMounted(() => {
 
 <template>
     <NavbarSecond />
-    <section class="w-full flex flex-row items-center justify-center p-10 reg">
-        <h1></h1>
-        <div class="bg-white h-auto w-[90%] md:w-[70%] lg:w-[80%] shadow-lg rounded-md p-6">
-            <h1 class="font-semibold mb-3">Gym Basic Information</h1>
-            <form class="mx-auto" @submit.prevent="handleRegister">
-                <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-5 group">
-                            <input v-model="formData.name" type="text" name="floating_first_name" id="floating_first_name"
-                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
-                                placeholder=" " required />
-                            <label for="floating_first_name"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 
-                                    duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
-                                    peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
-                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Gym Name*</label>
-                        </div>
-                        <div class="relative z-0 w-full mb-5 group">
-                            <input v-model="formData.email" type="text" name="floating_first_name" id="floating_first_name"
-                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
-                                placeholder=" " required />
-                            <label for="floating_first_name"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 
-                                    duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
-                                    peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
-                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email*</label>
+
+    <section class="w-full flex  flex-col items-center justify-center px-4 laptop:px-10 pb-30 reg">
+
+        <div class="h-auto w-[100%] md:w-[70%] lg:w-[55%] py-5 ">
+
+            <form class="mx-auto flex flex-col space-y-5" @submit.prevent="handleRegister">
+                <div class=" flex flex-col space-y-5" v-if="step === 2">
+                    <h1 class="font-semibold mb-3 text-black text-3xl ">Other Gym Details</h1>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Images</h1>
+                        <p class="text-sm mb-2">Upload atleast one image of your gym</p>
+                        <span class="text-red text-sm mb-3" v-if="message.gymImages">{{ message.gymImages }}</span>
+                        <div class="flex items-center justify-center w-full bg-forth">
+                            <label for="dropzone-file-gym-images"
+                                class="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                            class="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">JPG, PNG</p>
+                                </div>
+                                <input id="dropzone-file-gym-images" type="file" class="hidden" multiple name="gym-images"
+                                    @change="handleGymImages" />
+                            </label>
+
                         </div>
 
-                    </div>
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-5 group">
-                            <input v-model="formData.contact" type="text" name="floating_first_name" id="floating_first_name" 
-                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
-                                placeholder=" " required />
-                            <label for="floating_first_name"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 
-                                    duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
-                                    peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
-                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone*</label>
-                        </div>
-                        
+
 
                     </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Profile Image</h1>
+                        <p class="text-sm mb-3">Upload atleast one image of your gym</p>
+                        <span class="text-red text-sm mb-3" v-if="message.gymProfileImage">{{ message.gymProfileImage
+                        }}</span>
+
+                        <div class="flex items-center justify-center w-full bg-forth">
+                            <label for="dropzone-file-profile-image"
+                                class="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                            class="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">JPG, PNG</p>
+                                </div>
+                                <input id="dropzone-file-profile-image" type="file" class="hidden" name="gym-profile-image"
+                                    @change="handleGymProfileImage" />
+                            </label>
+                        </div>
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Opening Hours</h1>
+                        <p class="text-sm mb-3">Add opening hours of your gym in during morning and eving</p>
+                        <h1 class="font-semibold  text-black text-xl mb-3">Morning</h1>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.openingHours.morning.start" type="time" name="floating_first_name"
+                                    id="morning-start"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="morning-start"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Start
+                                    time</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.openingHours.morning.end" type="time" name="floating_last_name"
+                                    id="morning-end"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="morning-end"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">End
+                                    time</label>
+                            </div>
+
+                        </div>
+                        <h1 class="font-semibold  text-black text-xl mb-3">Evening</h1>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.openingHours.evening.start" type="time" name="floating_first_name"
+                                    id="evening-start"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="evening-start"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Start
+                                    time</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.openingHours.evening.end" type="time" name="floating_last_name"
+                                    id="evening-end"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="evening-end"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">End
+                                    time</label>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Membership Plans</h1>
+                        <p class="text-sm mb-3">Add Membership plans offered by your gym(Plan-1 is compulsory)</p>
+                        <h1 class="font-semibold  text-black text-xl mb-3">Plan-1</h1>
+
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.membershipPlans.plan1.title" type="text" name="plan1-title"
+                                    id="plan1-title"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="plan1-title"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Plan
+                                    Title</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.membershipPlans.plan1.price" type="number" name="plan1-price"
+                                    id="plan1-price"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="plan1-price"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+                            </div>
+
+
+
+                        </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <input v-model="formData.membershipPlans.plan1.duration" type="number" name="plan1-duration"
+                                id="plan1-duration"
+                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                placeholder=" " required />
+                            <label for="plan1-duration"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)</label>
+                        </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <textarea
+                                class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
+                                name="" id="" cols="30" rows="5" placeholder="Add Description"
+                                v-model="formData.membershipPlans.plan1.description" required></textarea>
+                        </div>
+                        <h1 class="font-semibold  text-black text-xl mb-3">Plan-2</h1>
+
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.membershipPlans.plan2.title" type="text" name="plan1-title"
+                                    id="plan1-title"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " />
+                                <label for="plan1-title"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Plan
+                                    Title</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.membershipPlans.plan2.price" type="number" name="plan1-price"
+                                    id="plan1-price"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " />
+                                <label for="plan1-price"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+                            </div>
+
+
+
+                        </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <input v-model="formData.membershipPlans.plan2.duration" type="number" name="plan1-duration"
+                                id="plan1-duration"
+                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                placeholder=" " />
+                            <label for="plan1-duration"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)</label>
+                        </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <textarea
+                                class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
+                                name="" id="" cols="30" rows="5" placeholder="Add Description"
+                                v-model="formData.membershipPlans.plan2.description"></textarea>
+                        </div>
+                        <h1 class="font-semibold  text-black text-xl mb-3">Plan-3</h1>
+
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.membershipPlans.plan3.title" type="text" name="plan1-title"
+                                    id="plan1-title"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " />
+                                <label for="plan1-title"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Plan
+                                    Title</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.membershipPlans.plan3.price" type="number" name="plan1-price"
+                                    id="plan1-price"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " />
+                                <label for="plan1-price"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+                            </div>
+
+
+
+                        </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <input v-model="formData.membershipPlans.plan3.duration" type="number" name="plan1-duration"
+                                id="plan1-duration"
+                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                placeholder=" " />
+                            <label for="plan1-duration"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)</label>
+                        </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <textarea
+                                class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
+                                name="" id="" cols="30" rows="5" placeholder="Add Description"
+                                v-model="formData.membershipPlans.plan3.description"></textarea>
+                        </div>
+
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Features</h1>
+                        <p class="text-sm mb-3">Select features of your gym</p>
+                        <div class="flex flex-wrap space-x-2">
+                            <span
+                                class="border p-2 py-1 rounded-xl hover:cursor-pointer transition-all duration-100 ease-in"
+                                v-for="f in allFeatures" :key="f.id" @click="toggleFeature(f.id)" :class="{
+                                    'bg-first text-white': formData.features.includes(f.id), // Style when selected
+                                    'text-black': !formData.features.includes(f.id) // Default style when not selected
+                                }">
+                                {{ f.name }}
+                            </span>
+
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Workouts</h1>
+                        <p class="text-sm mb-3">Select workouts available in your gym</p>
+                        <div class="flex flex-wrap space-x-2">
+                            <span
+                                class="border p-2 py-1 rounded-xl hover:cursor-pointer transition-all duration-100 ease-in"
+                                v-for="w in allWorkouts" :key="w.id" @click="toggleWorkout(w.id)" :class="{
+                                    'bg-first text-white': formData.workouts.includes(w.id), // Style when selected
+                                    'text-black': !formData.workouts.includes(w.id) // Default style when not selected
+                                }">
+                                {{ w.name }}
+                            </span>
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Submission</h1>
+                        <p class="text-sm mb-3">Submit your gym details for <span
+                                class="text-first font-semibold">verification</span>. Once your gym is verified, you'll
+                            receive a <span class="text-first font-semibold">notification via email or your GymPass
+                                account</span>. Afterward, you can proceed with the <span
+                                class="text-first font-semibold">payment</span>, and your gym will be listed. Thank you for
+                            your interest! </p>
+                        <Button content="Submit" buttonType="submit" />
+
+
+
+
+                    </div>
+
+
+
+
                 </div>
-                
-                
-
-
-                <h1 class="font-semibold mb-3">Gym Location</h1>
-                <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-5 group">
-                            <input v-model="formData.address" type="text" name="floating_first_name" id="floating_first_name" 
+                <div class=" flex flex-col space-y-5" v-if="step === 1">
+                    <h1 class="font-semibold mb-3 text-black text-3xl ">Gym Information</h1>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Details</h1>
+                        <p class="text-sm mb-3">Customer will be able to see this</p>
+                        <div class="relative z-0 w-full  group">
+                            <input v-model="formData.name" type="text" name="gym-name" id="gym-name"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                 placeholder=" " required />
-                            <label for="floating_first_name"
+                            <label for="gym-name"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 
                                     duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
                                     peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
-                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Address</label>
+                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Gym
+                                Name*</label>
                         </div>
-                        <div class="relative z-0 w-full mb-5 group">
-                            <input type="text" name="floating_first_name" id="floating_first_name" v-model="formData.location.lat"
-                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
-                                placeholder=" " required />
-                            <label for="floating_first_name"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 
-                                    duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
-                                    peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
-                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Latitude*</label>
-                        </div>
+
 
                     </div>
-                    <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Owner Details</h1>
+                        <p class="text-sm mb-3">GymPass will use this for all business communication</p>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.ownerName" type="text" name="ownerName" id="ownerName"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="ownerName"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Full
+                                    Name</label>
+                            </div>
+                            <div class="relative z-0 w-full  group">
+                                <input v-model="formData.email" type="text" name="email" id="email"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="email"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email
+                                    Address</label>
+                                <span class="text-red text-sm ">{{ message.email }}</span>
+                            </div>
+
+
+                        </div>
                         <div class="relative z-0 w-full mb-5 group">
-                            <input type="text" name="floating_first_name" id="floating_first_name" v-model="formData.location.lng"
+                            <input v-model="formData.contact" type="number" name="contact" id="contact"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                 placeholder=" " required />
-                            <label for="floating_first_name"
+                            <label for="contact"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 
                                     duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
                                     peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
-                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Longitude</label>
+                                      peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone
+                                Number</label>
+                            <span class="text-red text-sm ">{{ message.phone }}</span>
                         </div>
-                        
+
 
                     </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Gym Location</h1>
+                        <p class="text-sm mb-3">Drag the marker to your gym location(or enter the coordinates)</p>
+                        <div id="map" class="h-64 w-full mb-5 z-9"></div>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.location.lat" type="text" name="lat" id="lat"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="lat"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Latitude</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.location.lng" type="text" name="lng" id="lng"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="lng"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Longitude</label>
+                            </div>
+
+                        </div>
+
+                        <h1 class="font-semibold  text-black text-xl ">Gym Location Details</h1>
+                        <p class="text-sm mb-3">Location details should align with the location marked above</p>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.location.buildingNo" type="text" name="building-no"
+                                    id="building-no"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " />
+                                <label for="building-no"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Building
+                                    Number(Optional)</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.location.area" type="text" name="area" id="area"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="area"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Area/Locality</label>
+                            </div>
+
+                        </div>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.location.city" type="text" name="city" id="city"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="city"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">City</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.location.landmark" type="text" name="landmark" id="landmark"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " />
+                                <label for="landmark"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nearby
+                                    Landmark(optional)</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+
                 </div>
 
-                <!-- MAP to be continued  -->
-                <h2 class="font-semibold mt-5">Select Gym Location*</h2>
-                <div id="map" class="h-64 w-full mb-5"></div> 
-                <Button content="Register" buttonType="submit" />
 
-                
+
+
+
+
+
+
+                <div
+                    class="fixed left-0 bottom-0 z-10 w-[100vw] flex justify-center bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+
+                    <Button content="Previous" buttonType="button" :handler="() => { prevStep() }" extraStyle="mx-2"
+                        v-if="step !== 1" />
+                    <Button content="Next" buttonType="button" :handler="() => { nextStep() }" extraStyle="mx-2"
+                        v-if="step !== 2" />
+                </div>
+
+
+
             </form>
         </div>
     </section>
@@ -201,10 +565,5 @@ onMounted(() => {
 <style scoped>
 #map {
     height: 300px;
-}
-
-.reg{
-    background: url(../../assets/images/wallpaper2.jpg);
-    
 }
 </style>
