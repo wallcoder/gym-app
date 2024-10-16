@@ -18,10 +18,10 @@ const { isOpenLogin, isOpenRegisterGym, isOpenSignUp, isLogin } = storeToRefs(ho
 const { handleLogout } = home;
 </script>
 <template>
-    <header class="flex justify-between items-center text-lg px-4 laptop:px-[14%] tablet:px-[15%] bg-white py-3">
+    <header class="flex sticky top-0 w-full z-10 justify-between items-center text-lg px-4 laptop:px-[14%] tablet:px-[15%] bg-white py-2 shadow-[0_4px_4px_rgba(0,0,0,0.1)]">
         
         <RouterLink to="/" >
-            <img src="../../assets/images/logo-black.png" alt="logo-black" class="w-[45px]">
+            <img src="../../assets/images/logo-black.png" alt="logo-black" class="w-[40px]">
         </RouterLink>
         
         
