@@ -130,7 +130,7 @@ onMounted(() => {
                 <div class=" flex flex-col space-y-5" v-if="step === 2">
                     <h1 class="font-semibold mb-3 text-black text-3xl ">Other Gym Details</h1>
                     <div class="bg-white rounded-xl p-6">
-                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Images</h1>
+                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Images*</h1>
                         <p class="text-sm mb-2">Upload atleast one image of your gym</p>
                         <span class="text-red text-sm mb-3" v-if="message.gymImages">{{ message.gymImages }}</span>
                         <div class="flex items-center justify-center w-full bg-forth">
@@ -157,7 +157,7 @@ onMounted(() => {
 
                     </div>
                     <div class="bg-white rounded-xl p-6">
-                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Profile Image</h1>
+                        <h1 class="font-semibold  text-black text-2xl ">Add Gym Profile Image*</h1>
                         <p class="text-sm mb-3">Upload atleast one image of your gym</p>
                         <span class="text-red text-sm mb-3" v-if="message.gymProfileImage">{{ message.gymProfileImage
                         }}</span>
@@ -184,7 +184,7 @@ onMounted(() => {
 
                     </div>
                     <div class="bg-white rounded-xl p-6">
-                        <h1 class="font-semibold  text-black text-2xl ">Opening Hours</h1>
+                        <h1 class="font-semibold  text-black text-2xl ">Opening Hours*</h1>
                         <p class="text-sm mb-3">Add opening hours of your gym in during morning and eving</p>
                         <h1 class="font-semibold  text-black text-xl mb-3">Morning</h1>
                         <div class="grid md:grid-cols-2 md:gap-6">
@@ -195,7 +195,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="morning-start"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Start
-                                    time</label>
+                                    time*</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.openingHours.morning.end" type="time" name="floating_last_name"
@@ -204,7 +204,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="morning-end"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">End
-                                    time</label>
+                                    time*</label>
                             </div>
 
                         </div>
@@ -217,7 +217,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="evening-start"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Start
-                                    time</label>
+                                    time*</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.openingHours.evening.end" type="time" name="floating_last_name"
@@ -226,7 +226,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="evening-end"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">End
-                                    time</label>
+                                    time*</label>
                             </div>
 
                         </div>
@@ -235,7 +235,33 @@ onMounted(() => {
 
                     </div>
                     <div class="bg-white rounded-xl p-6">
-                        <h1 class="font-semibold  text-black text-2xl ">Membership Plans</h1>
+                        <h1 class="font-semibold  text-black text-2xl ">Razorpay API Key*</h1>
+                        <p class="text-sm mb-3">Enter Razorpay API keys to receive payment(Don't worry, your API keys are safe with us)</p>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input v-model="formData.publicKey" type="password" name="ownerName" id="ownerName"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="ownerName"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">API Public Key*</label>
+                            </div>
+                            <div class="relative z-0 w-full  group">
+                                <input v-model="formData.secretKey" type="password" name="email" id="email"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
+                                    placeholder=" " required />
+                                <label for="email"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">API Secret Key*</label>
+                                <span class="text-red text-sm ">{{ message.email }}</span>
+                            </div>
+
+
+                        </div>
+                       
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6">
+                        <h1 class="font-semibold  text-black text-2xl ">Membership Plans*</h1>
                         <p class="text-sm mb-3">Add Membership plans offered by your gym(Plan-1 is compulsory)</p>
                         <h1 class="font-semibold  text-black text-xl mb-3">Plan-1</h1>
 
@@ -247,7 +273,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="plan1-title"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Plan
-                                    Title</label>
+                                    Title*</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.membershipPlans.plan1.price" type="number" name="plan1-price"
@@ -255,7 +281,7 @@ onMounted(() => {
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="plan1-price"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price*</label>
                             </div>
 
 
@@ -267,7 +293,7 @@ onMounted(() => {
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                 placeholder=" " required />
                             <label for="plan1-duration"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)</label>
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)*</label>
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
                             <textarea
@@ -444,7 +470,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="ownerName"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Full
-                                    Name</label>
+                                    Name*</label>
                             </div>
                             <div class="relative z-0 w-full  group">
                                 <input v-model="formData.email" type="text" name="email" id="email"
@@ -452,7 +478,7 @@ onMounted(() => {
                                     placeholder=" " required />
                                 <label for="email"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email
-                                    Address</label>
+                                    Address*</label>
                                 <span class="text-red text-sm ">{{ message.email }}</span>
                             </div>
 
@@ -467,7 +493,7 @@ onMounted(() => {
                                     duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] 
                                     peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first
                                       peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone
-                                Number</label>
+                                Number*</label>
                             <span class="text-red text-sm ">{{ message.phone }}</span>
                         </div>
 
@@ -483,14 +509,14 @@ onMounted(() => {
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="lat"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Latitude</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Latitude*</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.location.lng" type="text" name="lng" id="lng"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="lng"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Longitude</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Longitude*</label>
                             </div>
 
                         </div>
@@ -512,7 +538,7 @@ onMounted(() => {
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="area"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Area/Locality</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Area/Locality*</label>
                             </div>
 
                         </div>
@@ -522,7 +548,7 @@ onMounted(() => {
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="city"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">City</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">City*</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.location.landmark" type="text" name="landmark" id="landmark"

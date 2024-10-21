@@ -3,15 +3,19 @@ import { insertUser } from "../controllers/userController.js";
 import { sendOTP } from "../controllers/otp.js";
 import { verifyOTP } from "../controllers/otp.js";
 import { userLogin, findUserFromToken } from "../controllers/login.js";
-import { getSubscriptionPlans } from "../controllers/planController.js";
+import { checkPlan, getSubscriptionPlans, insertPlanMapping } from "../controllers/planController.js";
 import { authenticateToken } from "../controllers/login.js";
 import { getSubscriptionPlanById } from "../controllers/planController.js";
 import { decodeToken } from "../controllers/login.js";
-import { insertGym} from "../controllers/gymController.js"; // New controller for gym registration
+import { insertGym } from "../controllers/gymController.js"; // New controller for gym registration
 import { getGymById, getGyms } from "../controllers/gymController.js";
+import { PaymentGateway } from "../models/paymentGateway.js";
+import { createOrder, getPublicKey, paymentDetails, verifyPayment } from "../controllers/paymentGateway.js";
+import '../controllers/paymentGateway.js'
 import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
+import { insertTransaction } from "../controllers/transactionController.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -57,4 +61,21 @@ router.get('/gyms/:id', getGymById);
 router.get('/subscription-plans', getSubscriptionPlans);
 router.get('/subscription-plans/:id', getSubscriptionPlanById);
 
+
+// PAYMENT GATEWAY
+router.post('/create-order', createOrder)
+router.post('/verify-payment', verifyPayment)
+router.get('/payment-details/:id', paymentDetails)
+router.post('/public-key', getPublicKey)
+
+
+
+// TRANSACTIOn
+router.post('/store-transaction', insertTransaction)
+
+// PLAN
+router.post('/insert-plan', insertPlanMapping)
+
+// QR CODE
+router.get('/check-plan/:planMapId', checkPlan);
 export default router;

@@ -13,9 +13,9 @@ export const useGymRegStore = defineStore('useGymReg', () => {
         email: '',
         contact: '',
         location: { lat: 0, lng: 0, buildingNo: '', area: '', city: '', landmark: '' },
-        
+
         ownerName: '',
-        
+
         gymImages: [],
         gymProfileImage: [],
         openingHours: {
@@ -28,7 +28,10 @@ export const useGymRegStore = defineStore('useGymReg', () => {
             plan3: { title: '', price: null, duration: '', description: '' }
         },
         features: [],
-        workouts: []
+        workouts: [],
+
+        publicKey: '',
+        secretKey: ''
     });
 
     const message = ref({
@@ -103,7 +106,7 @@ export const useGymRegStore = defineStore('useGymReg', () => {
 
             // Append gym images without using indexing
             formData.gymImages.forEach((image) => {
-                formDataToSend.append('gymImages', image); 
+                formDataToSend.append('gymImages', image);
             });
 
             if (formData.gymProfileImage.length > 0) {
@@ -114,14 +117,16 @@ export const useGymRegStore = defineStore('useGymReg', () => {
                 name: formData.name,
                 email: formData.email,
                 contact: formData.contact,
-                
+
                 ownerName: formData.ownerName,
-                
+
                 location: formData.location,
                 openingHours: formData.openingHours,
                 membershipPlans: formData.membershipPlans,
                 features: formData.features,
-                workouts: formData.workouts
+                workouts: formData.workouts,
+                publicKey: formData.publicKey,
+                secretKey: formData.secretKey
             }));
 
             formDataToSend.append('ownerId', currentUserToken.value.userId);

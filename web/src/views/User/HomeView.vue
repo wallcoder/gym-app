@@ -1,26 +1,43 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Hero from '../../components/Hero.vue'
 import Services from '../../components/Services.vue'
 import Action from '../../components/Action.vue'
 import Mobile from '../../components/Mobile.vue'
-import {useGymStore} from '../../stores/gyms'
-import {storeToRefs} from 'pinia'
+import { useGymStore } from '../../stores/gyms'
+import { useHomeStore } from '../../stores/home'
+import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia'
+const route = useRoute();
+const home = useHomeStore()
+
 const gymStore = useGymStore();
-const {gyms}  = storeToRefs(gymStore)
-const {getGyms} = gymStore;
+const { gyms } = storeToRefs(gymStore)
+const { getGyms } = gymStore;
+const { isOpenLogin } = storeToRefs(home)
+watch(
+    () => route.query.showLoginModal,
+    (newVal) => {
+        if (newVal === 'true') {
+            isOpenLogin.value = true;
+        }
+    }
+);
 
-
-onMounted(async ()=>{
+onMounted(async () => {
     await getGyms();
-})
+    if (route.query.showLoginModal === 'true') {
+        isOpenLogin.value = true;
+    }
+});
+
+
 </script>
 <template>
-    <Hero/>
+    <Hero />
     <Services />
     <Action />
     <Mobile />
-    
 </template>
 <style scoped>
 .hero {

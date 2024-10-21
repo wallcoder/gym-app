@@ -20,14 +20,7 @@ export const Gym = sequelize.define('Gym', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    gymApiKey: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    gymApiSecretKey: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
+    
 
     ownerId: {
         type: DataTypes.INTEGER,
@@ -242,7 +235,7 @@ export const GymImages = sequelize.define('GymImages', {
 Gym.hasMany(GymImages, { foreignKey: 'gymId' })
 GymImages.belongsTo(Gym, { foreignKey: 'gymId' })
 
-Gym.hasOne(GymOpeningHours, { foreignKeyKey: 'gymId' })
+Gym.hasOne(GymOpeningHours, { foreignKey: 'gymId' })
 GymOpeningHours.belongsTo(Gym, { foreignKey: 'gymId' })
 
 

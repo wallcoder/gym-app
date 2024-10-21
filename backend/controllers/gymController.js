@@ -7,7 +7,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs'; // To check if the folder exists
 import { PlanMapping } from "../models/Plans.js";
-
+import { encrypt } from "./paymentGateway.js";
+import { insertApiKey } from "./paymentGateway.js";
 
 // Define storage for multer
 const storage = multer.diskStorage({
@@ -47,7 +48,7 @@ export const insertGym = async (req, res) => {
         const gymData = await JSON.parse(req.body.gymData);
 
         console.log(gymData)
-        // Retrieve uploaded files (images)
+       
         const gymImages = req.files.gymImages || [];
         const gymProfileImage = req.files.gymProfileImage ? req.files.gymProfileImage[0] : null;
 
@@ -65,6 +66,9 @@ export const insertGym = async (req, res) => {
             status: 'unverified'
 
         })
+        if(!newGym){
+            res.status(400).json({message: 'error creating gym'})
+        }
 
         const gymId = newGym.id;
 
@@ -80,6 +84,10 @@ export const insertGym = async (req, res) => {
 
 
         })
+
+        if(!newPlan1){
+            res.status(400).json({message: 'error creating plan 1'})
+        }
 
         const plan2 = gymData.membershipPlans.plan2;
 
@@ -185,8 +193,9 @@ export const insertGym = async (req, res) => {
 
         }
 
+        const enApi =  encrypt(gymData.publicKey, gymData.secretKey)
 
-
+        insertApiKey(enApi.encryptedData1, enApi.encryptedData2, enApi.key, enApi.iv, gymId)
 
 
 
@@ -238,7 +247,31 @@ export const getGyms = async (req, res) => {
 
 export const getGymById = async (req, res) => {
     try {
-        const gym = await Gym.findOne({ where: { id: req.params.id } });
+        const gym = await Gym.findOne({
+            where: { id: req.params.id },
+            include: [{ model: GymLocation }, { model: GymOpeningHours }, { model: Plan },
+            {
+                model: GymFeatureMapping,
+                include: [{
+                    model: GymFeature
+
+                }]
+            },
+            {
+                model: GymWorkoutMapping,
+                include: [{
+                    model: GymWorkout
+                }]
+            },
+            {
+                model: GymImages
+            },
+            {
+                model: Plan
+            }
+
+            ]
+        });
         if (!gym) {
             return res.status(404).json({ message: 'Gym not found' });
         }
@@ -247,6 +280,17 @@ export const getGymById = async (req, res) => {
         res.status(400).json(err);
     }
 };
+
+// const open = async()=>{
+//     const newOpen = await GymOpeningHours.create({
+//         morning: '6:00am - 9:00am',
+//         evening: '7:00pm - 10:00pm',
+//         gymId: 30
+
+//     })
+// }
+// open()
+
 
 // const insertGymFeature = async ()=>{
 //     const newFeat = await  GymFeature.create({
@@ -266,3 +310,48 @@ export const getGymById = async (req, res) => {
 
 // insertGymWorkout()
 // insertGymWorkout()
+
+// const insertMap = async ()=>{
+//     const newMap = await GymFeatureMapping.create({
+//         gymId: 30,
+//         gymFeatureId: 3
+//     })
+// }
+
+// const insertMapWork = async ()=>{
+//     const newMap = await GymWorkoutMapping.create({
+//         gymId: 30,
+//         gymWorkoutId: 3
+//     })
+// }
+
+// insertMap()
+// insertMapWork()
+
+
+// const insertPlan = async () => {
+//     const newPlan = await Plan.bulkCreate([{
+
+//         planName: "Listing Only",
+//         planDescription: "List your gym on our app, with contact details displayed Member Registration will not be  processed through our app",
+//         planType: "subscription",
+//         price: 500,
+//         state: "active",
+//         duration: 1
+
+
+//     },
+//     {
+
+//         planName: "Full Plan",
+//         planDescription: "Our app will provide Gym Listing , membership registration and member management system.",
+//         planType: "subscription",
+//         price: 1200,
+//         state: "active",
+//         duration: 1
+
+
+//     }])
+// }
+
+// insertPlan()
