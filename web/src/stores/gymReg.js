@@ -180,6 +180,6 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     }
 
     return {
-        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, fetchFeatures, fetchWorkouts toggleWorkout
+        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, fetchFeatures, fetchWorkouts 
     };
 });
