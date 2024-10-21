@@ -7,6 +7,8 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     const token = useTokenStore();
     const { decodeToken } = token;
     const { currentUserToken } = storeToRefs(token);
+    const features = ref([])
+    const workouts = ref([])
 
     const formData = reactive({
         name: '',
@@ -142,8 +144,42 @@ export const useGymRegStore = defineStore('useGymReg', () => {
         }
     };
 
+    const fetchFeatures = async (id) => {
+
+        try {
+            console.log(id)
+            const response = await axios.get(`features/${id}`)
+            console.log(response.data)
+
+            features.value = response.data
+        } catch (err) {
+            console.log(err)
+        }
+
+
+
+
+    }
+
+
+    const fetchWorkouts = async (id) => {
+
+        try {
+            console.log(id)
+            const response = await axios.get(`workouts/${id}`)
+            console.log(response.data)
+
+            workouts.value = response.data
+        } catch (err) {
+            console.log(err)
+        }
+
+
+
+
+    }
 
     return {
-        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout
+        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, fetchFeatures, fetchWorkouts toggleWorkout
     };
 });

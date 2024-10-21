@@ -17,7 +17,7 @@ const { payNow } = pg;
 
 const gymStore = useGymStore();
 const { gym } = storeToRefs(gymStore);
-const { getGymById } = gymStore;
+const { getGymById, fetchFeatures, fetchWorkouts } = gymStore;
 
 const api = import.meta.env.VITE_API;
 
@@ -30,6 +30,9 @@ const props = defineProps({
 
 onMounted(() => {
     getGymById(Number(props.id));
+    fetchFeatures(props.id);
+    fetchWorkouts(props.id);
+
     decodeToken();
 });
 
