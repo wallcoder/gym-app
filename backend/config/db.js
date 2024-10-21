@@ -10,7 +10,7 @@
 import { Sequelize } from 'sequelize';
 
 // Create a new Sequelize instance (replace the values with your actual credentials)
-const sequelize = new Sequelize('gym_app', 'postgres', 'postgres', {
+const sequelize = new Sequelize('gym_app', 'postgres', 'POSTGRES', {
   host: 'localhost',  // or your database server address
   dialect: 'postgres', // The database you're connecting to
   logging: false, // Set to 'true' if you want to see SQL logs in the console
