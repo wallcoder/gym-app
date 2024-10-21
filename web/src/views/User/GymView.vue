@@ -7,8 +7,11 @@ import { storeToRefs } from 'pinia';
 import { ref, onMounted } from 'vue';
 import { usePaymentGatewayStore } from '../../stores/paymentGateway';
 import { useTokenStore } from '../../stores/token';
+import { useGymRegStore } from '../../stores/gymReg';
 
 const token = useTokenStore();
+const gymReg = useGymRegStore()
+const { fetchFeatures, fetchWorkouts } = gymReg;
 const { decodeToken } = token;
 const { currentUserToken } = storeToRefs(token);
 
@@ -17,13 +20,13 @@ const { payNow } = pg;
 
 const gymStore = useGymStore();
 const { gym } = storeToRefs(gymStore);
-const { getGymById, fetchFeatures, fetchWorkouts } = gymStore;
+const { getGymById } = gymStore;
 
 const api = import.meta.env.VITE_API;
 
 const props = defineProps({
-    planType: {
-        type: String,
+   id : {
+        type: Number,
         required: true,
     },
 });

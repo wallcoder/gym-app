@@ -29,7 +29,7 @@ const routes = [
         name: 'home',
         component: HomeView
       },
-      
+
 
     ],
     meta: {
@@ -137,12 +137,12 @@ const routes = [
     name: 'gym-registration',
     component: RegisterGymView,
     props: true,
-    meta:{
+    meta: {
       requiresAuth: true
     }
   },
   {
-    path: '/gyms/:planType',
+    path: '/gyms/:id',
     name: 'gym-view',
     component: GymView,
     props: true
@@ -162,14 +162,14 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const token = localStorage.getItem('token');
     if (!token) {
-      
+
       return next({ name: 'home', query: { showLoginModal: true } });
 
     }
   }
 
   next();
-  
+
 })
 
 export default router
