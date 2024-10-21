@@ -29,5 +29,17 @@ export const usePlanStore = defineStore('plans', ()=>{
         }
     }
 
-    return{subscriptionPlans, getSubscriptionPlans, getSubscriptionPlanById}
+
+    const createPlanMapping = async (userId, planId) => {
+        try {
+            console.log("from createPlanMapping", userId, planId)
+            const response = await axios.post('/insert-plan', { userId, planId })
+            console.log(response.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    return{subscriptionPlans, getSubscriptionPlans, getSubscriptionPlanById, createPlanMapping}
 })

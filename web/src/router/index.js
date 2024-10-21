@@ -18,6 +18,7 @@ import GymView from '@/views/User/GymView.vue';
 import HomeView from '@/views/User/HomeView.vue';
 import RegisterGymView from '@/views/User/RegisterGymView.vue';
 
+
 const routes = [
   {
     path: '/',
@@ -135,12 +136,16 @@ const routes = [
     path: '/gym-registration/:planId',
     name: 'gym-registration',
     component: RegisterGymView,
-    props: true
+    props: true,
+    meta:{
+      requiresAuth: true
+    }
   },
   {
-    path: '/gyms/:id',
+    path: '/gyms/:planType',
     name: 'gym-view',
-    component: GymView
+    component: GymView,
+    props: true
   },
 ]
 
@@ -153,8 +158,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = `Vue.js ${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
-  next()
+  document.title = `${to.meta.title}`
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      
+      return next({ name: 'home', query: { showLoginModal: true } });
+
+    }
+  }
+
+  next();
+  
 })
 
 export default router

@@ -7,8 +7,8 @@ import { Plan } from "./Gym.js";
 export const PlanMapping = sequelize.define('PlanMapping', {
     userId: {
         type: DataTypes.INTEGER,
-        allowNull:false,
-        references:{
+        allowNull: false,
+        references: {
             model: User,
             key: 'id'
         }
@@ -16,28 +16,34 @@ export const PlanMapping = sequelize.define('PlanMapping', {
 
     planId: {
         type: DataTypes.INTEGER,
-        allowNull: false, 
+        allowNull: false,
         references: {
             model: Plan,
             key: 'id'
         }
     },
-    
+
     status: {
-        type: DataTypes.ENUM('active', 'inactive', 'expired'),
+        type: DataTypes.STRING,
         allowNull: false,
-        
+
 
     },
 
     expireDate: {
         type: DataTypes.DATE,
         allowNull: false
+    },
+
+    qrCode: {
+        type: DataTypes.TEXT,
+        allowNull: true
+
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 
-User.hasMany(PlanMapping, {foreignKey: 'userId'})
-PlanMapping.belongsTo(User, {foreignKey: 'userId'})
-Plan.hasMany(PlanMapping, {foreignKey: 'planId'})
-PlanMapping.belongsTo(Plan, {foreignKey: 'planId'})
+User.hasMany(PlanMapping, { foreignKey: 'userId' })
+PlanMapping.belongsTo(User, { foreignKey: 'userId' })
+Plan.hasMany(PlanMapping, { foreignKey: 'planId' })
+PlanMapping.belongsTo(Plan, { foreignKey: 'planId' })

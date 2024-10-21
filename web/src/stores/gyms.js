@@ -5,6 +5,7 @@ import axios from 'axios';
 export const useGymStore = defineStore('gym', () => {
     const gyms = ref([])
     const gym = ref(null)
+    
 
     const getGyms = async () => {
         try {
@@ -19,8 +20,10 @@ export const useGymStore = defineStore('gym', () => {
 
     const getGymById = async (id) => {
         try {
+            console.log("heyeheyey")
             const response = await axios.get(`/gyms/${id}`)
             gym.value = response.data
+            console.log(gym.value)
         } catch (err) {
             console.log(err)
         }

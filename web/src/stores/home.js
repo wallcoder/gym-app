@@ -4,11 +4,19 @@ import axios from "axios";
 import { onClickOutside, tryOnScopeDispose } from '@vueuse/core';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import {useTokenStore} from '@/stores/token' 
+
+import { useRouter } from "vue-router";
+
+
 
 
 export const useHomeStore = defineStore('home', () => {
+    const router = useRouter()
 
-
+    const token = useTokenStore();
+    const {decodeToken} = token;
+    const {currentUserToken} = storeToRefs(token)
 
     // MODAL
     const modal = ref(null);
@@ -112,7 +120,8 @@ export const useHomeStore = defineStore('home', () => {
             localStorage.setItem('token', token)
             isLogin.value = true
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            closeModals()
+            closeModals();
+            decodeToken();
 
 
         } catch (err) {
@@ -133,6 +142,7 @@ export const useHomeStore = defineStore('home', () => {
 const handleLogout = () => {
     localStorage.removeItem('token');
     isLogin.value = false;
+    router.push('/')
   };
 
 

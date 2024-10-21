@@ -27,7 +27,7 @@ onMounted(() => {
             <p class="text-center text-white my-2">Register your gym and expand your reach to more fitness enthusiasts! Join
                 our platform to enhance your visibility, connect with potential members, and promote your unique offerings.
                 Let us help you grow your fitness community!</p>
-            <!-- <Button content='Get Started' :handler="activateRegisterGym()"/> -->
+            <Button content='Get Started' :handler="()=>{activateRegisterGym()}"/>
         </div>
 
 
