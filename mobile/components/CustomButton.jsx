@@ -12,7 +12,7 @@ const CustomButton = ({
     <TouchableOpacity
       onPress={handlePress}
       activeOpacity={0.7}
-      className={` rounded-full min-h-[50px] flex flex-row items-center justify-center flex-r ${containerStyles} w-[320px] mr-[20px] ml-[20px]`}
+      className={` rounded-full min-h-[50px] flex flex-row items-center justify-center flex-r ${containerStyles} ${title === "View Card"? "ml-0 mr-0" : "mr-[20px] ml-[20px]"} w-[320px] `}
       
     >
         {title === "Login With Google" && (

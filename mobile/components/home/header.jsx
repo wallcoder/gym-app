@@ -1,8 +1,12 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Header = () => {
+  const handleSearchPress = () => {
+    // Navigate to the search page
+    router.push('/searchPage'); // Assuming you have a "searchPage"
+  };
   return (
     <>
         <View className="flex flex-row justify-between items-center  w-[340px] mt-[30px]">
@@ -17,7 +21,13 @@ const Header = () => {
               </Text>
             </View>
           </View>
-          <Ionicons name="notifications" size={24} color="#52AB99" />
+          <View className="flex flex-row ">
+            <TouchableOpacity className="mr-[20px]" onPress={handleSearchPress}>
+              <Ionicons name="search" size={24} color="#52AB99" />
+            </TouchableOpacity>
+            <Ionicons  name="notifications" size={24} color="#52AB99" />
+
+          </View>
         </View>
     </>
   )

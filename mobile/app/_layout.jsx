@@ -10,7 +10,7 @@ export default function RootLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="(auths)" />
-      
+      {/* <Stack.Screen name="(availbleGyms) " /> */}
     </Stack>
   );
 }
