@@ -1,8 +1,9 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../components/home/header';
 import SearchInput from '../../components/SearchInput';
 import AvailableGyms from '../../components/home/availableGyms';
+import { router } from 'expo-router'; // Import the router
 
 const Gyms = () => {
   const [inputBgColor, setInputBgColor] = useState('transparent');
@@ -16,9 +17,13 @@ const Gyms = () => {
     }
   };
 
+  const handleGymPress = () => {
+    // Navigate to a new page when a gym is pressed
+    router.push('/gymDetails'); // Assuming you have a page named "gymDetails"
+  };
+
   return (
     <View className="">
-      
       <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
         <View className="items-center h-[130px]" style={{ backgroundColor: inputBgColor }}>
           <Header />
@@ -34,17 +39,29 @@ const Gyms = () => {
         scrollEventThrottle={16}
       >
         <View className="flex items-center">
-         
           <View className="mt-[10px] px-4">
             <Text className="font-semibold mb-[10px] text-[12px] text-black text-center">
               TOP GYMS AVAILABLE
             </Text>
-            <AvailableGyms containerStyle=""/>
-            <AvailableGyms />
-            <AvailableGyms />
-            <AvailableGyms />
-            <AvailableGyms />
-            <AvailableGyms />
+            {/* Wrap each AvailableGyms component with TouchableOpacity */}
+            <TouchableOpacity onPress={handleGymPress}>
+              <AvailableGyms />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleGymPress}>
+              <AvailableGyms />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleGymPress}>
+              <AvailableGyms />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleGymPress}>
+              <AvailableGyms />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleGymPress}>
+              <AvailableGyms />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleGymPress}>
+              <AvailableGyms />
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
