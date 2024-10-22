@@ -1,10 +1,12 @@
 import { View, Text, Image, ScrollView } from 'react-native';
 import React from 'react';
-import { icons } from '../../constants';
+import { icons } from '../constants';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import TimeTable from '../../components/timeTable';
-import Features from '../../components/features';
-import WorkoutsAvailable from '../../components/workoutsAvailable';
+import TimeTable from '../components/timeTable';
+import Features from '../components/features';
+import WorkoutsAvailable from '../components/workoutsAvailable';
+import CustomButton from '../components/CustomButton';
+import { router } from 'expo-router';
 
 const GymDetails = () => {
   return (
@@ -27,7 +29,7 @@ const GymDetails = () => {
       <View className="p-3 pt-0 ">
         <Text className="text-lg font-bold mb-[10px]">Opening Hours</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-          {/* Add the TimeTable components in a horizontal scrollable view */}
+          
           <TimeTable
             title="Morning"
             otherStyle=""
@@ -109,7 +111,15 @@ const GymDetails = () => {
       <View className="p-3 pt-0">
         <Text className="text-lg font-bold mb-[10px]">Rating</Text>
         <Text className="text-[16px] mb-[10px] ">rate </Text>
-        
+      </View>
+      <View className="p-3 pt-0">
+        <CustomButton 
+          title="Get Membership"
+          handlePress={() => router.push("/membershipsPlans")}
+          containerStyles="bg-[#52AB99]"
+          textStyles="text-white text-lg"
+
+        />
       </View>
     </ScrollView>
   );

@@ -1,12 +1,10 @@
-import { Text, View, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
-import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
-import FormField from "../../components/FormField";
-import { useState } from "react";
-import { router } from "expo-router";
-import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function SignUp() {
+import React, { useState } from 'react';
+import { SafeAreaView, Text, View, ScrollView } from 'react-native';
+import CustomButton from '../components/CustomButton';
+import FormField from '../components/FormField';
+
+const EditProfileScreen = () => {
   const [form, setForm] = useState({
     firstName: "",
     LastName: "",
@@ -14,26 +12,18 @@ export default function SignUp() {
     password: "",
     confirmPassword: ""
   });
-  
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView
-        contentContainerStyle={{ paddingVertical: 20, alignItems: "center" }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled" 
-      >
-        <Text className="mt-[50px]  text-[20px] text-black text-center">
-          Sign Up
-        </Text>
 
-        <View className="justify-center items-center">
-          
+  return (
+    <SafeAreaView className="flex-1 p-3 pt-10">
+      <Text className="text-center text-[24px]">Edit Profile</Text>
+      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+        <View className="mt-4">
           <FormField
             title="First Name"
             value={form.firstName}
             handleChangeText={(e) => setForm({ ...form, firstName: e })}
             otherStyles="mt-[30px]"
-            keyboardType="text"
+            keyboardType="default"
             placeholder="First Name"
           />
           
@@ -42,7 +32,7 @@ export default function SignUp() {
             value={form.LastName}
             handleChangeText={(e) => setForm({ ...form, LastName: e })}
             otherStyles="mt-[30px]"
-            keyboardType="text"
+            keyboardType="default"
             placeholder="Last Name"
           />
           
@@ -61,6 +51,7 @@ export default function SignUp() {
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-[30px]"
             placeholder="Password"
+            secureTextEntry={true} 
           />
 
           <FormField
@@ -69,22 +60,18 @@ export default function SignUp() {
             handleChangeText={(e) => setForm({ ...form, confirmPassword: e })}
             otherStyles="mt-[30px]"
             placeholder="Confirm Password"
+            secureTextEntry={true} 
           />
-
+        
           <CustomButton
-            title="Sign Up"
-            handlePress={() => router.push("")}
-            containerStyles="bg-[#52AB99] mt-[40px] mr-[20px] ml-[20px] w-[320px]"
+            title="Update"
+            containerStyles="bg-[#52AB99] mt-[8px] mr-[20px] mt-[45px] w-full"
+            textStyles="text-white font-bold text-lg"
           />
-
-          <View className="mt-[30px] flex justify-center flex-row">
-            <Ionicons name="arrow-back" size={24} color="black" />
-            <Link href="../" className="text-[16px] font-psemibold text-[#52AB99]">
-              Go back
-            </Link>
-          </View>
         </View>
       </ScrollView>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
-}
+};
+
+export default EditProfileScreen;

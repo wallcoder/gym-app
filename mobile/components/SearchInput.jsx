@@ -9,13 +9,9 @@ const SearchInput = () => {
 
   return (
     <View className="mt-[10px] flex flex-row items-center  w-[340px] h-[50px] p-[10px] bg-black-100 rounded-md border-2 border-[#a8a7a7] focus:border-secondary">
-      <TouchableOpacity
-        onPress={() => {
-          
-        }}
-      >
+      
         <Ionicons name="search" size={24} color="#52AB99" />
-      </TouchableOpacity>
+      
       <TextInput
         className="text-[16px] ml-[10px] mt-0.5 text-black  font-pregular"
         

@@ -27,7 +27,7 @@ const ForgottenPassword = () => {
         <CustomButton
           title="Reset password"
           handlePress={() => router.push("../index")}
-          containerStyles="bg-[#52AB99] mt-[8px]"
+          containerStyles="bg-[#52AB99] mt-[8px] mr-[20px] ml-[20px] w-[320px]"
           textStyles="text-white text-[16px]"
         />
         <View className="mt-[30px] flex justify-center  flex-row ">

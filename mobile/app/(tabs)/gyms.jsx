@@ -1,35 +1,34 @@
+// app/(tabs)/gyms.jsx
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../components/home/header';
 import SearchInput from '../../components/SearchInput';
 import AvailableGyms from '../../components/home/availableGyms';
-import { router } from 'expo-router'; // Import the router
+import { useRouter } from 'expo-router'; 
 
 const Gyms = () => {
   const [inputBgColor, setInputBgColor] = useState('transparent');
+  const router = useRouter(); 
 
   const handleScroll = (event) => {
     const yOffset = event.nativeEvent.contentOffset.y;
-    if (yOffset > 10) {
-      setInputBgColor('#fff'); 
-    } else {
-      setInputBgColor('transparent'); 
-    }
+    setInputBgColor(yOffset > 10 ? '#fff' : 'transparent');
   };
 
   const handleGymPress = () => {
-    // Navigate to a new page when a gym is pressed
-    router.push('/gymDetails'); // Assuming you have a page named "gymDetails"
+    router.push('/gymDetails'); 
   };
-
+  
   return (
-    <View className="">
+    <View className="flex-1">
       <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
         <View className="items-center h-[130px]" style={{ backgroundColor: inputBgColor }}>
           <Header />
-          <View className="">
+          <TouchableOpacity
+            
+          >
             <SearchInput />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView
@@ -43,25 +42,11 @@ const Gyms = () => {
             <Text className="font-semibold mb-[10px] text-[12px] text-black text-center">
               TOP GYMS AVAILABLE
             </Text>
-            {/* Wrap each AvailableGyms component with TouchableOpacity */}
-            <TouchableOpacity onPress={handleGymPress}>
-              <AvailableGyms />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleGymPress}>
-              <AvailableGyms />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleGymPress}>
-              <AvailableGyms />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleGymPress}>
-              <AvailableGyms />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleGymPress}>
-              <AvailableGyms />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleGymPress}>
-              <AvailableGyms />
-            </TouchableOpacity>
+            {[...Array(6)].map((_, index) => (
+              <TouchableOpacity key={index} onPress={handleGymPress}>
+                <AvailableGyms />
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
       </ScrollView>
