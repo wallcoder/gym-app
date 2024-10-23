@@ -1,30 +1,34 @@
-import { View, Text, ScrollView } from 'react-native';
+// app/(tabs)/gyms.jsx
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../components/home/header';
 import SearchInput from '../../components/SearchInput';
 import AvailableGyms from '../../components/home/availableGyms';
+import { useRouter } from 'expo-router'; 
 
 const Gyms = () => {
   const [inputBgColor, setInputBgColor] = useState('transparent');
+  const router = useRouter(); 
 
   const handleScroll = (event) => {
     const yOffset = event.nativeEvent.contentOffset.y;
-    if (yOffset > 10) {
-      setInputBgColor('#fff'); 
-    } else {
-      setInputBgColor('transparent'); 
-    }
+    setInputBgColor(yOffset > 10 ? '#fff' : 'transparent');
   };
 
+  const handleGymPress = () => {
+    router.push('/gymDetails'); 
+  };
+  
   return (
-    <View className="">
-      
+    <View className="flex-1">
       <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
         <View className="items-center h-[130px]" style={{ backgroundColor: inputBgColor }}>
           <Header />
-          <View className="">
+          <TouchableOpacity
+            
+          >
             <SearchInput />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView
@@ -34,17 +38,15 @@ const Gyms = () => {
         scrollEventThrottle={16}
       >
         <View className="flex items-center">
-         
           <View className="mt-[10px] px-4">
             <Text className="font-semibold mb-[10px] text-[12px] text-black text-center">
               TOP GYMS AVAILABLE
             </Text>
-            <AvailableGyms containerStyle=""/>
-            <AvailableGyms />
-            <AvailableGyms />
-            <AvailableGyms />
-            <AvailableGyms />
-            <AvailableGyms />
+            {[...Array(6)].map((_, index) => (
+              <TouchableOpacity key={index} onPress={handleGymPress}>
+                <AvailableGyms />
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
       </ScrollView>
