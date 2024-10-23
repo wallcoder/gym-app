@@ -7,7 +7,11 @@ import SignUp from '../../components/SignUp.vue'
 import Login from '../../components/Login.vue'
 import SubscriptionDeals from '../../components/SubscriptionDeals.vue'
 import OTP from '../../components/OTP.vue'
+import {useTokenStore} from '@/stores/token'
+import {storeToRefs} from 'pinia'
 
+const token = useTokenStore()
+const {componentKey} = storeToRefs(token)
 
 
 
@@ -16,7 +20,7 @@ import OTP from '../../components/OTP.vue'
 
 <template>
     <section>
-        <NavbarPrimary />
+        <NavbarPrimary :key="componentKey"/>
 
         <RouterView />
         <SignUp />

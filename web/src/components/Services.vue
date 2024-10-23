@@ -1,13 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import GymCard from './GymCard.vue'
+
 import ButtonLink from './ButtonLink.vue'
+import GymCard from '@/components/GymCard.vue'
 import { storeToRefs } from 'pinia'
 import { useGymStore } from '../stores/gyms'
 
-const api = import.meta.env.VITE_API
-console.log(api)
+
 const gymStore = useGymStore();
 const { gyms } = storeToRefs(gymStore)
 const { getGyms } = gymStore;
@@ -17,74 +17,6 @@ onMounted(async () => {
     
 })
 
-// const gyms = ref([
-//     {
-//         id: 1,
-//         name: "Lotus Gym",
-//         rating: 4.2,
-//         price: 1000,
-//         location: "Ape Town, Karma Land",
-//         imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 2,
-//         name: "Rogue Gym",
-//         rating: 4.4,
-//         price: 2000,
-//         location: "Willow Creek, Piltover",
-//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 3,
-//         name: "Bombastic Gym",
-//         rating: 4.4,
-//         price: 2000,
-//         location: "Bombastic Town, Piltover",
-//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 3,
-//         name: "Bombastic Gym",
-//         rating: 4.4,
-//         price: 2000,
-//         location: "Bombastic Town, Piltover",
-//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 1,
-//         name: "Lotus Gym",
-//         rating: 4.2,
-//         price: 1000,
-//         location: "Ape Town, Karma Land",
-//         imgPath: new URL('../assets/images/gym.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 2,
-//         name: "Rogue Gym",
-//         rating: 4.4,
-//         price: 2000,
-//         location: "Willow Creek, Piltover",
-//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 3,
-//         name: "Bombastic Gym",
-//         rating: 4.4,
-//         price: 2000,
-//         location: "Bombastic Town, Piltover",
-//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-//     },
-//     {
-//         id: 3,
-//         name: "Bombastic Gym",
-//         rating: 4.4,
-//         price: 2000,
-//         location: "Bombastic Town, Piltover",
-//         imgPath: new URL('../assets/images/wallpaper2.jpg', import.meta.url).href
-//     },
-    
-
-// ])
 </script>   
 
 <template>
@@ -94,44 +26,14 @@ onMounted(async () => {
         <div class="w-full flex flex-wrap justify-center   gym-card mt-8 ">
 
 
-            <RouterLink :to="`gyms/${gym.id}`" v-for="gym in gyms" :key="gym.id"
-                class="rounded-xl   smartphone-md:w-[210px] tablet:w-[350px] shadow-4 relative  main bg-white flex-grow-1 m-2 tablet:m-3 ">
-                <img :src="`${api}${gym.profileImage}`" alt="gym" class="rounded-xl w-full h-[200px]" />
-                <div
-                    class="absolute inset-0 w-28  h-8 flex  items-center text-xs p-2 font-medium  bg-black bg-opacity-50 text-white rounded-xl">
-                    <h3>&#8377; {{ gym.Plans[0].price }}/{{ gym.Plans[0].duration == 1 ? '': gym.Plans[0].duration}}month</h3>
-                    
-
-
-                </div>
-                <div class="p-2 flex flex-col">
-                    <h2 class="text-black">{{ gym.gymName }} </h2>
-                    <h3 class="font-medium text-sm">{{ gym.GymLocation.area }}, {{ gym.GymLocation.city }}</h3>
-                    <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i> 
-                    </h3>
-                </div>
-            </RouterLink>
+            <GymCard :gyms="gyms" />
 
 
         </div>
-        <ButtonLink content="View All" link="" />
+        <ButtonLink content="View All" link="gyms/location/Aizawl" />
     </section>
 </template>
 
 <style scoped>
-.gym-card img {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    object-fit: cover;
-}
 
-.gym-card .main {
-    transition: all 200ms linear;
-}
-
-.gym-card .main:hover {
-    transform: scale(1.025);
-
-
-}
 </style>

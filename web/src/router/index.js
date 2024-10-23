@@ -17,6 +17,13 @@ import UserView from '@/views/User/UserView.vue';
 import GymView from '@/views/User/GymView.vue';
 import HomeView from '@/views/User/HomeView.vue';
 import RegisterGymView from '@/views/User/RegisterGymView.vue';
+import AvailGyms from '@/views/User/AvailGyms.vue';
+import LayoutGym from '@/views/User/LayoutGym.vue';
+import UserSpace from '@/views/User/UserSpace.vue';
+import Saved from '@/views/User/Saved.vue';
+import Notification from '@/views/User/Notification.vue';
+import Membership from '@/views/User/Membership.vue';
+import MyGyms from '@/views/User/MyGyms.vue';
 
 
 const routes = [
@@ -27,14 +34,17 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: HomeView
+        component: HomeView,
+        meta: {
+          title: 'GymPass | Home'
+        }
       },
 
 
+
     ],
-    meta: {
-      title: 'eCommerce Dashboard'
-    }
+
+
   },
   {
     path: '/dashboard',
@@ -105,7 +115,7 @@ const routes = [
     name: 'alerts',
     component: AlertsView,
     meta: {
-      title: 'Alerts'
+      title: 'GymPass | Alerts'
     }
   },
   {
@@ -113,7 +123,7 @@ const routes = [
     name: 'buttons',
     component: ButtonsView,
     meta: {
-      title: 'Buttons'
+      title: 'GymPass | Buttons'
     }
   },
   {
@@ -121,7 +131,7 @@ const routes = [
     name: 'signin',
     component: SigninView,
     meta: {
-      title: 'Signin'
+      title: 'GymPass | Signin'
     }
   },
   {
@@ -129,7 +139,7 @@ const routes = [
     name: 'signup',
     component: SignupView,
     meta: {
-      title: 'Signup'
+      title: 'GymPass | Signup'
     }
   },
   {
@@ -138,15 +148,79 @@ const routes = [
     component: RegisterGymView,
     props: true,
     meta: {
+      title: 'GymPass | Gym Registration',
       requiresAuth: true
     }
   },
+
   {
-    path: '/gyms/:id',
-    name: 'gym-view',
-    component: GymView,
-    props: true
+    path: '/gyms',
+    component: LayoutGym,
+    children: [
+      {
+        path: 'location/:location',  // Now this is specific to location
+        props: true,
+        name: 'available-gyms',
+        component: AvailGyms,
+        meta: {
+          title: 'GymPass | Available Gyms'
+        },
+      },
+      {
+        path: 'gym/:id',  // Now this is specific to gym ID
+        props: true,
+        name: 'gym',
+        component: GymView,
+        meta: {
+          title: 'GymPass | Gym'
+        },
+      }
+    ]
   },
+
+  {
+    path: '/user',
+    
+    component: UserSpace,
+    meta:{
+      title: 'Gympass | Userspace'
+    },
+    children:[
+      {
+        path:'saves',
+        component: Saved,
+        meta:{
+          title: 'GymPass | Saved'
+        }
+
+      },
+      {
+        path:'notifications',
+        component: Notification,
+        meta:{
+          title: 'GymPass | Notifications'
+        }
+
+      },
+      {
+        path:'membership',
+        component: Membership,
+        meta:{
+          title: 'GymPass | Membership'
+        }
+
+      },
+      {
+        path:'my-gyms',
+        component: MyGyms,
+        meta:{
+          title: 'GymPass | My Gyms'
+        }
+
+      }
+    ]
+  }
+
 ]
 
 const router = createRouter({
