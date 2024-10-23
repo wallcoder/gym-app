@@ -16,7 +16,7 @@ export default function Index() {
 
   const handleChangeText = (name, value) => {
     setForm({ ...form, [name]: value });
-    setError(""); // Reset error on input change
+    setError(""); 
   };
 
   const handleSubmit = () => {
@@ -25,7 +25,6 @@ export default function Index() {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(form.email)) {
       setError("Invalid email format");
@@ -39,12 +38,12 @@ export default function Index() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
-        contentContainerStyle={{ paddingVertical: 20, alignItems: "center" }} // Ensure scrollability
+        contentContainerStyle={{ paddingVertical: 20, alignItems: "center" }} 
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled" // Allow dismissing keyboard when tapping outside
+        keyboardShouldPersistTaps="handled" 
       >
         <View className="justify-center items-center">
-          {/* Fixed Content */}
+          
           <Text className="text-center mt-[100px] mb-[50px] text-[20px] text-black">Log In</Text>
 
           <FormField
@@ -62,7 +61,7 @@ export default function Index() {
             handleChangeText={(e) => handleChangeText("password", e)}
             otherStyles="mt-[30px]"
             placeholder="Password"
-            secureTextEntry={true} // Enable password field to be hidden
+            secureTextEntry={true}
           />
 
           {error ? (
@@ -82,14 +81,14 @@ export default function Index() {
           <CustomButton
             title={isSubmitting ? "Logging in..." : "Log in"}
             handlePress={handleSubmit}
-            containerStyles="bg-[#52AB99]"
+            containerStyles="bg-[#52AB99] mr-[20px] ml-[20px] w-[320px]"
             disabled={isSubmitting} 
           />
 
           <CustomButton
             title="Login With Google"
             handlePress={() => router.push("/sign-in")}
-            containerStyles="bg-[#d6d6d6] mt-[8px]"
+            containerStyles="bg-[#d6d6d6] mt-[8px] mr-[20px] ml-[20px] w-[320px]"
             textStyles="text-black text-[16px]"
           />
 
@@ -98,8 +97,8 @@ export default function Index() {
             <Link href="./(auths)/sign-up" className="text-lg font-psemibold text-[#52AB99]">
               Signup
             </Link>
-            <Link href="./(tabs)/memberships" className="text-lg font-psemibold text-[#52AB99]">
-            memberships
+            <Link href="./profile" className="text-lg font-psemibold text-[#52AB99]">
+            profile
             </Link>
           </View>
         </View>

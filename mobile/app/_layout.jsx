@@ -10,7 +10,23 @@ export default function RootLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="(auths)" />
-      {/* <Stack.Screen name="(availbleGyms) " /> */}
+      <Stack.Screen name="membershipsCard" options={{
+        title:"Membership Card",
+        headerShown:true
+      }}/>
+      <Stack.Screen name="gymDetails" options={{
+        title:"Lustus Gym",
+        headerShown:true
+      }}/>
+      <Stack.Screen name="membershipsPlans" options={{
+        title:"Memberships Plans",
+        headerShown:true
+      }}/>
+      <Stack.Screen name="searchScreen" options={{
+        title:"search Screen",
+        headerShown:true
+      }}/>
+      
     </Stack>
   );
 }
