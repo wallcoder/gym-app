@@ -13,31 +13,12 @@ import { useTokenStore } from '../../stores/token'
 const token = useTokenStore()
 const { decodeToken, fetchUser } = token
 const gymReg = useGymRegStore()
-const { formData, handleRegister, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout } = gymReg;
-const { message, isFormValid } = storeToRefs(gymReg)
+const { formData, handleRegister, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout, fetchFeatures, fetchWorkouts } = gymReg;
+const { message, isFormValid, allFeatures, allWorkouts } = storeToRefs(gymReg)
 const plan = usePlanStore()
 const { getSubscriptionPlanById } = plan;
 const { subPlan } = storeToRefs(plan)
 
-const allFeatures = [{
-    id: 1,
-    name: 'AC'
-
-},
-{
-    id: 2,
-    name: 'Parking'
-
-}]
-
-const allWorkouts = [{
-    id: 1,
-    name: 'Weightlifting'
-},
-{
-    id: 2,
-    name: 'Cardio'
-}]
 
 
 
@@ -75,8 +56,10 @@ const mapContainerId = 'map'; // ID for the map container
 let marker;
 
 // Initialize the map
-onMounted(() => {
+onMounted(async () => {
 
+    await fetchFeatures();
+    await fetchWorkouts();
     getSubscriptionPlanById(props.planId)
     decodeToken();
     // Check if the browser supports geolocation
@@ -298,24 +281,24 @@ onMounted(() => {
                         <div class="relative z-0 w-full mb-5 group">
                             <textarea
                                 class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
-                                name="" id="" cols="30" rows="5" placeholder="Add Description"
+                                name="" cols="30" rows="5" placeholder="Add Description"
                                 v-model="formData.membershipPlans.plan1.description" required></textarea>
                         </div>
                         <h1 class="font-semibold  text-black text-xl mb-3">Plan-2</h1>
 
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input v-model="formData.membershipPlans.plan2.title" type="text" name="plan1-title"
-                                    id="plan1-title"
+                                <input v-model="formData.membershipPlans.plan2.title" type="text" name="plan2-title"
+                                    id="plan2-title"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " />
-                                <label for="plan1-title"
+                                <label for="plan2-title"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Plan
                                     Title</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <input v-model="formData.membershipPlans.plan2.price" type="number" name="plan1-price"
-                                    id="plan1-price"
+                                <input v-model="formData.membershipPlans.plan2.price" type="number" name="plan2-price"
+                                    id="plan2-price"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " />
                                 <label for="plan1-price"
@@ -326,25 +309,25 @@ onMounted(() => {
 
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
-                            <input v-model="formData.membershipPlans.plan2.duration" type="number" name="plan1-duration"
-                                id="plan1-duration"
+                            <input v-model="formData.membershipPlans.plan2.duration" type="number" name="plan2-duration"
+                                id="plan2-duration"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                 placeholder=" " />
-                            <label for="plan1-duration"
+                            <label for="plan2-duration"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)</label>
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
                             <textarea
                                 class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
-                                name="" id="" cols="30" rows="5" placeholder="Add Description"
+                                name="" cols="30" rows="5" placeholder="Add Description"
                                 v-model="formData.membershipPlans.plan2.description"></textarea>
                         </div>
                         <h1 class="font-semibold  text-black text-xl mb-3">Plan-3</h1>
 
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input v-model="formData.membershipPlans.plan3.title" type="text" name="plan1-title"
-                                    id="plan1-title"
+                                <input v-model="formData.membershipPlans.plan3.title" type="text" name="plan3-title"
+                                    id="plan3-title"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " />
                                 <label for="plan1-title"
@@ -352,11 +335,11 @@ onMounted(() => {
                                     Title</label>
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <input v-model="formData.membershipPlans.plan3.price" type="number" name="plan1-price"
-                                    id="plan1-price"
+                                <input v-model="formData.membershipPlans.plan3.price" type="number" name="plan3-price"
+                                    id="plan3-price"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " />
-                                <label for="plan1-price"
+                                <label for="plan3-price"
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
                             </div>
 
@@ -364,17 +347,17 @@ onMounted(() => {
 
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
-                            <input v-model="formData.membershipPlans.plan3.duration" type="number" name="plan1-duration"
-                                id="plan1-duration"
+                            <input v-model="formData.membershipPlans.plan3.duration" type="number" name="plan3-duration"
+                                id="plan3-duration"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                 placeholder=" " />
-                            <label for="plan1-duration"
+                            <label for="plan3-duration"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Duration(months)</label>
                         </div>
                         <div class="relative z-0 w-full mb-5 group">
                             <textarea
                                 class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
-                                name="" id="" cols="30" rows="5" placeholder="Add Description"
+                                name="" cols="30" rows="5" placeholder="Add Description"
                                 v-model="formData.membershipPlans.plan3.description"></textarea>
                         </div>
 
@@ -391,7 +374,7 @@ onMounted(() => {
                                     'bg-first text-white': formData.features.includes(f.id), // Style when selected
                                     'text-black': !formData.features.includes(f.id) // Default style when not selected
                                 }">
-                                {{ f.name }}
+                                {{ f.featureName }} 
                             </span>
 
 
@@ -411,7 +394,7 @@ onMounted(() => {
                                     'bg-first text-white': formData.workouts.includes(w.id), // Style when selected
                                     'text-black': !formData.workouts.includes(w.id) // Default style when not selected
                                 }">
-                                {{ w.name }}
+                                {{ w.workoutName }}
                             </span>
 
 

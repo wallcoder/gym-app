@@ -7,7 +7,7 @@ import { checkPlan, getSubscriptionPlans, insertPlanMapping } from "../controlle
 import { authenticateToken } from "../controllers/login.js";
 import { getSubscriptionPlanById } from "../controllers/planController.js";
 import { decodeToken } from "../controllers/login.js";
-import { insertGym } from "../controllers/gymController.js"; // New controller for gym registration
+import { getFeatures, getWorkouts, insertGym } from "../controllers/gymController.js"; // New controller for gym registration
 import { getGymById, getGyms } from "../controllers/gymController.js";
 import { PaymentGateway } from "../models/paymentGateway.js";
 import { createOrder, getPublicKey, paymentDetails, verifyPayment } from "../controllers/paymentGateway.js";
@@ -16,6 +16,7 @@ import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import { insertTransaction } from "../controllers/transactionController.js";
+
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -75,6 +76,12 @@ router.post('/store-transaction', insertTransaction)
 
 // PLAN
 router.post('/insert-plan', insertPlanMapping)
+
+// FEATURES
+router.get('/features', getFeatures )
+
+// WORKOUTS
+router.get('/workouts', getWorkouts)
 
 // QR CODE
 router.get('/check-plan/:planMapId', checkPlan);

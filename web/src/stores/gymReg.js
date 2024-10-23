@@ -2,13 +2,17 @@ import { defineStore, storeToRefs } from "pinia";
 import { ref, reactive, watch, computed } from "vue";
 import axios from "axios";
 import { useTokenStore } from "./token";
+import { useRouter } from "vue-router";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export const useGymRegStore = defineStore('useGymReg', () => {
     const token = useTokenStore();
+    const router = useRouter()
     const { decodeToken } = token;
     const { currentUserToken } = storeToRefs(token);
-    const features = ref([])
-    const workouts = ref([])
+    const allFeatures = ref([])
+    const allWorkouts = ref([])
 
     const formData = reactive({
         name: '',
@@ -138,20 +142,21 @@ export const useGymRegStore = defineStore('useGymReg', () => {
             });
 
             console.log(response.data);
+          
 
         } catch (err) {
             console.log(err);
         }
     };
 
-    const fetchFeatures = async (id) => {
+    const fetchFeatures = async () => {
 
         try {
-            console.log(id)
-            const response = await axios.get(`features/${id}`)
+           console.log("from fetchFeatures")
+            const response = await axios.get(`/features`)
             console.log(response.data)
 
-            features.value = response.data
+            allFeatures.value = response.data
         } catch (err) {
             console.log(err)
         }
@@ -162,14 +167,14 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     }
 
 
-    const fetchWorkouts = async (id) => {
+    const fetchWorkouts = async () => {
 
         try {
-            console.log(id)
-            const response = await axios.get(`workouts/${id}`)
+            console.log("from fetchWorkouts")
+            const response = await axios.get(`/workouts`)
             console.log(response.data)
 
-            workouts.value = response.data
+            allWorkouts.value = response.data
         } catch (err) {
             console.log(err)
         }
@@ -180,6 +185,6 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     }
 
     return {
-        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, fetchFeatures, fetchWorkouts 
+        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout,  fetchFeatures, fetchWorkouts, allFeatures, allWorkouts
     };
 });

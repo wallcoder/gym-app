@@ -26,12 +26,14 @@ export default {
     },
     extend: {
       colors: {
+        ...defaultTheme.colors,
         first: '#52AB99',
         'first-light': '#59C7B1',
         second: '#2C6777',
         third: '#C8D8E5',
         forth: '#F4F4F4',
         fifth: '#ffffff',
+        sixth: '#DDDDDD',
 
 
         current: 'currentColor',

@@ -281,6 +281,34 @@ export const getGymById = async (req, res) => {
     }
 };
 
+export const getFeatures = async (req, res)=>{
+    try {
+        console.log("emarald eyes")
+        const features = await GymFeature.findAll();
+        if(!features){
+            res.status(400).json({message: 'Features not available'})
+        }
+        res.status(200).json(features)
+    } catch (error) {
+        res.status(400).json(error)
+        
+    }
+}
+
+export const getWorkouts = async (req, res)=>{
+    try {
+        console.log("my home")
+        const workouts = await GymWorkout.findAll();
+        if(!workouts){
+            res.status(400).json({message: 'Workouts not available'})
+        }
+        res.status(200).json(workouts)
+    } catch (error) {
+        res.status(400).json(error)
+        
+    }
+}
+
 // const open = async()=>{
 //     const newOpen = await GymOpeningHours.create({
 //         morning: '6:00am - 9:00am',
@@ -355,3 +383,4 @@ export const getGymById = async (req, res) => {
 // }
 
 // insertPlan()
+

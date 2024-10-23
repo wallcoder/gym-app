@@ -4,7 +4,7 @@ import axios from "axios";
 import { onClickOutside, tryOnScopeDispose } from '@vueuse/core';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import {useTokenStore} from '@/stores/token' 
+import { useTokenStore } from '@/stores/token'
 
 import { useRouter } from "vue-router";
 
@@ -15,9 +15,9 @@ export const useHomeStore = defineStore('home', () => {
     const router = useRouter()
 
     const token = useTokenStore();
-    const {decodeToken} = token;
-    const {currentUserToken} = storeToRefs(token)
-
+    const { decodeToken, forceRerender } = token;
+    const { currentUserToken } = storeToRefs(token)
+    const currentUser = ref(null);  // Declare currentUser as a ref
     // MODAL
     const modal = ref(null);
     const isOpenLogin = ref(false)
@@ -110,40 +110,58 @@ export const useHomeStore = defineStore('home', () => {
 
     const handleLogin = async () => {
         try {
-            // if (message.value.email || message.value.password || message.value.conPassword) {
-            //     // do nothing
-            //     return;
-            // }
-            const response = await axios.post('/login', { email: email.value, password: password.value })
-            console.log(response)
+            const response = await axios.post('/login', { email: email.value, password: password.value });
             const token = response.data.token;
-            localStorage.setItem('token', token)
-            isLogin.value = true
+
+            // Store the token in localStorage
+            localStorage.setItem('token', token);
+
+            // Set the login state and configure axios authorization header
+            isLogin.value = true;
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            // Decode the token to get user data (adjust based on your decodeToken logic)
+            const userData = await decodeToken(token); // Assuming this returns user data like { firstName, ... }
+
+            // Update currentUser and store in localStorage
+            currentUser.value = userData;
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            // Log the current user for debugging
+            console.log("User Data after Login:", currentUser.value);
+
+            // Close login modals
             closeModals();
-            decodeToken();
+            
+
+
+
+
+
 
 
         } catch (err) {
-            console.log("error: ", err)
-            if (err.status === 401 && err.response) {
+            console.log("error: ", err);
+            if (err.response && err.response.status === 401) {
                 if (err.response.data.passwordMessage) {
                     toast.error(err.response.data.passwordMessage, {
-                        "theme": "colored",
-                        "position": "bottom-center"
+                        theme: "colored",
+                        position: "bottom-center"
                     });
-
                 }
             }
         }
-    }
+    };
+
 
     // Logout function
-const handleLogout = () => {
-    localStorage.removeItem('token');
-    isLogin.value = false;
-    router.push('/')
-  };
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        isLogin.value = false;
+        currentUser.value = false;
+        router.push('/')
+    };
 
 
     const handleRegister = async () => {
@@ -281,7 +299,7 @@ const handleLogout = () => {
 
     return {
         modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister,
-        otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin
+        otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin, currentUser
     }
 
 })
