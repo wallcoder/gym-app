@@ -23,6 +23,7 @@ import UserSpace from '@/views/User/UserSpace.vue';
 import Saved from '@/views/User/Saved.vue';
 import Notification from '@/views/User/Notification.vue';
 import Membership from '@/views/User/Membership.vue';
+import Profile from '@/views/User/Profile.vue';
 import MyGyms from '@/views/User/MyGyms.vue';
 
 
@@ -179,41 +180,49 @@ const routes = [
   },
 
   {
-    path: '/user',
-    
+    path: '/user-profile',
+
     component: UserSpace,
-    meta:{
+    meta: {
       title: 'Gympass | Userspace'
     },
-    children:[
+    children: [
       {
-        path:'saves',
+        path: '',
+        component: Profile,
+        meta: {
+          title: 'Gympass | Profile'
+        }
+
+      },
+      {
+        path: 'saved',
         component: Saved,
-        meta:{
+        meta: {
           title: 'GymPass | Saved'
         }
 
       },
       {
-        path:'notifications',
+        path: 'notifications',
         component: Notification,
-        meta:{
+        meta: {
           title: 'GymPass | Notifications'
         }
 
       },
       {
-        path:'membership',
+        path: 'memberships',
         component: Membership,
-        meta:{
+        meta: {
           title: 'GymPass | Membership'
         }
 
       },
       {
-        path:'my-gyms',
+        path: 'my-gyms',
         component: MyGyms,
-        meta:{
+        meta: {
           title: 'GymPass | My Gyms'
         }
 

@@ -79,7 +79,7 @@ const logoChange = computed(() => {
 
 <template>
   <header
-    class="flex justify-between items-center text-lg tablet:px-[14%] bg-white text-black  w-full z-99999 transition-all duration-200 ease-linear py-3">
+    class="flex justify-between items-center text-lg tablet:px-[14%] bg-white text-black  w-full z-99999 transition-all duration-200 ease-linear py-3 shadow-3">
     <RouterLink to="/" class="">
       <img src="../../assets/images/logo-original.png" alt="logo" class="w-[40px]">
     </RouterLink>
