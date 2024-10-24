@@ -49,12 +49,12 @@ const { isOpenLoc, isOpenSugg, query } = storeToRefs(searchBar)
                 <div class="flex flex-col bg-white  cursor-pointer rounded-lg">
 
                     <div class="flex flex-col  p-2 hover:bg-gray rounded-lg">
-                        <h3 class="font-semibold space-x-1"><i class="fa-solid fa-location-crosshairs"></i><span>Detect
+                        <h3 class=" space-x-1"><i class="fa-solid fa-location-crosshairs"></i><span>Detect
                                 Current Location</span></h3>
 
                     </div>
                     <div class="flex flex-col  p-2 hover:bg-gray rounded-lg">
-                        <h3 class="font-semibold space-x-1"><i class="fa-solid fa-plus"></i><span>Add Location</span></h3>
+                        <h3 class=" space-x-1"><i class="fa-solid fa-plus"></i><span>Add Location</span></h3>
 
                     </div>
 
