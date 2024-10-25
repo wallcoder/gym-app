@@ -1,4 +1,4 @@
-// app/(tabs)/gyms.jsx
+
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../components/home/header';
