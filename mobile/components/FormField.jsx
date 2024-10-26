@@ -17,7 +17,7 @@ const FormField = ({
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
-      <View className="w-[320px] h-[50px] px-4 border-b-[1px] border-black focus:border-secondary flex flex-row items-center">
+      <View className="w-full h-[50px] px-4 border-b-[1px] border-black focus:border-secondary flex flex-row items-center">
         {/* Add icons for specific titles */}
         {title === "First Name" && (
           <Ionicons name="person" size={24} color="#52AB99" />
@@ -38,11 +38,11 @@ const FormField = ({
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
-          secureTextEntry={isPasswordField && !showPassword}  // Hide for both Password and Confirm Password
+          secureTextEntry={isPasswordField && !showPassword}  
           {...props}
         />
 
-        {/* Toggle visibility for Password and Confirm Password fields */}
+       
         {isPasswordField && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image

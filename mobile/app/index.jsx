@@ -42,7 +42,7 @@ export default function Index() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled" 
       >
-        <View className="justify-center items-center">
+        <View className="justify-center items-center p-3">
           
           <Text className="text-center mt-[100px] mb-[50px] text-[20px] text-black">Log In</Text>
 
@@ -81,24 +81,26 @@ export default function Index() {
           <CustomButton
             title={isSubmitting ? "Logging in..." : "Log in"}
             handlePress={handleSubmit}
-            containerStyles="bg-[#52AB99] mr-[20px] ml-[20px] w-[320px]"
+            containerStyles="bg-[#52AB99] w-full"
             disabled={isSubmitting} 
+            textStyles="w-full text-center"
           />
 
           <CustomButton
             title="Login With Google"
             handlePress={() => router.push("/sign-in")}
-            containerStyles="bg-[#d6d6d6] mt-[8px] mr-[20px] ml-[20px] w-[320px]"
-            textStyles="text-black text-[16px]"
-          />
+            containerStyles="bg-[#d6d6d6] mt-[8px] w-full "
+            textStyles="text-black text-[16px] text-center"
+            imageStyle=" mr-[10px]"
+          /> 
 
           <View className="flex justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-black font-pregular">Don't have an account?</Text>
             <Link href="./(auths)/sign-up" className="text-lg font-psemibold text-[#52AB99]">
               Signup
             </Link>
-            <Link href="./profile" className="text-lg font-psemibold text-[#52AB99]">
-            profile
+            <Link href="./mapIntegrated" className="text-lg font-psemibold text-[#52AB99]">
+              map
             </Link>
           </View>
         </View>
