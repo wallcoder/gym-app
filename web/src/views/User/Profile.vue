@@ -1,7 +1,7 @@
 <script setup>
 </script>
 <template>
-    <section class="p-2 flex flex-col w-full rounded-lg ">
+    <section class="p-2 flex flex-col rounded-lg ">
         <h1 class="text-lg font-semibold text-black">Profile</h1>
         <div class="flex mt-8 items-center justify-between">
             <div class="flex items-center space-x-2  ">
