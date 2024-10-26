@@ -11,8 +11,8 @@ const saves = () => {
   };
   return (
     <>
-      <SafeAreaView className="flex-1 ">
-        <View className="p-3 pt-8">
+      <SafeAreaView className="flex-1 p-3 pt-14">
+        <View className="w-full">
           <TouchableOpacity onPress={handleGymPress}>
             <AvailableGyms />
           </TouchableOpacity>

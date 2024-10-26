@@ -5,7 +5,7 @@ import { icons } from '../../constants'
 const AvailableGyms = ({containerStyle}) => {
   return (
     <>
-        <View className={`border-[1px] rounded-2xl border-[#b4b0b0] border-solid w-[340px] h-[240px] overflow-hidden mb-[10px] ${containerStyle}`}>
+        <View className={`border-[1px] rounded-2xl border-[#b4b0b0] border-solid w-full h-[240px] overflow-hidden mb-[10px] ${containerStyle}`}>
         
             <ImageBackground
                 source={icons.gymImage}

@@ -26,7 +26,10 @@ export default function RootLayout() {
         title:"search Screen",
         headerShown:true
       }}/>
-      
+      <Stack.Screen name="mapIntegrated" options={{
+        title:"map ",
+        headerShown:true
+      }}/>
     </Stack>
   );
 }
