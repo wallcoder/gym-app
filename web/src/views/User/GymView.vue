@@ -8,6 +8,7 @@ import { ref, onMounted } from 'vue';
 import { usePaymentGatewayStore } from '../../stores/paymentGateway';
 import { useTokenStore } from '../../stores/token';
 import { useGymRegStore } from '../../stores/gymReg';
+import LoaderSquare from '@/components/LoaderSquare.vue'
 
 const token = useTokenStore();
 const gymReg = useGymRegStore()
@@ -58,12 +59,12 @@ setInterval(nextImage, 8000);
 
 <template>
     <section>
-        
-        <div class="px-3 tablet:px-[12%] flex flex-col pt-2 pb-30">
+        <LoaderSquare v-if="isLoadingSquare"/>
+        <div class="px-3 tablet:px-[12%] flex flex-col pt-2 pb-30" v-else>
             <div class="relative py-4">
                 <!-- Check if gym and GymImages are available -->
                 <img v-if="gym?.GymImages?.length" :src="`${api}${gym.GymImages[currentImageIndex].gymImgPath}`" alt="gym"
-                    class="w-full rounded-lg h-[50vh] object-cover transition duration-500 ease-in-out" />
+                    class="w-full rounded-lg h-[50vh] object-cover transition duration-500 ease-in-out" v-motion-fade-visible-once/>
                 <button @click="prevImage"
                     class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md">
                     <i class="fa-solid fa-chevron-left"></i>
@@ -75,10 +76,10 @@ setInterval(nextImage, 8000);
             </div>
 
             <!-- Check if gym is available -->
-            <h1 v-if="gym" class="text-2xl font-semibold text-black mb-2">{{ gym.gymName }}</h1>
+            <h1 v-if="gym" class="text-2xl font-semibold text-black mb-2" v-motion-fade-visible-once>{{ gym.gymName }}</h1>
 
             <div class="flex flex-col tablet:flex-row tablet:justify-between">
-                <div class="flex flex-col">
+                <div class="flex flex-col" v-motion-fade-visible-once>
                     <span class="flex items-center space-x-1">
                         <i class="fa-solid fa-star text-lg text-yellow-500"></i>
                         <span>4.2</span>
@@ -103,8 +104,8 @@ setInterval(nextImage, 8000);
                     </span>
                 </div>
 
-                <!-- Check if gym is available -->
-                <div v-if="gym"
+                <!-- Check if gym is available  -->
+                <div v-if="gym" v-motion-fade-visible-once
                     class="flex flex-col bg-third p-3 rounded-xl font-semibold text-black my-3 tablet:my-0 tablet:w-[350px]">
                     <h1 class="text-xl mb-1">Contact Us</h1>
                     <h1>Phone: <span class="font-medium">{{ gym.gymPhone }}</span></h1>
@@ -112,7 +113,7 @@ setInterval(nextImage, 8000);
                 </div>
             </div>
 
-            <div class="flex flex-col">
+            <div class="flex flex-col" v-motion-fade-visible-once>
                 <h1 class="text-2xl font-semibold text-black mb-2">Opening Hours</h1>
                 <div class="flex space-x-2">
                     <!-- Check if GymOpeningHour is available -->
@@ -129,7 +130,7 @@ setInterval(nextImage, 8000);
                 </div>
             </div>
 
-            <div class="flex flex-col mt-[20px]">
+            <div class="flex flex-col mt-[20px]" v-motion-fade-visible-once>
                 <h1 class="text-2xl font-semibold text-black mb-2">Membership Plans</h1>
                 <div class="flex space-y-2">
                     <!-- Check if Plans are available -->
@@ -147,11 +148,11 @@ setInterval(nextImage, 8000);
                 </div>
             </div>
 
-            <div class="flex flex-col mt-[20px]">
+            <div class="flex flex-col mt-[20px]" >
                 <h1 class="text-2xl font-semibold text-black mb-2">Features</h1>
                 <div class="flex space-x-4">
                     <!-- Check if GymFeatureMappings are available -->
-                    <span v-for="e in gym?.GymFeatureMappings" :key="e.GymFeature.id"
+                    <span v-for="e in gym?.GymFeatureMappings" :key="e.GymFeature.id" v-motion-fade-visible-once
                         class="bg-first py-2 px-4 rounded-2xl text-white font-medium">
                         {{ e.GymFeature.featureName }}
                     </span>
@@ -162,7 +163,7 @@ setInterval(nextImage, 8000);
                 <h1 class="text-2xl font-semibold text-black mb-2">Workouts Available</h1>
                 <div class="flex space-x-4">
                     <!-- Check if GymWorkoutMappings are available -->
-                    <span v-for="e in gym?.GymWorkoutMappings" :key="e.GymWorkout.id"
+                    <span v-for="e in gym?.GymWorkoutMappings" :key="e.GymWorkout.id" v-motion-fade-visible-once
                         class="bg-first py-2 px-4 rounded-2xl text-white font-medium">
                         {{ e.GymWorkout.workoutName }}
                     </span>

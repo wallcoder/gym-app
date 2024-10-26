@@ -1,12 +1,20 @@
 <script setup>
 import NavbarSecond from '@/components/Navbars/NavbarSecond.vue'
 import Footer from '@/components/Footer.vue'
+
 import { RouterView, RouterLink } from 'vue-router'
+import {ref} from 'vue'
+import {storeToRefs} from 'pinia'
+import EditProfile from '@/components/EditProfile.vue'
+import {useHomeStore} from '@/stores/home'
+const home = useHomeStore();
+const {isOpenEditProfile} = storeToRefs(home)
+
 </script>
 <template>
-    <section class="bg-white">
+    <section class="bg-white" >
         <NavbarSecond />
-        <section class=" w-full tablet:px-[14%] mb-29">
+        <section class=" w-full tablet:px-[14%] mb-29" v-motion-fade-visible-once>
             <div class="relative mb-35">
                 <img src="../../assets/images/wallpaper1.png" alt="" class="w-full h-45 object-cover">
                 <div class="flex justify-center items-center absolute left-0 right-0 top-25 flex-col">
@@ -37,11 +45,12 @@ import { RouterView, RouterLink } from 'vue-router'
                         active-class="bg-sixth">Settings</RouterLink>
                 </nav>
                 <div class="px-3 py-2">
-                    <RouterView />
+                    <RouterView v-motion-fade-visible-once/>
                 </div>
             </section>
         </section>
         <Footer />
+        <EditProfile />
     </section>
 </template>
 

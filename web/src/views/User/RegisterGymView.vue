@@ -105,14 +105,14 @@ onMounted(async () => {
 <template>
     <NavbarSecond />
 
-    <section class="w-full flex  flex-col items-center justify-center px-4 laptop:px-10 pb-30 reg">
+    <section class="w-full flex  flex-col items-center justify-center px-4 laptop:px-10 pb-30 reg bg-white">
 
         <div class="h-auto w-[100%] md:w-[70%] lg:w-[55%] py-5 ">
 
             <form class="mx-auto flex flex-col space-y-5" @submit.prevent="handleRegister">
                 <div class=" flex flex-col space-y-5" v-if="step === 2">
-                    <h1 class="font-semibold mb-3 text-black text-3xl ">Other Gym Details</h1>
-                    <div class="bg-white rounded-xl p-6">
+                    <h1 class="font-semibold mb-3 text-black text-2xl "  v-motion-fade-visible-once>Other Gym Details</h1>
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Add Gym Images*</h1>
                         <p class="text-sm mb-2">Upload atleast one image of your gym</p>
                         <span class="text-red text-sm mb-3" v-if="message.gymImages">{{ message.gymImages }}</span>
@@ -139,7 +139,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Add Gym Profile Image*</h1>
                         <p class="text-sm mb-3">Upload atleast one image of your gym</p>
                         <span class="text-red text-sm mb-3" v-if="message.gymProfileImage">{{ message.gymProfileImage
@@ -166,7 +166,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Opening Hours*</h1>
                         <p class="text-sm mb-3">Add opening hours of your gym in during morning and eving</p>
                         <h1 class="font-semibold  text-black text-xl mb-3">Morning</h1>
@@ -217,7 +217,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Razorpay API Key*</h1>
                         <p class="text-sm mb-3">Enter Razorpay API keys to receive payment(Don't worry, your API keys are safe with us)</p>
                         <div class="grid md:grid-cols-2 md:gap-6">
@@ -243,7 +243,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Membership Plans*</h1>
                         <p class="text-sm mb-3">Add Membership plans offered by your gym(Plan-1 is compulsory)</p>
                         <h1 class="font-semibold  text-black text-xl mb-3">Plan-1</h1>
@@ -364,7 +364,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Features</h1>
                         <p class="text-sm mb-3">Select features of your gym</p>
                         <div class="flex flex-wrap space-x-2">
@@ -384,7 +384,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Workouts</h1>
                         <p class="text-sm mb-3">Select workouts available in your gym</p>
                         <div class="flex flex-wrap space-x-2">
@@ -405,7 +405,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Submission</h1>
                         <p class="text-sm mb-3">Submit your gym details for <span
                                 class="text-first font-semibold">verification</span>. Once your gym is verified, you'll
@@ -425,8 +425,8 @@ onMounted(async () => {
 
                 </div>
                 <div class=" flex flex-col space-y-5" v-if="step === 1">
-                    <h1 class="font-semibold mb-3 text-black text-3xl ">Gym Information</h1>
-                    <div class="bg-white rounded-xl p-6">
+                    <h1 class="font-semibold mb-3 text-black text-2xl " v-motion-fade-visible-once>Gym Information</h1>
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Add Gym Details</h1>
                         <p class="text-sm mb-3">Customer will be able to see this</p>
                         <div class="relative z-0 w-full  group">
@@ -443,7 +443,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Owner Details</h1>
                         <p class="text-sm mb-3">GymPass will use this for all business communication</p>
                         <div class="grid md:grid-cols-2 md:gap-6">
@@ -482,7 +482,7 @@ onMounted(async () => {
 
 
                     </div>
-                    <div class="bg-white rounded-xl p-6">
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Gym Location</h1>
                         <p class="text-sm mb-3">Drag the marker to your gym location(or enter the coordinates)</p>
                         <div id="map" class="h-64 w-full mb-5 z-9"></div>
