@@ -10,11 +10,11 @@ const { isOpenLoc, isOpenSugg, query } = storeToRefs(searchBar)
 </script>
 
 <template>
-    <div class="relative shadow-3 rounded-lg">
+    <div class="relative shadow-3 rounded-lg z-99999" v-motion-fade-visible-once>
         <div class="bg-white h-10 tablet:w-[600px]  laptop:h-10 smartphone:w-[400px] rounded-lg  mb-1 flex">
             <span class="flex justify-center items-center cursor-pointer"><i
                     class="fa-solid fa-magnifying-glass text-lg text-first p-2"></i></span>
-            <input v-model="query" type="text" placeholder="Search Gym or Location" class="text-black p-2 rounded-lg w-[80%] outline-none ">
+            <input v-model="query" type="text" placeholder="Search Gym" class="text-black p-2 rounded-lg w-[80%] outline-none ">
             <span class="flex  items-center justify-end rounded-lg  text-black  p-2 w-[20%] cursor-pointer" @click="toggleLoc()">Aizawl<span
                     class=""></span><i class="fa-solid fa-location-dot text-lg text-first p-2 cursor-pointer"></i>
                 <i class="fa-solid text-sm px-1 fa-chevron-down transition-all duration-100 ease-in-out cursor-pointer"

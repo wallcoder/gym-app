@@ -25,6 +25,7 @@ import Notification from '@/views/User/Notification.vue';
 import Membership from '@/views/User/Membership.vue';
 import Profile from '@/views/User/Profile.vue';
 import MyGyms from '@/views/User/MyGyms.vue';
+import NotFound from '@/views/User/NotFound.vue';
 
 
 const routes = [
@@ -183,7 +184,7 @@ const routes = [
     path: '/user-profile',
 
     component: UserSpace,
-    
+
     meta: {
       title: 'Gympass | Userspace',
       requiresAuth: true
@@ -236,7 +237,8 @@ const routes = [
 
       }
     ]
-  }
+  },
+  { path: '/:catchall(.*)*', name: 'not-found', component: NotFound }
 
 ]
 

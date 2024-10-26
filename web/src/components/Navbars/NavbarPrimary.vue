@@ -4,6 +4,7 @@ import { useHomeStore } from '../../stores/home';
 import { storeToRefs } from 'pinia';
 import { useTokenStore } from '@/stores/token';
 import axios from 'axios';
+import DropdownMenu from '@/components/DropdownMenu.vue' 
 
 const token = useTokenStore();
 const componentKey = ref(0);
@@ -82,47 +83,13 @@ const logoChange = computed(() => {
     <RouterLink to="/">
       <img src="../../assets/images/logo-white.png" alt="logo" class="w-[50px]">
     </RouterLink>
-    <nav class="hidden laptop:flex laptop:items-center">
-      <span @click="isOpenRegisterGym = true" class="ml-16 font-medium hover:cursor-pointer">Register Gym</span>
-      <span @click="isOpenLogin = true" class="ml-16 font-medium hover:cursor-pointer" v-if="!isLogin">Login</span>
-      <span @click="isOpenSignUp = true" class="ml-16 font-medium hover:cursor-pointer" v-if="!isLogin">Sign up</span>
+    <nav class="hidden laptop:flex laptop:items-center space-x-10">
+      <span @click="isOpenRegisterGym = true" class="font-medium hover:cursor-pointer">Register Gym</span>
+      <span @click="isOpenLogin = true" class=" font-medium hover:cursor-pointer" v-if="!isLogin">Login</span>
+      <span @click="isOpenSignUp = true" class=" font-medium hover:cursor-pointer" v-if="!isLogin">Sign up</span>
 
       <!-- Profile Picture with Dropdown -->
-      <div class="relative ml-16 cursor-pointer" v-if="isLogin" @click="toggleDropdown">
-        <div class="flex items-center space-x-2">
-          <img src="../../assets/images/pp.jpg" alt="pp" class="w-[40px] h-[40px] rounded-full bg-gray">
-          <span v-if="currentUser">{{ currentUser.firstName }}</span>
-
-          <i class="fa-solid text-sm px-1 fa-chevron-down transition-all duration-100 ease-in-out"
-            :class="isDropdownOpen ? 'rotate-180' : ''"></i>
-        </div>
-        <!-- Dropdown Menu -->
-        <div v-if="isDropdownOpen"
-          class="absolute right-0 text-[1.05rem] top-14 text-black mt-0 w-35 bg-white rounded-lg shadow-lg text-md z-10">
-          <ul>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer rounded-t-lg">
-              <RouterLink to="">Profile</RouterLink>
-            </li>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-              <RouterLink to="/user/notifications">Notifications</RouterLink>
-            </li>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-              <RouterLink to="">Settings</RouterLink>
-            </li>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-              <RouterLink to="/user/my-gyms">My Gym</RouterLink>
-            </li>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-              <RouterLink to="/user/membership">Membership</RouterLink>
-            </li>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-              <RouterLink to="/user/saves">Saves</RouterLink>
-            </li>
-            <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer rounded-b-lg" @click="handleLogout">Logout
-            </li>
-          </ul>
-        </div>
-      </div>
+      <DropdownMenu />
     </nav>
 
     <i class="fa-solid text-3xl text-white hover:cursor-pointer transition-all duration-200 ease-linear block laptop:hidden"

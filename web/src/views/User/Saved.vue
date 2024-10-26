@@ -6,6 +6,10 @@ import ButtonLink from '@/components/ButtonLink.vue'
 import GymCard from '@/components/GymCard.vue'
 import { storeToRefs } from 'pinia'
 import { useGymStore } from '@/stores/gyms'
+import LoaderSquare from '@/components/LoaderSquare.vue'
+import { useLoaderStore } from '@/stores/loader'
+const loader = useLoaderStore()
+const { isLoadingSquare } = storeToRefs(loader)
 
 
 const gymStore = useGymStore();
@@ -21,15 +25,19 @@ onMounted(async () => {
 
 <template>
     <section class=" p-2 flex flex-col w-full rounded-lg">
-        <h1 class="text-lg font-semibold text-black">Memberships</h1>
-        <div class=" flex flex-wrap ">
+        <h1 class="text-lg font-semibold text-black">Saved</h1>
+        
+            <LoaderSquare v-if="isLoadingSquare"/>
+       
+        <div class=" flex flex-wrap " v-else>
 
 
-            <GymCard :gyms="gyms" />
-            
+            <GymCard :gyms="gyms" v-motion-fade-visible-once />
+
+
 
         </div>
-        
+
     </section>
 </template>
 

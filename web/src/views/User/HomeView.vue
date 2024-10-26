@@ -4,6 +4,7 @@ import Hero from '../../components/Hero.vue'
 import Services from '../../components/Services.vue'
 import Action from '../../components/Action.vue'
 import Mobile from '../../components/Mobile.vue'
+
 import { useGymStore } from '../../stores/gyms'
 import { useHomeStore } from '../../stores/home'
 import { useRoute } from 'vue-router';
@@ -34,10 +35,12 @@ onMounted(async () => {
 
 </script>
 <template>
-    <Hero />
-    <Services />
-    <Action />
-    <Mobile />
+    <section class="bg-white">
+        <Hero />
+        <Services />
+        <Action />
+        <Mobile />
+    </section>
 </template>
 <style scoped>
 .hero {

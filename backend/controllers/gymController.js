@@ -234,6 +234,9 @@ export const insertGym = async (req, res) => {
 export const getGyms = async (req, res) => {
     try {
         const gyms = await Gym.findAll({
+            where: {
+                
+            },
             include: [
                 { model: GymLocation },
                 { model: Plan }
