@@ -20,7 +20,7 @@ const ForgottenPassword = () => {
   return (
     <SafeAreaView className="flex-1 p-3">
     <>
-      <Text className="text-black text-[18px] text-center mt-[50px]">Forgotten Password</Text>
+      <Text className="text-black text-[18px] text-center mt-[50px] ">Forgotten Password</Text>
       <View className="flex justify-center items-center h-full">
         <FormField
           title="Email"
