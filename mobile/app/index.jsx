@@ -6,6 +6,10 @@ import FormField from "../components/FormField";
 import { useState } from "react";
 import CheckBox from "../components/checkBox";
 
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://10.0.2.2:3000'; // This points to localhost on 
+
 export default function Index() {
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
