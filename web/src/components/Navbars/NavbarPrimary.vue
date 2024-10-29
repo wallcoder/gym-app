@@ -32,9 +32,6 @@ onMounted(async () => {
   }
 });
 
-watch(localStorage.getItem('user'), () => {
-  currentUser.value = localStorage.getItem('user')
-})
 
 
 
