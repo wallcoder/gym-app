@@ -13,7 +13,7 @@ const Header = () => {
   };
   return (
     <>
-        <View className="flex flex-row justify-between items-center  w-[340px] mt-[30px]">
+        <View className="flex flex-row justify-between items-center  w-full mt-[30px]">
           <View className="flex flex-row justify-center items-center">
             <TouchableOpacity onPress={handleMapPress}>
               <Ionicons name="location" size={24} color="#52AB99" />

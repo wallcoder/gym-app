@@ -40,8 +40,8 @@ const Gyms = () => {
         contentContainerStyle={{ flexGrow: 1, paddingTop: 30 }}
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
-        scrollEventThrottle={1}       // Lower throttle for more responsive scrolling
-        decelerationRate={0.99}       // Increased deceleration rate for faster dragging response
+        scrollEventThrottle={1}       
+        decelerationRate={0.99}     
       >
         <View className="flex items-center w-full">
           <View className=" w-full">

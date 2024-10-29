@@ -99,8 +99,8 @@ export default function Index() {
             <Link href="./(auths)/sign-up" className="text-lg font-psemibold text-[#52AB99]">
               Signup
             </Link>
-            <Link href="./mapIntegrated" className="text-lg font-psemibold text-[#52AB99]">
-              map
+            <Link href="./gyms" className="text-lg font-psemibold text-[#52AB99]">
+            gyms
             </Link>
           </View>
         </View>
