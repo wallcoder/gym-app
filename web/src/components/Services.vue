@@ -4,8 +4,14 @@ import { RouterLink } from 'vue-router'
 
 import ButtonLink from './ButtonLink.vue'
 import GymCard from '@/components/GymCard.vue'
+import LoaderSquare from '@/components/LoaderSquare.vue'
 import { storeToRefs } from 'pinia'
 import { useGymStore } from '../stores/gyms'
+
+
+import { useLoaderStore } from '@/stores/loader'
+const loader = useLoaderStore()
+const { isLoadingSquare } = storeToRefs(loader)
 
 
 const gymStore = useGymStore();
@@ -14,7 +20,7 @@ const { getGyms } = gymStore;
 
 onMounted(async () => {
     await getGyms();
-    
+
 })
 
 </script>   
@@ -24,9 +30,12 @@ onMounted(async () => {
         <h1 class="text-2xl tablet:text-3xl text-black text-center">Top Gyms Available in <span
                 class="text-first">Aizawl</span></h1>
         <div class="w-full flex flex-wrap justify-center   gym-card mt-8 ">
-
-
-            <GymCard :gyms="gyms" />
+            <div v-if="isLoadingSquare">
+                <LoaderSquare />
+            </div>
+            <div v-else>
+                <GymCard :gyms="gyms"  />
+            </div>
 
 
         </div>
@@ -34,6 +43,4 @@ onMounted(async () => {
     </section>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

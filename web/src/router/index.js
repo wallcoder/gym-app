@@ -25,6 +25,7 @@ import Notification from '@/views/User/Notification.vue';
 import Membership from '@/views/User/Membership.vue';
 import Profile from '@/views/User/Profile.vue';
 import MyGyms from '@/views/User/MyGyms.vue';
+import NotFound from '@/views/User/NotFound.vue';
 
 
 const routes = [
@@ -183,13 +184,17 @@ const routes = [
     path: '/user-profile',
 
     component: UserSpace,
+
     meta: {
-      title: 'Gympass | Userspace'
+      title: 'Gympass | Userspace',
+      requiresAuth: true
     },
     children: [
       {
         path: '',
         component: Profile,
+        name: 'profile',
+
         meta: {
           title: 'Gympass | Profile'
         }
@@ -198,6 +203,7 @@ const routes = [
       {
         path: 'saved',
         component: Saved,
+        name: 'saved',
         meta: {
           title: 'GymPass | Saved'
         }
@@ -206,6 +212,7 @@ const routes = [
       {
         path: 'notifications',
         component: Notification,
+        name: 'notifications',
         meta: {
           title: 'GymPass | Notifications'
         }
@@ -214,6 +221,7 @@ const routes = [
       {
         path: 'memberships',
         component: Membership,
+        name: 'memberships',
         meta: {
           title: 'GymPass | Membership'
         }
@@ -222,13 +230,15 @@ const routes = [
       {
         path: 'my-gyms',
         component: MyGyms,
+        name: 'my-gyms',
         meta: {
           title: 'GymPass | My Gyms'
         }
 
       }
     ]
-  }
+  },
+  { path: '/:catchall(.*)*', name: 'not-found', component: NotFound }
 
 ]
 

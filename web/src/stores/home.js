@@ -24,6 +24,7 @@ export const useHomeStore = defineStore('home', () => {
     const isOpenSignUp = ref(false)
     const isOpenRegisterGym = ref(false)
     const isOpenOTP = ref(false)
+    const isOpenEditProfile = ref(false)
 
     // AUTH
     const isLogin = ref(false);
@@ -49,6 +50,7 @@ export const useHomeStore = defineStore('home', () => {
         isOpenRegisterGym.value = false
         firstName.value = ''
         lastName.value = ''
+        isOpenEditProfile.value = false
         if (clearEmail) {
             email.value = ''
         }
@@ -132,6 +134,7 @@ export const useHomeStore = defineStore('home', () => {
 
             // Close login modals
             closeModals();
+            forceRerender();
             
 
 
@@ -299,7 +302,7 @@ export const useHomeStore = defineStore('home', () => {
 
     return {
         modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister,
-        otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin, currentUser
+        otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin, currentUser, isOpenEditProfile
     }
 
 })

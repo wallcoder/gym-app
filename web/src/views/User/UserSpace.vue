@@ -1,12 +1,20 @@
 <script setup>
 import NavbarSecond from '@/components/Navbars/NavbarSecond.vue'
 import Footer from '@/components/Footer.vue'
+
 import { RouterView, RouterLink } from 'vue-router'
+import {ref} from 'vue'
+import {storeToRefs} from 'pinia'
+import EditProfile from '@/components/EditProfile.vue'
+import {useHomeStore} from '@/stores/home'
+const home = useHomeStore();
+const {isOpenEditProfile} = storeToRefs(home)
+
 </script>
 <template>
-    <section class="bg-white">
+    <section class="bg-white" >
         <NavbarSecond />
-        <section class="h-[100vh] w-full tablet:px-[14%]  ">
+        <section class=" w-full tablet:px-[14%] mb-29" v-motion-fade-visible-once>
             <div class="relative mb-35">
                 <img src="../../assets/images/wallpaper1.png" alt="" class="w-full h-45 object-cover">
                 <div class="flex justify-center items-center absolute left-0 right-0 top-25 flex-col">
@@ -14,30 +22,35 @@ import { RouterView, RouterLink } from 'vue-router'
                         class="rounded-full bg-blue-200 w-40 h-40 object-cover border-4 border-white cursor-pointer hover:brightness-90 transition-all duration-200 ease-in-out"
                         alt="">
                     <h2 class="text-xl text-black font-semibold ">Sarah Wayne</h2>
-                    
                 </div>
-                
-
             </div>
             <section class="flex rounded-lg shadow-3 bg-white text-black">
-                <nav class="flex flex-col  w-50 h-60 ">
-                    <RouterLink to="/user-profile" class="bg-white p-2 hover:bg-sixth transition-all duration-200 rounded-l-lg"
-                        exact-active-class="bg-sixth">Profile
+                <nav class="flex flex-col  ">
+                    <RouterLink to="/user-profile"
+                        class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200 rounded-l-lg  "
+                        active-class="bg-sixth">Profile
                     </RouterLink>
-                    <RouterLink to="/user-profile/notifications" exact-active-class="bg-sixth" class="bg-white p-2 hover:bg-sixth transition-all duration-200">Notifications
+                    <RouterLink to="/user-profile/notifications"
+                        class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200" active-class="bg-sixth">
+                        Notifications
                     </RouterLink>
-                    <RouterLink to="/user-profile/memberships" exact-active-class="bg-sixth" class="bg-white p-2 hover:bg-sixth transition-all duration-200">Membership
+                    <RouterLink to="/user-profile/memberships"
+                        class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200" active-class="bg-sixth">Membership
                     </RouterLink>
-                    <RouterLink to="/user-profile/saved" exact-active-class="bg-sixth" class="bg-white p-2 hover:bg-sixth transition-all duration-200">Saved</RouterLink>
-                    <RouterLink to="/user-profile/my-gyms" exact-active-class="bg-sixth" class="bg-white p-2 hover:bg-sixth transition-all duration-200">My Gym</RouterLink>
-                    <RouterLink to="/user-profile/my-gyms" exact-active-class="bg-sixth" class="bg-white p-2 hover:bg-sixth transition-all duration-200">Settings</RouterLink>
+                    <RouterLink to="/user-profile/saved" class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200"
+                        active-class="bg-sixth">Saved</RouterLink>
+                    <RouterLink to="/user-profile/my-gyms" class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200"
+                        active-class="bg-sixth">My Gym</RouterLink>
+                    <RouterLink to="/user-profile/settings" class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200"
+                        active-class="bg-sixth">Settings</RouterLink>
                 </nav>
-                <RouterView />
-
+                <div class="px-3 py-2">
+                    <RouterView v-motion-fade-visible-once/>
+                </div>
             </section>
-
         </section>
-
         <Footer />
+        <EditProfile />
     </section>
 </template>
+

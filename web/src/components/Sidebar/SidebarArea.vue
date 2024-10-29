@@ -300,9 +300,9 @@ const menuGroups = ref([
     ref="target"
   >
     <!-- SIDEBAR HEADER -->
-    <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-      <router-link to="/">
-        <img src="@/assets/images/logo/logo.svg" alt="Logo" />
+    <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 ">
+      <router-link to="/" class="flex pl-4">
+        <h1 class="text-white font-semibold text-xl">Admin</h1>
       </router-link>
 
       <button class="block lg:hidden" @click="sidebarStore.isSidebarOpen = false">
@@ -344,7 +344,7 @@ const menuGroups = ref([
       <!-- Sidebar Menu -->
 
       <!-- Promo Box -->
-      <div
+      <!-- <div
         class="mx-auto mb-10 w-full max-w-60 rounded-sm border border-strokedark bg-boxdark py-6 px-4 text-center shadow-default"
       >
         <h3 class="mb-1 font-semibold text-white">TailAdmin Pro</h3>
@@ -357,7 +357,7 @@ const menuGroups = ref([
         >
           Purchase Now
         </a>
-      </div>
+      </div> -->
       <!-- Promo Box -->
     </div>
   </aside>

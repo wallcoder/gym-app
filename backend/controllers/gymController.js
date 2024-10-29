@@ -3,6 +3,7 @@ import { User } from "../models/User.js";
 import { Plan } from "../models/Gym.js";
 import sequelize from "../config/db.js";
 import { GymFeatureMapping } from "../models/Gym.js";
+import { Op } from "sequelize";
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs'; // To check if the folder exists
@@ -48,7 +49,7 @@ export const insertGym = async (req, res) => {
         const gymData = await JSON.parse(req.body.gymData);
 
         console.log(gymData)
-       
+
         const gymImages = req.files.gymImages || [];
         const gymProfileImage = req.files.gymProfileImage ? req.files.gymProfileImage[0] : null;
 
@@ -66,8 +67,8 @@ export const insertGym = async (req, res) => {
             status: 'unverified'
 
         })
-        if(!newGym){
-            res.status(400).json({message: 'error creating gym'})
+        if (!newGym) {
+            res.status(400).json({ message: 'error creating gym' })
         }
 
         const gymId = newGym.id;
@@ -85,8 +86,8 @@ export const insertGym = async (req, res) => {
 
         })
 
-        if(!newPlan1){
-            res.status(400).json({message: 'error creating plan 1'})
+        if (!newPlan1) {
+            res.status(400).json({ message: 'error creating plan 1' })
         }
 
         const plan2 = gymData.membershipPlans.plan2;
@@ -193,7 +194,7 @@ export const insertGym = async (req, res) => {
 
         }
 
-        const enApi =  encrypt(gymData.publicKey, gymData.secretKey)
+        const enApi = encrypt(gymData.publicKey, gymData.secretKey)
 
         insertApiKey(enApi.encryptedData1, enApi.encryptedData2, enApi.key, enApi.iv, gymId)
 
@@ -234,6 +235,7 @@ export const insertGym = async (req, res) => {
 export const getGyms = async (req, res) => {
     try {
         const gyms = await Gym.findAll({
+
             include: [
                 { model: GymLocation },
                 { model: Plan }
@@ -244,6 +246,56 @@ export const getGyms = async (req, res) => {
         res.status(400).json(err);
     }
 };
+
+export const searchGyms = async (req, res) => {
+
+    let { term, location } = req.query
+
+    console.log(req.query)
+    
+
+    try {
+
+
+        if(!term){
+            return res.json({gyms: []})
+        }
+
+
+        term = `%${term}%`
+
+
+        const search = await Gym.findAll(
+
+            // {
+            //     include: [
+            //         {
+            //             model: GymLocation,
+            //             where: { city: location }
+            //         },
+
+
+            //     ]
+            // },
+            {
+                where: {
+                    gymName: { [Op.iLike]: term }
+                }
+            }
+
+        )
+        console.log(search)
+
+        res.status(200).json({ gyms: search })
+
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err)
+    }
+
+
+}
 
 export const getGymById = async (req, res) => {
     try {
@@ -281,31 +333,31 @@ export const getGymById = async (req, res) => {
     }
 };
 
-export const getFeatures = async (req, res)=>{
+export const getFeatures = async (req, res) => {
     try {
         console.log("emarald eyes")
         const features = await GymFeature.findAll();
-        if(!features){
-            res.status(400).json({message: 'Features not available'})
+        if (!features) {
+            res.status(400).json({ message: 'Features not available' })
         }
         res.status(200).json(features)
     } catch (error) {
         res.status(400).json(error)
-        
+
     }
 }
 
-export const getWorkouts = async (req, res)=>{
+export const getWorkouts = async (req, res) => {
     try {
         console.log("my home")
         const workouts = await GymWorkout.findAll();
-        if(!workouts){
-            res.status(400).json({message: 'Workouts not available'})
+        if (!workouts) {
+            res.status(400).json({ message: 'Workouts not available' })
         }
         res.status(200).json(workouts)
     } catch (error) {
         res.status(400).json(error)
-        
+
     }
 }
 

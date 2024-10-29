@@ -7,6 +7,7 @@ export const useSearchBarStore = defineStore('searchBar', ()=>{
     const isOpenSugg = ref(false)
     const isOpenLoc = ref(false)
     const query  = ref("")
+    const hasSearched = ref(false);
 
     const toggleSugg = ()=>{
         isOpenSugg.value = !isOpenSugg.value
@@ -18,15 +19,15 @@ export const useSearchBarStore = defineStore('searchBar', ()=>{
         isOpenSugg.value = false
     }
 
-    watch(query, (newVal)=>{
-        if(newVal){
-            isOpenSugg.value = true
-        }else{
-            isOpenSugg.value = false
-        }
+    // watch(query, (newVal)=>{
+    //     if(newVal){
+    //         isOpenSugg.value = true
+    //     }else{
+    //         isOpenSugg.value = false
+    //     }
        
-    })
+    // })
     return{
-        isOpenLoc, isOpenSugg, toggleLoc, toggleSugg, query
+        isOpenLoc, isOpenSugg, toggleLoc, toggleSugg, query, hasSearched
     }
 })

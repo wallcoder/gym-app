@@ -106,19 +106,19 @@ const logoChange = computed(() => {
                             <RouterLink to="">Profile</RouterLink>
                         </li>
                         <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-                            <RouterLink to="/user/notifications">Notifications</RouterLink>
+                            <RouterLink to="/user-profile/notifications">Notifications</RouterLink>
                         </li>
                         <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
                             <RouterLink to="">Settings</RouterLink>
                         </li>
                         <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-                            <RouterLink to="/user/my-gyms">My Gym</RouterLink>
+                            <RouterLink to="/user-profile/my-gyms">My Gym</RouterLink>
                         </li>
                         <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-                            <RouterLink to="/user/membership">Membership</RouterLink>
+                            <RouterLink to="/user-profile/membership">Membership</RouterLink>
                         </li>
                         <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-                            <RouterLink to="/user/saves">Saves</RouterLink>
+                            <RouterLink to="/user-profile/saved">Saves</RouterLink>
                         </li>
                         <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer rounded-b-lg"
                             @click="handleLogout">Logout
