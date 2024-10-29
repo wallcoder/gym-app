@@ -10,6 +10,11 @@ import { useTokenStore } from '../../stores/token';
 import { useGymRegStore } from '../../stores/gymReg';
 import LoaderSquare from '@/components/LoaderSquare.vue'
 
+import { useLoaderStore } from '@/stores/loader'
+const loader = useLoaderStore()
+const { isLoadingSquare } = storeToRefs(loader)
+
+
 const token = useTokenStore();
 const gymReg = useGymRegStore()
 const { fetchFeatures, fetchWorkouts } = gymReg;
@@ -27,15 +32,15 @@ const api = import.meta.env.VITE_API;
 
 const props = defineProps({
    id : {
-        type: Number,
+        type: String,
         required: true,
     },
 });
 
 onMounted(() => {
     getGymById(Number(props.id));
-    fetchFeatures(props.id);
-    fetchWorkouts(props.id);
+    fetchFeatures(Number(props.id));
+    fetchWorkouts(Number(props.id));
 
     decodeToken();
 });

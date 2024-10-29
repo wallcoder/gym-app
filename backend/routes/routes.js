@@ -7,7 +7,7 @@ import { checkPlan, getSubscriptionPlans, insertPlanMapping } from "../controlle
 import { authenticateToken } from "../controllers/login.js";
 import { getSubscriptionPlanById } from "../controllers/planController.js";
 import { decodeToken } from "../controllers/login.js";
-import { getFeatures, getWorkouts, insertGym } from "../controllers/gymController.js"; // New controller for gym registration
+import { getFeatures, getWorkouts, insertGym, searchGyms } from "../controllers/gymController.js"; // New controller for gym registration
 import { getGymById, getGyms } from "../controllers/gymController.js";
 import { PaymentGateway } from "../models/paymentGateway.js";
 import { createOrder, getPublicKey, paymentDetails, verifyPayment } from "../controllers/paymentGateway.js";
@@ -85,4 +85,8 @@ router.get('/workouts', getWorkouts)
 
 // QR CODE
 router.get('/check-plan/:planMapId', checkPlan);
+
+
+// gym search
+router.get('/search-gyms', searchGyms)
 export default router;

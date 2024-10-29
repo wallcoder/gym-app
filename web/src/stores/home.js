@@ -134,6 +134,7 @@ export const useHomeStore = defineStore('home', () => {
 
             // Close login modals
             closeModals();
+            forceRerender();
             
 
 
