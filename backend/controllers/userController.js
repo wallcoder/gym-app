@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
+import { Op } from 'sequelize';
 
 
 import { User, UserRole } from '../models/User.js';
@@ -14,7 +15,7 @@ const transporter = nodemailer.createTransport({
         user: "sbfactual@gmail.com",
         pass: "hbrjzyojxejwyqpe",
     },
-});
+})
 
 const sendOTP = async () => {
     const otp = generateOTP()
@@ -31,6 +32,73 @@ const sendOTP = async () => {
 }
 
 // sendOTP().catch(console.error)
+export const getAllUsers = async (req, res) => {
+    try {
+        console.log("HIYAAAAA")
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const offset = (page - 1) * limit;
+        let term = req.query.term;
+
+        // Prepare the search term for LIKE queries
+        if (term) {
+            term = isNaN(term) ? `%${term}%` : parseInt(term, 10);
+        }
+        console.log(term)
+        // Define condition for Gym model based on term
+        const userCondition = term
+            ? {
+                [Op.or]: [
+                    { firstName: { [Op.iLike]: term } },
+                    { lastName: { [Op.iLike]: term } },
+                    { email: { [Op.iLike]: term } },
+                    { status: { [Op.iLike]: term } },
+                ],
+            }
+            : {};
+
+        // Step 1: Count gyms based on userCondition without including associations
+        const totalItems = await User.count({ where: userCondition });
+
+        // Step 2: Fetch gyms with associations and pagination
+        const gyms = await User.findAll({
+            where: userCondition,
+            limit,
+            offset,
+            include: [
+                {
+                    model: UserRole,
+                    required: false,  // Allow gyms without locations
+                    where: term
+                        ? {
+
+                            roleName: { [Op.iLike]: term },
+
+
+                        }
+                        : {},
+                },
+
+            ],
+        });
+
+        const totalPages = Math.ceil(totalItems / limit);
+        const currentPage = page;
+
+        console.log(gyms)
+
+        // Respond with paginated data
+        res.json({
+            allItems: gyms,
+            totalPages,
+            currentPage,
+            totalUsers: totalItems,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching users.' });
+    }
+};
 
 export const insertUser = async (req, res) => {
     try {

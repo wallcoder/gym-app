@@ -11,7 +11,7 @@ const componentKey = ref(0);
 const forceRerender = () => {
   componentKey.value += 1;
 };
-// Declare currentUser as a ref
+
 
 const home = useHomeStore();
 const { isOpenLogin, isOpenRegisterGym, isOpenSignUp, currentUser, isLogin } = storeToRefs(home);

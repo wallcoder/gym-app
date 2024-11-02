@@ -40,7 +40,7 @@ export const insertApiKey = async (encrypted1, encrypted2, key, iv, gymId) => {
             iv,
             gymId: gymId // Replace this with the actual gym ID you need
         });
-        console.log('API Key inserted successfully:', newApiKey);
+        console.log('API Key inserted successfully:');
     } catch (error) {
         console.error('Error inserting API Key:', error);
     }

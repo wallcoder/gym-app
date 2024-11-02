@@ -138,11 +138,19 @@ export const useGymRegStore = defineStore('useGymReg', () => {
             formDataToSend.append('ownerId', currentUserToken.value.userId);
 
             const response = await axios.post('/register-gym', formDataToSend, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                headers: { 'Content-Type': 'multipart/form-data' }, timeout: 20000
             });
 
             console.log(response.data);
-          
+            router.push('/')
+            toast.success("Gym Details submitted successfully", {
+                "theme": "colored",
+                "position": "bottom-center"
+            });
+
+
+
+
 
         } catch (err) {
             console.log(err);
@@ -152,9 +160,9 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     const fetchFeatures = async () => {
 
         try {
-           console.log("from fetchFeatures")
+
             const response = await axios.get(`/features`)
-            console.log(response.data)
+
 
             allFeatures.value = response.data
         } catch (err) {
@@ -170,9 +178,9 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     const fetchWorkouts = async () => {
 
         try {
-            console.log("from fetchWorkouts")
+
             const response = await axios.get(`/workouts`)
-            console.log(response.data)
+
 
             allWorkouts.value = response.data
         } catch (err) {
@@ -185,6 +193,6 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     }
 
     return {
-        formData, handleRegister, message, isFormValid: computed(() => checkFormFilled(formData) && checkMessagesEmpty(message.value)), handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout,  fetchFeatures, fetchWorkouts, allFeatures, allWorkouts
+        formData, handleRegister, message, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout, fetchFeatures, fetchWorkouts, allFeatures, allWorkouts
     };
 });

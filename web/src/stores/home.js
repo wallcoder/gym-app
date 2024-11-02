@@ -110,6 +110,17 @@ export const useHomeStore = defineStore('home', () => {
 
 
 
+    const handleSave = async (gymId, userId) => {
+        try {
+            const response = await axios.post('/save-gym/:id', { gymId, userId });
+            console.log(response.data);
+
+        } catch (err) {
+
+            console.log(err)
+
+        }
+    }
     const handleLogin = async () => {
         try {
             const response = await axios.post('/login', { email: email.value, password: password.value });
@@ -125,17 +136,17 @@ export const useHomeStore = defineStore('home', () => {
             // Decode the token to get user data (adjust based on your decodeToken logic)
             const userData = await decodeToken(token); // Assuming this returns user data like { firstName, ... }
 
-            // Update currentUser and store in localStorage
+
             currentUser.value = userData;
             localStorage.setItem('user', JSON.stringify(userData));
 
-            // Log the current user for debugging
+
             console.log("User Data after Login:", currentUser.value);
 
-            // Close login modals
+
             closeModals();
             forceRerender();
-            
+
 
 
 
@@ -301,7 +312,7 @@ export const useHomeStore = defineStore('home', () => {
 
 
     return {
-        modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister,
+        modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister, handleSave,
         otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin, currentUser, isOpenEditProfile
     }
 
