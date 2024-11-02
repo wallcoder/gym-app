@@ -43,7 +43,7 @@ cron.schedule('*/5 * * * *', async () => {
             }
         );
 
-        console.log(`${result[0]} rows updated`);
+        
     } catch (error) {
         console.error('Error while updating expired plans:', error);
     }
@@ -111,7 +111,7 @@ export const getSubscriptionPlans = async (req, res) => {
 
 export const getSubscriptionPlanById = async (req, res) => {
     try {
-        console.log("helllooo")
+
 
         const id = req.params.id
         const subscriptionPlan = await Plan.findOne({ where: { planType: 'subscription', id } })

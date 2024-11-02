@@ -1,5 +1,5 @@
 import express from "express";
-import { insertUser } from "../controllers/userController.js";
+import { getAllUsers, insertUser } from "../controllers/userController.js";
 import { sendOTP } from "../controllers/otp.js";
 import { verifyOTP } from "../controllers/otp.js";
 import { userLogin, findUserFromToken } from "../controllers/login.js";
@@ -7,7 +7,7 @@ import { checkPlan, getSubscriptionPlans, insertPlanMapping } from "../controlle
 import { authenticateToken } from "../controllers/login.js";
 import { getSubscriptionPlanById } from "../controllers/planController.js";
 import { decodeToken } from "../controllers/login.js";
-import { getFeatures, getWorkouts, insertGym, searchGyms } from "../controllers/gymController.js"; // New controller for gym registration
+import { getAllGyms, getFeatures, getWorkouts, insertGym, searchGyms } from "../controllers/gymController.js"; // New controller for gym registration
 import { getGymById, getGyms } from "../controllers/gymController.js";
 import { PaymentGateway } from "../models/paymentGateway.js";
 import { createOrder, getPublicKey, paymentDetails, verifyPayment } from "../controllers/paymentGateway.js";
@@ -51,12 +51,16 @@ router.post('/verify-otp', verifyOTP);
 router.post('/login', userLogin);
 router.post('/user-token', findUserFromToken);
 
+// USERS
+router.get('/admin/users', getAllUsers)
+
 // decode token
 router.post('/decode-token', decodeToken);
 
 // gym
 router.get('/gyms', getGyms);
 router.get('/gyms/:id', getGymById);
+router.get('/admin/gyms', getAllGyms)
 
 // SUBSCRIPTION PLANS
 router.get('/subscription-plans', getSubscriptionPlans);

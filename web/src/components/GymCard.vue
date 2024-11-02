@@ -1,6 +1,10 @@
 <script setup>
+import {useHomeStore} from '@/stores/home';
+const home = useHomeStore();
+
+const {handleSave} = home
 const api = import.meta.env.VITE_API
-console.log(api)
+
 const props = defineProps({
     gyms: {
         type: Array,
@@ -29,7 +33,7 @@ const props = defineProps({
                     <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i></h3>
                 </div>
                 <div>
-                    <i class="fa-solid fa-bookmark text-sixth text-2xl mr-2 mt-2 cursor-pointer"></i>
+                    <i class="fa-solid fa-bookmark text-sixth text-2xl mr-2 mt-2 cursor-pointer" @click="handleSave(gym.id)"></i>
                 </div>
             </div>
         </div>

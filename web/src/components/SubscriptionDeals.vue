@@ -36,17 +36,20 @@ onMounted(() => {
                     <h1 class="text-xl font-semibold text-black mb-4">Choose Subscription Plans</h1>
 
 
-                    <div class="max-w-md mx-auto" >
-                        <div v-for="s in subscriptionPlans" :key="s.id" class="relative z-0 w-full mb-5 group shadow-4 p-4 space-y-2">
+                    <div class="max-w-md mx-auto">
+                        <div v-for="s in subscriptionPlans" :key="s.id"
+                            class="relative z-0 w-full mb-5 group shadow-4 p-4 space-y-2">
                             <h3 class="text-md font-semibold text-black">{{ s.planName }}</h3>
-                            <h4 class="font-semibold">&#8377;{{s.price}}/month</h4>
+                            <h4 class="font-semibold">&#8377;{{ s.price }}/month</h4>
                             <p class="text-sm">
                                 {{ s.planDescription }}
                             </p>
-                            <RouterLink :to="`/gym-registration/${s.planName}`" class="text-first font-semibold inline-block hover:underline" @click="closeModals()">Register
+                            <RouterLink :to="`/gym-registration/${s.id}/${s.planName}`"
+                                class="text-first font-semibold inline-block hover:underline" @click="closeModals()">
+                                Register
                             </RouterLink>
                         </div>
-                       
+
 
 
 
