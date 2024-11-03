@@ -5,10 +5,10 @@ import { Link } from "expo-router";
 import FormField from "../components/FormField";
 import { useState } from "react";
 import CheckBox from "../components/checkBox";
-
 import axios from 'axios';
+import 'react-native-get-random-values';
 
-axios.defaults.baseURL = 'http://10.0.2.2:3000'; // This points to localhost on 
+axios.defaults.baseURL = 'http://10.0.2.2:3000'; // This points to localhost on Android Emulator
 
 export default function Index() {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -23,7 +23,7 @@ export default function Index() {
     setError(""); 
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.email || !form.password) {
       setError("Please fill in all fields");
       return;
@@ -36,7 +36,23 @@ export default function Index() {
     }
 
     setSubmitting(true);
-    router.push("/gyms");
+
+    try {
+      const response = await axios.post('/login', {
+        email: form.email,
+        password: form.password,
+      });
+
+      if (response.status === 200) {
+        router.push("/gyms");
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "An error occurred. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -47,7 +63,6 @@ export default function Index() {
         keyboardShouldPersistTaps="handled" 
       >
         <View className="justify-center items-center p-3">
-          
           <Text className="text-center mt-[100px] mb-[50px] text-[20px] text-black">Log In</Text>
 
           <FormField
@@ -103,9 +118,9 @@ export default function Index() {
             <Link href="./(auths)/sign-up" className="text-lg font-psemibold text-[#52AB99]">
               Signup
             </Link>
-            <Link href="./gyms" className="text-lg font-psemibold text-[#52AB99]">
-            gyms
-            </Link>
+            {/* <Link href="./gyms" className="text-lg font-psemibold text-[#52AB99]">
+              gyms
+            </Link> */}
           </View>
         </View>
       </ScrollView>

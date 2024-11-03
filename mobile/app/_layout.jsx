@@ -24,12 +24,17 @@ export default function RootLayout() {
       }}/>
       <Stack.Screen name="searchScreen" options={{
         title:"search Screen",
-        headerShown:true
+        headerShown:false
       }}/>
       <Stack.Screen name="mapIntegrated" options={{
         title:"map ",
         headerShown:true
       }}/>
+      <Stack.Screen name="notifications" options={{
+        title: "Notifications",
+        headerShown: true
+      }} />
+
     </Stack>
   );
 }

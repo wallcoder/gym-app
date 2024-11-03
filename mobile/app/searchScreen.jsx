@@ -1,12 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { SafeAreaView, ScrollView, View } from 'react-native';
+import React from 'react';
+import SearchInput from '../components/SearchInput';
 
-const searchScreen = () => {
+const SearchScreen = () => {
   return (
-    <View>
-      <Text>searchScreen</Text>
-    </View>
-  )
-}
+    <SafeAreaView className="flex-1 bg-white pt-8">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 16 }}>
+        <View className="mb-4">
+          <SearchInput />
+        </View>
+        
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
-export default searchScreen
+export default SearchScreen;
