@@ -31,7 +31,7 @@ export default function SignUp() {
       });
 
       if (response.status === 201) {
-        setIsModalVisible(true); // Show OTP modal
+        handleSendOtp(); // Send OTP on successful registration
       } else {
         if (response.data.passwordMessage) alert(response.data.passwordMessage);
         if (response.data.emailMessage) alert(response.data.emailMessage);
@@ -43,6 +43,24 @@ export default function SignUp() {
     }
   };
 
+  const handleSendOtp = async () => {
+    try {
+      const otpResponse = await axios.post('/send-otp', { email: form.email });
+      
+      // Adjusted condition to allow any 2xx response status to show the OTP modal
+      if (otpResponse.status >= 200 && otpResponse.status < 300) {
+        setIsModalVisible(true); // Show OTP modal if OTP is sent successfully
+        alert("OTP sent to your email!");
+      } else {
+        alert("Failed to send OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      alert("An error occurred while sending OTP. Please try again.");
+    }
+  };
+  
+
   const handleVerifyOtp = async () => {
     try {
       const response = await axios.post('/verify-otp', {
@@ -52,7 +70,7 @@ export default function SignUp() {
 
       if (response.status === 200) {
         alert("OTP verified successfully!");
-        router.push("/welcome"); // Navigate to another page on successful verification
+        router.push("/gyms"); // Navigate to another page on successful verification
       } else {
         alert("Invalid OTP. Please try again.");
       }
@@ -160,3 +178,6 @@ export default function SignUp() {
     </SafeAreaView>
   );
 }
+//shawnms1902@gmail.com
+//Shawnlast99@
+//dominicvans00@gmail.com

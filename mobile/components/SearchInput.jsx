@@ -8,10 +8,7 @@ const SearchInput = () => {
   
 
   return (
-    <View className="mt-[10px] flex flex-row items-center  w-[340px] h-[50px] p-[10px] bg-black-100 rounded-md border-2 border-[#a8a7a7] focus:border-secondary">
-      
-        <Ionicons name="search" size={24} color="#52AB99" />
-      
+    <View className=" flex flex-row justify-between items-center  w-full h-[40px] p-[3px] pr-[8px] bg-black-100 rounded-md border-2 border-[#a8a7a7] focus:border-secondary">
       <TextInput
         className="text-[16px] ml-[10px] mt-0.5 text-black  font-pregular"
         
@@ -19,7 +16,10 @@ const SearchInput = () => {
         placeholderTextColor="#a8a7a7"
         
       />
-
+      <View>
+        <Ionicons name="search" size={24} color="#52AB99" />
+      </View>
+      
       
     </View>
   );

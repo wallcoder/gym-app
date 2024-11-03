@@ -1,9 +1,53 @@
 import { SafeAreaView, View, Text, Animated, TouchableOpacity } from 'react-native';
 import React, { useState, useRef } from 'react';
-import Header from '../../components/home/header';
-import SearchInput from '../../components/SearchInput';
+import Header from '../header';
 import AvailableGyms from '../../components/home/availableGyms';
 import { useRouter } from 'expo-router';
+import { icons } from '../../constants';
+
+const gymsData = [
+  {
+    id: 1,
+    name: 'Lotus Gym',
+    location: 'Lowland Street, Green Valley',
+    rating: 4.5,
+    recommended: true,
+    image: icons.gymImage, // Replace with your placeholder image
+  },
+  {
+    id: 2,
+    name: 'Iron Paradise',
+    location: 'Sunset Boulevard, Uptown',
+    rating: 4.7,
+    recommended: false,
+    image: icons.gymImage, // Replace with another placeholder or same image
+  },
+  {
+    id: 3,
+    name: 'FitNation',
+    location: 'Maple Road, Midtown',
+    rating: 4.2,
+    recommended: true,
+    image: icons.gymImage,
+  },
+  {
+    id: 4,
+    name: 'broooooo',
+    location: 'Mafsfasfafdtown',
+    rating: 5,
+    recommended: true,
+    image: icons.gymImage,
+  },
+  {
+    id: 5,
+    name: 'nanannanaon',
+    location: 'askjakdnawn',
+    rating: 4.2,
+    recommended: true,
+    image: icons.gymImage,
+  },
+  
+];
 
 const Gyms = () => {
   const [inputBgColor, setInputBgColor] = useState('transparent');
@@ -30,9 +74,6 @@ const Gyms = () => {
       <View>
         <View className="items-center">
           <Header />
-          <TouchableOpacity>
-            {/* <SearchInput /> */}
-          </TouchableOpacity>
         </View>
       </View>
 
@@ -40,17 +81,17 @@ const Gyms = () => {
         contentContainerStyle={{ flexGrow: 1, paddingTop: 30 }}
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
-        scrollEventThrottle={1}       
-        decelerationRate={0.99}     
+        scrollEventThrottle={1}
+        decelerationRate={0.99}
       >
         <View className="flex items-center w-full">
-          <View className=" w-full">
+          <View className="w-full">
             <Text className="font-semibold mb-[10px] text-lg text-black text-center">
               TOP GYMS AVAILABLE
             </Text>
-            {[...Array(20)].map((_, index) => (
-              <TouchableOpacity key={index} onPress={handleGymPress}>
-                <AvailableGyms containerStyle="w-full" />
+            {gymsData.map((gym) => (
+              <TouchableOpacity key={gym.id} onPress={handleGymPress}>
+                <AvailableGyms containerStyle="w-full" gym={gym} />
               </TouchableOpacity>
             ))}
           </View>
