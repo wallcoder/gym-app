@@ -206,3 +206,18 @@ export const checkPlan = async (req, res) => {
 }
 
 
+export const getUserPlan = async(req, res)=>{
+    const {userId} = req.params;
+    try{
+        const userPlan = await PlanMapping.findAll({
+            where: {userId},
+            include: {model: Plan, where: {planType: 'membership'}}
+        })
+
+        res.json(userPlan)
+    }catch(err){
+        res.status(500).json(err)
+    }
+}
+
+

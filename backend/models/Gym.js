@@ -243,6 +243,10 @@ export const Notification = sequelize.define('Notification', {
             key: 'id'
         }
     },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     message: {
         type: DataTypes.STRING,
         allowNull: false,
