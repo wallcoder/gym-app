@@ -7,11 +7,16 @@ import 'vue3-toastify/dist/index.css';
 import { useTokenStore } from '@/stores/token'
 
 import { useRouter } from "vue-router";
-
-
+import { useGymStore } from '@/stores/gyms'
 
 
 export const useHomeStore = defineStore('home', () => {
+    const gymStore = useGymStore();
+    const { userSavedGyms } = storeToRefs(gymStore)
+    const { getSavedGyms } = gymStore;
+
+
+
     const router = useRouter()
 
     const token = useTokenStore();
@@ -25,7 +30,7 @@ export const useHomeStore = defineStore('home', () => {
     const isOpenRegisterGym = ref(false)
     const isOpenOTP = ref(false)
     const isOpenEditProfile = ref(false)
-
+    const savedGyms = ref([])
     // AUTH
     const isLogin = ref(false);
     const firstName = ref('');
@@ -110,15 +115,36 @@ export const useHomeStore = defineStore('home', () => {
 
 
 
-    const handleSave = async (gymId, userId) => {
+    const handleSave = async (gymId) => {
         try {
-            const response = await axios.post('/save-gym/:id', { gymId, userId });
-            console.log(response.data);
+            console.log("handleSave: ", gymId)
+            if (currentUser.value) {
+                const userId = currentUser.value.userId
+                const response = await axios.post('/save-gym', { gymId, userId });
+                console.log(response.data);
+
+                getSaved(currentUser.value.userId)
+                getSavedGyms(currentUser.value.userId)
+            } else {
+                isOpenLogin.value = true
+            }
 
         } catch (err) {
 
             console.log(err)
 
+        }
+    }
+
+    const getSaved = async (userId) => {
+        try {
+            console.log("getSaved: ", userId)
+            const response = await axios.get(`/user-saved/${userId}`)
+            savedGyms.value = response.data.map(item => item.gymId)
+            console.log("saved gyms: ", savedGyms.value)
+
+        } catch (err) {
+            console.log(err)
         }
     }
     const handleLogin = async () => {
@@ -312,7 +338,7 @@ export const useHomeStore = defineStore('home', () => {
 
 
     return {
-        modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister, handleSave,
+        modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister, handleSave, getSaved, savedGyms,
         otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin, currentUser, isOpenEditProfile
     }
 

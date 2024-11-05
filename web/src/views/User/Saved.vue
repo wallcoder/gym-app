@@ -8,16 +8,23 @@ import { storeToRefs } from 'pinia'
 import { useGymStore } from '@/stores/gyms'
 import LoaderSquare from '@/components/LoaderSquare.vue'
 import { useLoaderStore } from '@/stores/loader'
+import { useHomeStore } from '@/stores/home'
+
+const home = useHomeStore();
+const { currentUser } = storeToRefs(home)
 const loader = useLoaderStore()
 const { isLoadingSquare } = storeToRefs(loader)
 
 
 const gymStore = useGymStore();
-const { gyms } = storeToRefs(gymStore)
-const { getGyms } = gymStore;
+const { userSavedGyms } = storeToRefs(gymStore)
+const { getSavedGyms } = gymStore;
+
 
 onMounted(async () => {
-    await getGyms();
+    if (currentUser.value) {
+        await getSavedGyms(currentUser.value.userId);
+    }
 
 })
 
@@ -26,13 +33,13 @@ onMounted(async () => {
 <template>
     <section class=" p-2 flex flex-col w-full rounded-lg">
         <h1 class="text-lg font-semibold text-black">Saved</h1>
-        
-            <LoaderSquare v-if="isLoadingSquare"/>
-       
+
+        <LoaderSquare v-if="isLoadingSquare" />
+
         <div class=" flex flex-wrap " v-else>
 
 
-            <GymCard :gyms="gyms" v-motion-fade-visible-once />
+            <GymCard :gyms="userSavedGyms" v-motion-fade-visible-once />
 
 
 

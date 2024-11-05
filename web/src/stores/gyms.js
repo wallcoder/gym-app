@@ -14,6 +14,8 @@ export const useGymStore = defineStore('gym', () => {
     const searchedGyms = ref([])
     const allGyms = ref([])
     const gymSearch = ref('')
+    const userSavedGyms = ref([])
+    const myGyms = ref([])
 
     const getGyms = async () => {
 
@@ -33,7 +35,7 @@ export const useGymStore = defineStore('gym', () => {
     }
 
     const searchGyms = async (term = '', location ) => {
-        console.log("from search gyms: ", term)
+        
         try {
             const response = await axios.get(`/search-gyms?term=${term}&location=${location}`)
             searchedGyms.value = response.data.gyms
@@ -44,6 +46,29 @@ export const useGymStore = defineStore('gym', () => {
             console.log(err)
         }
 
+
+    }
+    const getSavedGyms = async(userId)=>{
+        console.log("from getSavedGyms: ", userId)
+        try{
+            const response = await axios.get(`/gyms/saved/${userId}`)
+            userSavedGyms.value = response.data;
+
+
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    const getMyGyms = async(userId)=>{
+        console.log("from getMygyms: ", userId)
+        try{
+            const response = await axios.get(`/user/gyms/${userId}`)
+            myGyms.value = response.data;
+
+        }catch(err){
+            console.log(err)
+        }
 
     }
 
@@ -77,5 +102,5 @@ export const useGymStore = defineStore('gym', () => {
     }
 
 
-    return { gym, gyms, getGymById, getGyms, searchGyms, searchedGyms, currentPage, totalGyms, totalPages, getAllGyms, allGyms, gymSearch }
+    return {getMyGyms, myGyms, getSavedGyms, userSavedGyms, gym, gyms, getGymById, getGyms, searchGyms, searchedGyms, currentPage, totalGyms, totalPages, getAllGyms, allGyms, gymSearch }
 })
