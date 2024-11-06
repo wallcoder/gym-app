@@ -11,7 +11,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 <template>
   <DefaultLayout>
-    <!-- <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
       <DataStatsOne />
     </div>
 
@@ -21,16 +21,14 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
      
       <ChartTwo />
       
-      <ChartThree />
+      
      
-      <MapOne />
       
-      <div class="col-span-12 xl:col-span-8">
-        <TableOne />
-      </div>
       
-      <ChatCard />
       
-    </div> -->
+      
+      
+      
+    </div>
   </DefaultLayout>
 </template>

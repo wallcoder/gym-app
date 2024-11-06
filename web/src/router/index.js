@@ -27,6 +27,20 @@ import Profile from '@/views/User/Profile.vue';
 import MyGyms from '@/views/User/MyGyms.vue';
 import NotFound from '@/views/User/NotFound.vue';
 
+import AdminLayout from '@/views/Admins/AdminLayout.vue'
+import Dashboard from '@/views/Admins/Dashboard.vue'
+import AdminCalender from '@/views/Admins/AdminCalender.vue'
+import AdminGyms from '@/views/Admins/AdminGyms.vue'
+import AdminFeatures from '@/views/Admins/AdminFeatures.vue'
+import AdminMemberships from '@/views/Admins/AdminMemberships.vue'
+import AdminNotifications from '@/views/Admins/AdminNotifications.vue'
+import AdminPlans from '@/views/Admins/AdminPlans.vue'
+import AdminTransactions from '@/views/Admins/AdminTransactions.vue'
+import AdminUsers from '@/views/Admins/AdminUsers.vue'
+
+
+
+
 
 const routes = [
   {
@@ -49,13 +63,106 @@ const routes = [
 
   },
   {
-    path: '/dashboard',
-    name: 'eCommerce',
-    component: ECommerceView,
-    meta: {
-      title: 'eCommerce Dashboard'
-    }
+    path: '/admin',
+    component: AdminLayout,
+    children:[{
+      path: '',
+      name: 'admin-dashboard',
+      component: Dashboard,
+      meta: {
+        title: 'Admin | Dashboard'
+      }
+    },
+    {
+      path: 'admin-calender',
+      name: 'admin-calender',
+      component: AdminCalender,
+      meta: {
+        title: 'Admin | Calender'
+      },
+      
+    },
+    {
+      path: 'admin-gyms',
+      name: 'admin-gyms',
+      component: AdminGyms,
+      meta: {
+        title: 'Admin | Gyms'
+      },
+    },
+    {
+      path: 'admin-features',
+      name: 'admin-features',
+      component: AdminFeatures,
+      meta: {
+        title: 'Admin | Workouts & Features'
+      },
+    },
+    {
+      path: 'admin-memberships',
+      name: 'admin-memberships',
+      component: AdminMemberships,
+      meta: {
+        title: 'Admin | Memberships'
+      },
+    },
+    {
+      path: 'admin-notifications',
+      name: 'admin-notifications',
+      component: AdminNotifications,
+      meta: {
+        title: 'Admin | Notfications'
+      },
+    },
+    {
+      path: 'admin-plans',
+      name: 'admin-plans',
+      component: AdminPlans,
+      meta: {
+        title: 'Admin | Plans'
+      },
+    },
+    {
+      path: 'admin-transactions',
+      name: 'admin-transactions',
+      component: AdminTransactions,
+      meta: {
+        title: 'Admin | Transactions'
+      },
+    },
+    {
+      path: 'admin-users',
+      name: 'admin-users',
+      component: AdminUsers,
+      meta: {
+        title: 'Admin | Users'
+      },
+    }]
   },
+
+
+//   import AdminFeatures from '@/views/Admins/AdminFeatures.vue'
+// import AdminMemberships from '@/views/Admins/AdminMemberships.vue'
+// import AdminNotifications from '@/views/Admins/AdminNotifications.vue'
+// import AdminPlans from '@/views/Admins/AdminPlans.vue'
+// import AdminTransactions from '@/views/Admins/AdminTransactions.vue'
+// import AdminUsers from '@/views/Admins/AdminUsers.vue'
+  {
+    path: '/admin-fake',
+
+    component: ECommerceView,
+
+    children: [{
+      path: '',
+      name: 'admin-dashboardd',
+      meta: {
+        title: 'Dashboard'
+      }
+    },
+
+    ]
+  },
+
   {
     path: '/calendar',
     name: 'calendar',
@@ -65,15 +172,15 @@ const routes = [
     }
   },
   {
-    path: '/profile',
-    name: 'profile',
+    path: '/profilee',
+    name: 'admin-profile',
     component: ProfileView,
     meta: {
       title: 'Profile'
     }
   },
   {
-    path: '/forms/form-elements',
+    path: '/form-elements',
     name: 'formElements',
     component: FormElementsView,
     meta: {
@@ -81,7 +188,7 @@ const routes = [
     }
   },
   {
-    path: '/forms/form-layout',
+    path: '/form-layout',
     name: 'formLayout',
     component: FormLayoutView,
     meta: {
@@ -144,8 +251,14 @@ const routes = [
       title: 'GymPass | Signup'
     }
   },
+
+  
+  
+  
+  
+  
   {
-    path: '/gym-registration/:planId',
+    path: '/gym-registration/:planId/:planName',
     name: 'gym-registration',
     component: RegisterGymView,
     props: true,

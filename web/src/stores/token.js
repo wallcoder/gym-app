@@ -15,13 +15,15 @@ export const useTokenStore = defineStore('token', () => {
   const decodeToken = async () => {
     try {
       const response = await axios.post('/decode-token');
-      console.log(response);
+      
       currentUserToken.value = response.data;
 
       // Ensure it's a stringified object when setting in localStorage
       localStorage.setItem('user', JSON.stringify(currentUserToken.value));
 
-      console.log('current user token:', currentUserToken.value);
+      
+      return currentUserToken.value;
+    
     } catch (err) {
       console.log(err);
     }

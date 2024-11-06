@@ -43,7 +43,7 @@ cron.schedule('*/5 * * * *', async () => {
             }
         );
 
-        console.log(`${result[0]} rows updated`);
+        
     } catch (error) {
         console.error('Error while updating expired plans:', error);
     }
@@ -111,7 +111,7 @@ export const getSubscriptionPlans = async (req, res) => {
 
 export const getSubscriptionPlanById = async (req, res) => {
     try {
-        console.log("helllooo")
+
 
         const id = req.params.id
         const subscriptionPlan = await Plan.findOne({ where: { planType: 'subscription', id } })
@@ -202,6 +202,21 @@ export const checkPlan = async (req, res) => {
     } catch (error) {
         console.error('Error checking plan status:', error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+export const getUserPlan = async(req, res)=>{
+    const {userId} = req.params;
+    try{
+        const userPlan = await PlanMapping.findAll({
+            where: {userId},
+            include: {model: Plan, where: {planType: 'membership'}}
+        })
+
+        res.json(userPlan)
+    }catch(err){
+        res.status(500).json(err)
     }
 }
 

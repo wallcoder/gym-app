@@ -3,13 +3,15 @@ import { User } from "../models/User.js";
 import { Plan } from "../models/Gym.js";
 import sequelize from "../config/db.js";
 import { GymFeatureMapping } from "../models/Gym.js";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs'; // To check if the folder exists
 import { PlanMapping } from "../models/Plans.js";
 import { encrypt } from "./paymentGateway.js";
 import { insertApiKey } from "./paymentGateway.js";
+import { Saved } from "../models/Gym.js";
+import { Notification } from "../models/Gym.js";
 
 // Define storage for multer
 const storage = multer.diskStorage({
@@ -198,37 +200,83 @@ export const insertGym = async (req, res) => {
 
         insertApiKey(enApi.encryptedData1, enApi.encryptedData2, enApi.key, enApi.iv, gymId)
 
+        res.json({ message: 'successful operation' })
 
-
-        // lat: 23.738008375,
-        //     lng: 92.70682112499999,
-        //     buildingNo: 'asfsaf',
-        //     area: 'asfasf',
-        //     city: 'asfasf',
-        //     landmark: 'asfasf'
-        // Construct the gym entry data with file paths
-        //   const newGym = await Gym.create({
-        //     name: gymData.name,
-        //     email: gymData.email,
-        //     contact: gymData.contact,
-        //     address: gymData.address,
-        //     ownerName: gymData.ownerName,
-        //     ownerEmail: gymData.ownerEmail,
-        //     location: gymData.location,
-        //     openingHours: gymData.openingHours,
-        //     membershipPlans: gymData.membershipPlans,
-        //     features: gymData.features,
-        //     workouts: gymData.workouts,
-        //     gymImages: gymImages.map(img => img.path), // Save paths of gym images
-        //     gymProfileImage: gymProfileImage ? gymProfileImage.path : null, // Save profile image path
-        //     ownerId: req.body.ownerId // Store the ownerId from the form
-        //   });
-
-        // Send success response with created gym data
-        //   res.status(201).json({ message: "Gym registered successfully", gym: newGym });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to register gym", details: err.message });
+    }
+};
+export const getAllGyms = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const offset = (page - 1) * limit;
+        let term = req.query.term;
+
+        // Prepare the search term for LIKE queries
+        if (term) {
+            term = isNaN(term) ? `%${term}%` : parseInt(term, 10);
+        }
+
+        // Define condition for Gym model based on term
+        const gymCondition = term
+            ? {
+                [Op.or]: [
+
+                    { gymName: { [Op.iLike]: term } },
+                    { gymPhone: { [Op.iLike]: term } },
+                    { gymEmail: { [Op.iLike]: term } },
+                    { status: { [Op.iLike]: term } },
+                ],
+            }
+            : {};
+
+        // Step 1: Count gyms based on gymCondition without including associations
+        const totalItems = await Gym.count({ where: gymCondition });
+
+        // Step 2: Fetch gyms with associations and pagination
+        const gyms = await Gym.findAll({
+            where: gymCondition,
+            limit,
+            offset,
+            include: [
+                {
+                    model: GymLocation,
+                    required: false,  // Allow gyms without locations
+                    where: term
+                        ? {
+                            [Op.or]: [
+                                { city: { [Op.iLike]: term } },
+                                { landmark: { [Op.iLike]: term } },
+                            ],
+                        }
+                        : {},
+                },
+                { model: User, required: false },
+                {
+                    model: GymFeatureMapping,
+                    required: false,
+                    include: [{ model: GymFeature, required: false }],
+                },
+
+                { model: GymImages, required: false },
+            ],
+        });
+
+        const totalPages = Math.ceil(totalItems / limit);
+        const currentPage = page;
+
+        // Respond with paginated data
+        res.json({
+            allGyms: gyms,
+            totalPages,
+            currentPage,
+            totalGyms: totalItems,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching gyms.' });
     }
 };
 
@@ -243,22 +291,137 @@ export const getGyms = async (req, res) => {
         });
         res.status(200).json(gyms);
     } catch (err) {
-        res.status(400).json(err);
+        res.status(500).json(err);
     }
 };
+
+
+export const getNotif = async (req, res)=>{
+    try{
+        console.log("hello fro get notif", req.params)
+        const {userId} = req.params
+
+        const notif = await Notification.findAll({
+            where: {userId}
+        })
+        console.log(notif)
+        res.json(notif)
+    }catch(err){
+        console.log(err)
+        res.status(500).json(err)
+    }
+}
+
+export const getSaved = async (req, res) => {
+    try {
+        console.log(req.params)
+        const { userId } = req.params;
+
+        const userSaved = await Saved.findAll(
+            {
+                where: { userId }
+            }
+        )
+
+        res.json(userSaved)
+
+    } catch (err) {
+        res.status(500).json(err)
+    }
+
+
+}
+
+export const getUserSavedGyms = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const savedGyms = await Gym.findAll({
+
+            include: [
+                { model: GymLocation },
+                {
+                    model: Saved,
+                    where: { userId }
+                },
+                { model: Plan }
+            ]
+        });
+
+        res.json(savedGyms)
+
+
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+export const getMyGyms = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const myGyms = await Gym.findAll({
+            where: { ownerId: userId },
+            include: [
+                { model: GymLocation },
+
+                { model: Plan }
+            ]
+        })
+
+        res.json(myGyms)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+export const saveGym = async (req, res) => {
+    const { gymId, userId } = req.body;
+    console.log("from save gym: ", gymId, userId);
+
+    try {
+
+        const check = await Saved.findOne({
+            where: {
+                userId,
+                gymId
+            }
+        });
+
+        if (check) {
+
+            await Saved.destroy({
+                where: {
+                    id: check.id
+                }
+            });
+
+            res.json({ message: 'deleted' });
+        } else {
+
+            const newSaved = await Saved.create({
+                userId,
+                gymId
+            });
+
+            res.json({ newSaved, message: 'saved' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+};
+
 
 export const searchGyms = async (req, res) => {
 
     let { term, location } = req.query
 
-    console.log(req.query)
-    
+
+
 
     try {
 
 
-        if(!term){
-            return res.json({gyms: []})
+        if (!term) {
+            return res.json({ gyms: [] })
         }
 
 
@@ -335,7 +498,7 @@ export const getGymById = async (req, res) => {
 
 export const getFeatures = async (req, res) => {
     try {
-        console.log("emarald eyes")
+
         const features = await GymFeature.findAll();
         if (!features) {
             res.status(400).json({ message: 'Features not available' })
@@ -349,7 +512,7 @@ export const getFeatures = async (req, res) => {
 
 export const getWorkouts = async (req, res) => {
     try {
-        console.log("my home")
+
         const workouts = await GymWorkout.findAll();
         if (!workouts) {
             res.status(400).json({ message: 'Workouts not available' })
@@ -361,6 +524,17 @@ export const getWorkouts = async (req, res) => {
     }
 }
 
+
+// const notif = async()=>{
+//     const newNotif = await Notification.create({
+//         title: "HEHEHE",
+//         message: 'sdgsdgsdg',
+//         link: '/',
+//         userId: 44
+//     })
+// }
+
+// notif()
 // const open = async()=>{
 //     const newOpen = await GymOpeningHours.create({
 //         morning: '6:00am - 9:00am',

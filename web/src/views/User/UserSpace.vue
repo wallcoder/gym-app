@@ -14,7 +14,7 @@ const {isOpenEditProfile} = storeToRefs(home)
 <template>
     <section class="bg-white" >
         <NavbarSecond />
-        <section class=" w-full tablet:px-[14%] mb-29" v-motion-fade-visible-once>
+        <section class=" w-full tablet:px-[14%] mb-29  " v-motion-fade-visible-once>
             <div class="relative mb-35">
                 <img src="../../assets/images/wallpaper1.png" alt="" class="w-full h-45 object-cover">
                 <div class="flex justify-center items-center absolute left-0 right-0 top-25 flex-col">
@@ -24,7 +24,7 @@ const {isOpenEditProfile} = storeToRefs(home)
                     <h2 class="text-xl text-black font-semibold ">Sarah Wayne</h2>
                 </div>
             </div>
-            <section class="flex rounded-lg shadow-3 bg-white text-black">
+            <section class="flex rounded-lg shadow-3 bg-white text-black min-h-[45vh]">
                 <nav class="flex flex-col  ">
                     <RouterLink to="/user-profile"
                         class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200 rounded-l-lg  "
@@ -41,8 +41,7 @@ const {isOpenEditProfile} = storeToRefs(home)
                         active-class="bg-sixth">Saved</RouterLink>
                     <RouterLink to="/user-profile/my-gyms" class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200"
                         active-class="bg-sixth">My Gym</RouterLink>
-                    <RouterLink to="/user-profile/settings" class="bg-white py-2 px-4 hover:bg-sixth transition-all duration-200"
-                        active-class="bg-sixth">Settings</RouterLink>
+                    
                 </nav>
                 <div class="px-3 py-2">
                     <RouterView v-motion-fade-visible-once/>

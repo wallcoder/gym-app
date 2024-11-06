@@ -33,7 +33,7 @@ export const Gym = sequelize.define('Gym', {
     },
 
     status: {
-        type: DataTypes.ENUM('unverified', 'verified'),
+        type: DataTypes.STRING,
         allowNull: false
     }
 
@@ -234,7 +234,7 @@ export const GymImages = sequelize.define('GymImages', {
 
 
 
-const Notification = sequelize.define('Notification', {
+export const Notification = sequelize.define('Notification', {
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -242,6 +242,10 @@ const Notification = sequelize.define('Notification', {
             model: User,
             key: 'id'
         }
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
     message: {
         type: DataTypes.STRING,
@@ -254,7 +258,7 @@ const Notification = sequelize.define('Notification', {
     }
 }, { timestamps: true })
 
-const Saved = sequelize.define('Saved', {
+export const Saved = sequelize.define('Saved', {
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,

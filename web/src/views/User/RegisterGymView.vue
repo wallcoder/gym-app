@@ -9,6 +9,7 @@ import ButtonLink from '../../components/ButtonLink.vue';
 import { usePlanStore } from '../../stores/plans'
 import { useGymRegStore } from '../../stores/gymReg'
 import { useTokenStore } from '../../stores/token'
+// import GMap from '@/components/GMap.vue'
 
 const token = useTokenStore()
 const { decodeToken, fetchUser } = token
@@ -28,6 +29,10 @@ const props = defineProps({
         type: String,
         required: true
     },
+    planName: {
+        type: String,
+        required: true
+    }
 
 
 })
@@ -60,7 +65,8 @@ onMounted(async () => {
 
     await fetchFeatures();
     await fetchWorkouts();
-    getSubscriptionPlanById(props.planId)
+
+    getSubscriptionPlanById(Number(props.planId))
     decodeToken();
     // Check if the browser supports geolocation
 
@@ -104,14 +110,14 @@ onMounted(async () => {
 
 <template>
     <NavbarSecond />
-
+    <!-- <GMap /> -->
     <section class="w-full flex  flex-col items-center justify-center px-4 laptop:px-10 pb-30 reg bg-white">
 
         <div class="h-auto w-[100%] md:w-[70%] lg:w-[55%] py-5 ">
 
             <form class="mx-auto flex flex-col space-y-5" @submit.prevent="handleRegister">
                 <div class=" flex flex-col space-y-5" v-if="step === 2">
-                    <h1 class="font-semibold mb-3 text-black text-2xl "  v-motion-fade-visible-once>Other Gym Details</h1>
+                    <h1 class="font-semibold mb-3 text-black text-2xl " v-motion-fade-visible-once>Other Gym Details</h1>
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Add Gym Images*</h1>
                         <p class="text-sm mb-2">Upload atleast one image of your gym</p>
@@ -219,27 +225,30 @@ onMounted(async () => {
                     </div>
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Razorpay API Key*</h1>
-                        <p class="text-sm mb-3">Enter Razorpay API keys to receive payment(Don't worry, your API keys are safe with us)</p>
+                        <p class="text-sm mb-3">Enter Razorpay API keys to receive payment(Don't worry, your API keys are
+                            safe with us)</p>
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.publicKey" type="password" name="ownerName" id="ownerName"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="ownerName"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">API Public Key*</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">API
+                                    Public Key*</label>
                             </div>
                             <div class="relative z-0 w-full  group">
                                 <input v-model="formData.secretKey" type="password" name="email" id="email"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-first peer"
                                     placeholder=" " required />
                                 <label for="email"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">API Secret Key*</label>
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-first  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">API
+                                    Secret Key*</label>
                                 <span class="text-red text-sm ">{{ message.email }}</span>
                             </div>
 
 
                         </div>
-                       
+
 
 
                     </div>
@@ -374,7 +383,7 @@ onMounted(async () => {
                                     'bg-first text-white': formData.features.includes(f.id), // Style when selected
                                     'text-black': !formData.features.includes(f.id) // Default style when not selected
                                 }">
-                                {{ f.featureName }} 
+                                {{ f.featureName }}
                             </span>
 
 
@@ -574,5 +583,4 @@ onMounted(async () => {
 <style scoped>
 #map {
     height: 300px;
-}
-</style>
+}</style>

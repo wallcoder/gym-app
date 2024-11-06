@@ -4,16 +4,23 @@ import { RouterLink } from 'vue-router'
 
 import ButtonLink from '@/components/ButtonLink.vue'
 import GymCard from '@/components/GymCard.vue'
+import MyGym from '@/components/MyGym.vue'
 import { storeToRefs } from 'pinia'
 import { useGymStore } from '@/stores/gyms'
-
+import { useHomeStore } from '@/stores/home'
+const home = useHomeStore()
+const { currentUser } = storeToRefs(home)
 
 const gymStore = useGymStore();
-const { gyms } = storeToRefs(gymStore)
-const { getGyms } = gymStore;
+const { myGyms } = storeToRefs(gymStore)
+const { getMyGyms } = gymStore;
 
 onMounted(async () => {
-    await getGyms();
+    if (currentUser.value) {
+
+
+        await getMyGyms(currentUser.value.userId);
+    }
 
 })
 
@@ -25,11 +32,11 @@ onMounted(async () => {
         <div class=" flex flex-wrap ">
 
 
-            <GymCard :gyms="gyms" />
-            
+            <MyGym :gyms="myGyms" />
+
 
         </div>
-        
+
     </section>
 </template>
 

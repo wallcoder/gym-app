@@ -1,6 +1,6 @@
 import './assets/css/satoshi.css'
 import './assets/css/style.css'
-import 'jsvectormap/dist/css/jsvectormap.min.css'
+
 import 'flatpickr/dist/flatpickr.min.css'
 
 
@@ -24,6 +24,7 @@ axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.timeout = 10000; // 10 seconds
 
 const app = createApp(App)
+
 
 app.use(createPinia())
 app.use(router)
