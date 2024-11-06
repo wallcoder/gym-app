@@ -46,7 +46,6 @@ const gymsData = [
     recommended: true,
     image: icons.gymImage,
   },
-  
 ];
 
 const Gyms = () => {
@@ -65,8 +64,12 @@ const Gyms = () => {
     }
   );
 
-  const handleGymPress = () => {
-    router.push('/gymDetails');
+  // Update handleGymPress to pass gym id to the gymDetails page
+  const handleGymPress = (gymId) => {
+    router.push({
+      pathname: '/gymDetails',
+      query: { id: gymId }, // Pass gym id as query param
+    });
   };
 
   return (
@@ -90,7 +93,7 @@ const Gyms = () => {
               TOP GYMS AVAILABLE
             </Text>
             {gymsData.map((gym) => (
-              <TouchableOpacity key={gym.id} onPress={handleGymPress}>
+              <TouchableOpacity key={gym.id} onPress={() => handleGymPress(gym.id)}>
                 <AvailableGyms containerStyle="w-full" gym={gym} />
               </TouchableOpacity>
             ))}
