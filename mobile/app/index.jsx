@@ -8,7 +8,8 @@ import CheckBox from "../components/checkBox";
 import axios from 'axios';
 import 'react-native-get-random-values';
 
-axios.defaults.baseURL = 'http://10.0.2.2:3000'; // This points to localhost on Android Emulator
+axios.defaults.baseURL = 'http://10.0.2.2:3000';
+// axios.defaults.baseURL = 'http://26.247.203.33:3000';
 
 export default function Index() {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -118,9 +119,9 @@ export default function Index() {
             <Link href="./(auths)/sign-up" className="text-lg font-psemibold text-[#52AB99]">
               Signup
             </Link>
-            {/* <Link href="./gyms" className="text-lg font-psemibold text-[#52AB99]">
+            <Link href="./gyms" className="text-lg font-psemibold text-[#52AB99]">
               gyms
-            </Link> */}
+            </Link>
           </View>
         </View>
       </ScrollView>
