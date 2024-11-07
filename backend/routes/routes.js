@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers, insertUser } from "../controllers/userController.js";
+import { delUserByEmail, getAllUsers, googleLogin, insertUser } from "../controllers/userController.js";
 import { sendOTP } from "../controllers/otp.js";
 import { verifyOTP } from "../controllers/otp.js";
 import { userLogin, findUserFromToken } from "../controllers/login.js";
@@ -50,9 +50,12 @@ router.post('/verify-otp', verifyOTP);
 // LOGIN
 router.post('/login', userLogin);
 router.post('/user-token', findUserFromToken);
+// google login
+router.post('/api/auth/google', googleLogin)
 
 // USERS
 router.get('/admin/users', getAllUsers)
+router.delete('/user/:email', delUserByEmail)
 
 // decode token
 router.post('/decode-token', decodeToken);

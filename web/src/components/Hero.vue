@@ -10,6 +10,7 @@ import SearchBar from '@/components/searchBar.vue'
                 Anywhere
             </h1>
             <SearchBar />
+            
         </div>
 
     </section>

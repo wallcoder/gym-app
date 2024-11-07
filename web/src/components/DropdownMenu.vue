@@ -7,7 +7,7 @@ import { useTokenStore } from '@/stores/token';
 import axios from 'axios';
 import SearchBar from '@/components/searchBar.vue'
 import DropdownMenu from '@/components/DropdownMenu.vue'
-
+const api = import.meta.env.VITE_API
 const token = useTokenStore();
 const componentKey = ref(0);
 const forceRerender = () => {
@@ -30,7 +30,8 @@ onMounted(async () => {
     }
 
     if (userFromStorage) {
-        currentUser.value = JSON.parse(userFromStorage);
+        currentUser.value = await JSON.parse(userFromStorage);
+        console.log("curent user: ", currentUser.value)
     }
 });
 
@@ -64,9 +65,9 @@ const toggleDropdown = () => {
         <!-- Profile Picture with Dropdown -->
         <div class="relative  cursor-pointer" v-if="isLogin" @click="toggleDropdown">
             <div class="flex items-center space-x-2">
-                <img src="@/assets/images/pp.jpg" alt="pp" class="w-[40px] h-[40px] rounded-full bg-gray">
+                <img v-if="currentUser && currentUser.imgPath" :src="currentUser.googleId ? `${currentUser.imgPath}`: `${api}${currentUser.imgPath}`" alt="pp" class="w-[40px] h-[40px] rounded-full bg-gray">
                 <span v-if="currentUser">{{ currentUser.firstName }}</span>
-
+                
                 <i class="fa-solid text-sm px-1 fa-chevron-down transition-all duration-100 ease-in-out"
                     :class="isDropdownOpen ? 'rotate-180' : ''"></i>
             </div>
@@ -80,9 +81,7 @@ const toggleDropdown = () => {
                     <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
                         <RouterLink to="/user-profile/notifications">Notifications</RouterLink>
                     </li>
-                    <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-                        <RouterLink to="">Settings</RouterLink>
-                    </li>
+                    
                     <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
                         <RouterLink to="/user-profile/my-gyms">My Gym</RouterLink>
                     </li>
@@ -90,7 +89,7 @@ const toggleDropdown = () => {
                         <RouterLink to="/user-profile/memberships">Membership</RouterLink>
                     </li>
                     <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer">
-                        <RouterLink to="/user-profile/saved">Saves</RouterLink>
+                        <RouterLink to="/user-profile/saved">Saved</RouterLink>
                     </li>
                     <li class="py-2 px-2 hover:bg-first hover:text-white cursor-pointer rounded-b-lg" @click="handleLogout">
                         Logout

@@ -116,29 +116,18 @@ onMounted(async () => {
         <div class="h-auto w-[100%] md:w-[70%] lg:w-[55%] py-5 ">
 
             <form class="mx-auto flex flex-col space-y-5" @submit.prevent="handleRegister">
-                <div class=" flex flex-col space-y-5" v-if="step === 2">
+                <div class=" flex flex-col space-y-5" v-show="step === 2">
                     <h1 class="font-semibold mb-3 text-black text-2xl " v-motion-fade-visible-once>Other Gym Details</h1>
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Add Gym Images*</h1>
                         <p class="text-sm mb-2">Upload atleast one image of your gym</p>
                         <span class="text-red text-sm mb-3" v-if="message.gymImages">{{ message.gymImages }}</span>
-                        <div class="flex items-center justify-center w-full bg-forth">
-                            <label for="dropzone-file-gym-images"
-                                class="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                    </svg>
-                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
-                                            class="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">JPG, PNG</p>
-                                </div>
-                                <input id="dropzone-file-gym-images" type="file" class="hidden" multiple name="gym-images"
-                                    @change="handleGymImages" />
-                            </label>
+                        <div class="flex items-center w-full bg-forth p-4">
+                            
+                                
+                                <input id="dropzone-file-gym-images" type="file" class="border-none" multiple name="gym-images"
+                                    @change="handleGymImages" required/>
+                            
 
                         </div>
 
@@ -151,23 +140,12 @@ onMounted(async () => {
                         <span class="text-red text-sm mb-3" v-if="message.gymProfileImage">{{ message.gymProfileImage
                         }}</span>
 
-                        <div class="flex items-center justify-center w-full bg-forth">
-                            <label for="dropzone-file-profile-image"
-                                class="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                    </svg>
-                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
-                                            class="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">JPG, PNG</p>
-                                </div>
-                                <input id="dropzone-file-profile-image" type="file" class="hidden" name="gym-profile-image"
-                                    @change="handleGymProfileImage" />
-                            </label>
+                        <div class="flex items-center w-full bg-forth p-4">
+                            
+                                
+                                <input id="dropzone-file-profile-image" type="file" class="border-none"  name="gym-profile-image"
+                                    @change="handleGymProfileImage" required/>
+                           
                         </div>
 
 
@@ -253,8 +231,8 @@ onMounted(async () => {
 
                     </div>
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
-                        <h1 class="font-semibold  text-black text-2xl ">Membership Plans*</h1>
-                        <p class="text-sm mb-3">Add Membership plans offered by your gym(Plan-1 is compulsory)</p>
+                        <h1 class="font-semibold  text-black text-2xl ">Membership Plan</h1>
+                        <p class="text-sm mb-3">Add Membership plans offered by your gym(More Plans can be added later)</p>
                         <h1 class="font-semibold  text-black text-xl mb-3">Plan-1</h1>
 
                         <div class="grid md:grid-cols-2 md:gap-6">
@@ -293,9 +271,9 @@ onMounted(async () => {
                                 name="" cols="30" rows="5" placeholder="Add Description"
                                 v-model="formData.membershipPlans.plan1.description" required></textarea>
                         </div>
-                        <h1 class="font-semibold  text-black text-xl mb-3">Plan-2</h1>
+                        <!-- <h1 class="font-semibold  text-black text-xl mb-3">Plan-2</h1> -->
 
-                        <div class="grid md:grid-cols-2 md:gap-6">
+                        <!-- <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-5 group">
                                 <input v-model="formData.membershipPlans.plan2.title" type="text" name="plan2-title"
                                     id="plan2-title"
@@ -368,7 +346,7 @@ onMounted(async () => {
                                 class="block py-2.5 px-2 rounded-lg w-full text-sm text-gray-900 bg-transparent border border-graydark  focus:ring-0 focus:border-first "
                                 name="" cols="30" rows="5" placeholder="Add Description"
                                 v-model="formData.membershipPlans.plan3.description"></textarea>
-                        </div>
+                        </div> -->
 
 
 
@@ -433,7 +411,7 @@ onMounted(async () => {
 
 
                 </div>
-                <div class=" flex flex-col space-y-5" v-if="step === 1">
+                <div class=" flex flex-col space-y-5" v-show="step === 1">
                     <h1 class="font-semibold mb-3 text-black text-2xl " v-motion-fade-visible-once>Gym Information</h1>
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Add Gym Details</h1>

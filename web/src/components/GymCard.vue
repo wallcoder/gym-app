@@ -16,7 +16,7 @@ const props = defineProps({
 
 </script>
 <template>
-    <div class="grid grid-cols-1  smartphone-md:grid-cols-2 tablet:grid-cols-3">
+    <div class="grid grid-cols-1  smartphone-md:grid-cols-2 tablet:grid-cols-3 2xl:grid-cols-4">
         <div v-for="gym in props.gyms" :key="gym.id" class="rounded-xl shadow-4 relative main bg-white m-2 tablet:m-3  " v-motion-fade-visible-once >
 
             <RouterLink :to="`/gyms/gym/${gym.id}`">
@@ -35,7 +35,7 @@ const props = defineProps({
                     <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i></h3>
                 </div>
                 <div>
-                    <i class="fa-solid fa-bookmark  text-2xl mr-2 mt-2 cursor-pointer" @click="handleSave(gym.id)" :class="savedGyms.includes(gym.id)?'text-first':'text-sixth'"></i>
+                    <i class="transition-all duration-150 ease-out fa-solid fa-bookmark  text-2xl mr-2 mt-2 cursor-pointer" @click="handleSave(gym.id)" :class="savedGyms.includes(gym.id)?'text-first':'text-sixth'"></i>
                 </div>
             </div>
         </div>
