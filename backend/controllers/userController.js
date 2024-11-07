@@ -1,11 +1,70 @@
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import { Op } from 'sequelize';
+import dotenv from 'dotenv';
+import { OAuth2Client } from 'google-auth-library';
+import jwt from 'jsonwebtoken'
 
+dotenv.config();
+const secretKey = process.env.SECRET_KEY
 
 import { User, UserRole } from '../models/User.js';
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+}
+
+export const googleLogin = async (req, res) => {
+    const { profile } = req.body;
+    console.log("google cred: ", profile, profile.email)
+
+    try {
+        const checkEmail = await User.findOne({
+            where: { email: profile.email, googleId: null }
+        })
+        if (checkEmail) {
+            return res.json({ message: 'an account is already created using this email' })
+        }
+
+        const checkUser = await User.findOne({
+            where: { googleId: profile.sub },
+            include: [{
+                model: UserRole,
+
+            }]
+        })
+
+        if (!checkUser) {
+            const insertUser = await User.create({
+                firstName: profile.given_name,
+                lastName: profile.family_name,
+                email: profile.email,
+                imgPath: profile.picture,
+                googleId: profile.sub,
+                roleId: 2,
+                status: 'verified'
+
+            })
+
+            const fetchUser = await User.findOne({
+                where: { id: insertUser.id },
+                include: [{
+                    model: UserRole,
+
+                }]
+            })
+
+            const token = jwt.sign({ userId: fetchUser.id, role: fetchUser.UserRole.roleName, firstName: fetchUser.firstName, lastName: fetchUser.lastName, googleId: fetchUser.googleId, imgPath: fetchUser.imgPath, email: fetchUser.email, createdAt: fetchUser.createdAt }, secretKey)
+            return res.json({ token })
+        }
+        console.log("USERR: ", checkUser.imgPath)
+        const token = jwt.sign({ userId: checkUser.id, role: checkUser.UserRole.roleName, firstName: checkUser.firstName, lastName: checkUser.lastName, googleId: checkUser.googleId, imgPath: checkUser.imgPath, email: checkUser.email, createdAt: checkUser.createdAt }, secretKey)
+        res.json({ token })
+
+    } catch (error) {
+        console.error('Token verification failed:', error);
+        res.status(500).json(error)
+
+    }
 }
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -99,7 +158,19 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching users.' });
     }
 };
-
+export const delUserByEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const delUser = await User.destroy({
+            where: {
+                email
+            }
+        })
+        res.json({ message: 'user deleted', delUser })
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
 export const insertUser = async (req, res) => {
     try {
         const data = req.body;

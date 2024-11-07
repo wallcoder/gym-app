@@ -36,11 +36,11 @@ onMounted(async () => {
 
         <LoaderSquare v-if="isLoadingSquare" />
 
-        <div class=" flex flex-wrap " v-else>
+        <div class=" flex flex-wrap w-full" v-else>
 
-
+            <div class="w-[60vw] h-[35vh] flex justify-center items-center font-semibold text-sixth text-3xl " v-if="userSavedGyms.length === 0">No Saved Gyms</div>
             <GymCard :gyms="userSavedGyms" v-motion-fade-visible-once />
-
+            
 
 
         </div>

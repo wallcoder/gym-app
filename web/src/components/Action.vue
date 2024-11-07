@@ -19,7 +19,7 @@ onMounted(() => {
 
 <template>
     <section class="w-full font-semibold flex flex-col items-center tablet:px-0  relative h-[350px] ">
-        <img src="../assets/images/gym.jpg" alt="" class="h-full w-full object-cover brightness-50" v-motion-fade-visible-once>
+        <img src="../assets/images/gym.webp" alt="" class="h-full w-full object-cover brightness-50" v-motion-fade-visible-once>
         <div class="absolute p-5 flex flex-col justify-center items-center w-[90%] laptop:w-[50%] h-full " v-motion-fade-visible-once>
 
 

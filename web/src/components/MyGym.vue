@@ -17,6 +17,7 @@ const props = defineProps({
 </script>
 <template>
     <div class="grid grid-cols-1  smartphone-md:grid-cols-2 tablet:grid-cols-3">
+        
         <div v-for="gym in props.gyms" :key="gym.id" class="rounded-xl shadow-4 relative main bg-white m-2 tablet:m-3  min-w-[250px] tablet:min-w-[280px]" v-motion-fade-visible-once >
 
             <RouterLink :to="`/gyms/gym/${gym.id}`">

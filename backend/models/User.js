@@ -30,7 +30,17 @@ const User = sequelize.define('User', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
+    },
+
+    imgPath:{
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+
+    googleId: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
 
     roleId: {

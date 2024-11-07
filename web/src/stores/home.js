@@ -5,7 +5,7 @@ import { onClickOutside, tryOnScopeDispose } from '@vueuse/core';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useTokenStore } from '@/stores/token'
-
+import { decodeCredential } from 'vue3-google-login'
 import { useRouter } from "vue-router";
 import { useGymStore } from '@/stores/gyms'
 
@@ -18,7 +18,7 @@ export const useHomeStore = defineStore('home', () => {
 
 
     const router = useRouter()
-
+    const isOpenRate = ref(false)
     const token = useTokenStore();
     const { decodeToken, forceRerender } = token;
     const { currentUserToken } = storeToRefs(token)
@@ -31,6 +31,9 @@ export const useHomeStore = defineStore('home', () => {
     const isOpenOTP = ref(false)
     const isOpenEditProfile = ref(false)
     const savedGyms = ref([])
+    const isOpenChangePassword = ref(false)
+    const isOpenDeleteAccount = ref(false)
+
     // AUTH
     const isLogin = ref(false);
     const firstName = ref('');
@@ -39,6 +42,8 @@ export const useHomeStore = defineStore('home', () => {
     const verifyEmail = ref('')
     const password = ref('');
     const conPassword = ref('');
+    const emailId = ref('')
+    const currPassword = ref('');
     const message = ref({
 
         email: '',
@@ -47,20 +52,35 @@ export const useHomeStore = defineStore('home', () => {
 
     })
 
+    const closeOtp = async (delUser = false) => {
+        console.log("closed")
+        isOpenOTP.value = false
+        if (delUser) {
+            await delUserByEmail(emailId.value)
+        }
+        emailId.value = '';
+        password.value = ''
+        password.value = ''
+    }
 
-
-    const closeModals = (clearEmail = true) => {
+    const closeModals = (clearEmail = true, clearPassword = true) => {
         isOpenLogin.value = false
         isOpenSignUp.value = false
         isOpenRegisterGym.value = false
         firstName.value = ''
         lastName.value = ''
         isOpenEditProfile.value = false
+        isOpenChangePassword.value = false
+        isOpenDeleteAccount.value = false
+        isOpenRate.value = false
+        currPassword.value = ''
         if (clearEmail) {
             email.value = ''
         }
+        if (clearPassword) {
+            password.value = ''
+        }
 
-        password.value = ''
         conPassword.value = ''
         otpInput.value = ''
         isOpenOTP.value = false
@@ -123,8 +143,14 @@ export const useHomeStore = defineStore('home', () => {
                 const response = await axios.post('/save-gym', { gymId, userId });
                 console.log(response.data);
 
-                getSaved(currentUser.value.userId)
-                getSavedGyms(currentUser.value.userId)
+                await getSaved(currentUser.value.userId)
+                await getSavedGyms(currentUser.value.userId)
+                if (response.data.message == 'saved') {
+                    toast.success("Gym has been saved", {
+                        "theme": "colored",
+                        "position": "bottom-center"
+                    });
+                }
             } else {
                 isOpenLogin.value = true
             }
@@ -147,8 +173,56 @@ export const useHomeStore = defineStore('home', () => {
             console.log(err)
         }
     }
+    const delUserByEmail = async (email) => {
+        try {
+            const response = await axios.delete(`/user/${email}`)
+            console.log(response.data)
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const callback = async (response) => {
+        console.log("Google login response", response)
+
+        let profile = decodeCredential(response.credential)
+
+        // save user profile
+        try {
+            const response = await axios.post('/api/auth/google', { profile })
+
+            const token = response.data.token
+            console.log("tokennn: ", token)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            localStorage.setItem('token', token);
+            const userData = await decodeToken(token);
+            currentUser.value = userData;
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            console.log("User Data after Login:", currentUser.value);
+            isLogin.value = true
+            closeModals(true, true)
+
+
+
+        } catch (err) {
+            console.log(err)
+        }
+        // localStorage.setItem('user', JSON.stringify(profile))
+
+
+
+
+
+
+
+    }
+
     const handleLogin = async () => {
         try {
+            console.log(email.value, password.value);
             const response = await axios.post('/login', { email: email.value, password: password.value });
             const token = response.data.token;
 
@@ -211,13 +285,13 @@ export const useHomeStore = defineStore('home', () => {
                 return;
             } else {
 
-
+                emailId.value = email.value;
 
                 const response = await axios.post('/register', { firstName: firstName.value, lastName: lastName.value, email: email.value, password: password.value, conPassword: conPassword.value })
 
                 if (response.status === 201) {
-                    console.log("yoyoy")
-                    closeModals(false);
+
+                    closeModals(false, false);
 
                     isOpenOTP.value = true;
                     sendOTP()
@@ -294,10 +368,10 @@ export const useHomeStore = defineStore('home', () => {
 
     const sendOTP = async () => {
         try {
-            console.log("OPT SENT")
+
             startTimer()
             const response = await axios.post('/send-otp', { email: email.value });
-            console.log(response)
+
         } catch (err) {
             if (err.status === 400 && err.response) {
                 if (err.response.otpMessage) {
@@ -314,6 +388,10 @@ export const useHomeStore = defineStore('home', () => {
             console.log("verifyOTP triggered");
             console.log(response);
 
+
+
+
+            await handleLogin()
             closeModals();
             toast.success("Your email is successfully verified", {
                 "theme": "colored",
@@ -338,7 +416,7 @@ export const useHomeStore = defineStore('home', () => {
 
 
     return {
-        modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister, handleSave, getSaved, savedGyms,
+        isOpenRate, currPassword, isOpenChangePassword, isOpenDeleteAccount, callback, closeOtp, modal, delUserByEmail, isOpenLogin, isOpenRegisterGym, isOpenSignUp, closeModals, isOpenOTP, firstName, lastName, email, password, conPassword, message, handleRegister, handleSave, getSaved, savedGyms,
         otpInput, timer, timeRemaining, isRunning, formatTime, startTimer, stopTimer, sendOTP, otpMessage, isValid, verifyOTP, verifyEmail, handleLogin, handleLogout, isLogin, currentUser, isOpenEditProfile
     }
 

@@ -23,10 +23,11 @@ onMounted(async () => {
 <template>
     <section>
 
-        <div class="p-2 flex flex-col w-full rounded-lg ">
+        <div class="p-2 flex flex-col w-full rounded-lg height-full">
 
-            <h1 class="text-lg font-semibold text-black">Memberships</h1>
-            <div class="flex space-x-2 p-4 shadow-3 rounded-lg text-sm" v-for="p in userPlans" :key="p.id">
+            <h1 class="text-lg font-semibold text-black">No Memberships</h1>
+            <div class="w-full h-70 flex justify-center items-center font-semibold text-sixth text-3xl  " v-if="userPlans.length === 0">No Membership Plans</div>
+            <div class="flex space-x-2 p-4 shadow-3 rounded-lg text-sm " v-for="p in userPlans" :key="p.id" v-else>
                 <div class="flex flex-col justify-center">
                     <h2 class="font-semibold ">Lotus Gym</h2>
                     <h2 class="mb-2">Card No: {{ p.id }}</h2>

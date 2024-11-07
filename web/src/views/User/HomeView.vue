@@ -44,7 +44,7 @@ onMounted(async () => {
 </template>
 <style scoped>
 .hero {
-    background: url(../../assets/images/wallpaper1.png);
+    background: url(../../assets/images/wallpaper1.webp);
     background-size: cover;
 
     background-position: 50% 20%;

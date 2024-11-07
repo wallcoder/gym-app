@@ -9,8 +9,8 @@ const secretKey = 'h75jd427#j'
 // NORMAL LOGIN
 export const userLogin = async (req, res) => {
     const { email, password } = req.body;
-    
 
+    console.log("userlogin: ", email, password)
     const findUser = await User.findOne({
         where: { email: email },
         include: [{
@@ -25,7 +25,7 @@ export const userLogin = async (req, res) => {
         return res.status(401).json({ passwordMessage: "Invalid credentials" })
     }
 
-    const token = jwt.sign({ userId: findUser.id, role: findUser.UserRole.roleName, firstName: findUser.firstName, lastName: findUser.lastName }, secretKey)
+    const token = jwt.sign({ userId: findUser.id, role: findUser.UserRole.roleName, firstName: findUser.firstName, lastName: findUser.lastName, googleId: findUser.googleId, imgPath: findUser.imgPath, email: findUser.email, createdAt: findUser.createdAt }, secretKey)
     res.json({ token })
 
 }
@@ -97,6 +97,10 @@ export const decodeToken = async (req, res) => {
             role: decodedToken.role,
             firstName: decodedToken.firstName,
             lastName: decodedToken.lastName,
+            googleId: decodedToken.googleId,
+            imgPath: decodedToken.imgPath,
+            email: decodedToken.email,
+            createdAt: decodedToken.createdAt
         })
 
 

@@ -9,15 +9,12 @@ import ButtonLink from '../components/ButtonLink.vue';
 
 const home = useHomeStore();
 const { modal, isOpenOTP, otpInput, timer, timeRemaining, isRunning, otpMessage, isValid, } = storeToRefs(home);
-const { closeModals , formatTime, startTimer, stopTimer, sendOTP, verifyOTP} = home;
+const { closeModals, closeOtp, formatTime, startTimer, stopTimer, sendOTP, verifyOTP } = home;
 
-onMounted(() => {
+onClickOutside(modal, () => {
+    closeOtp(true)
+});
 
-    
-    onClickOutside(modal, () => {
-        closeModals()
-    });
-})
 </script>
 
 <template>
@@ -29,7 +26,7 @@ onMounted(() => {
                     ref='modal'>
                     <!-- Ensure this ref is 'modal' -->
                     <span class="flex w-full justify-end text-txt-light dark:text-txt-dark ">
-                        <i class="fa-solid fa-xmark hover:cursor-pointer" @click="closeModals()"></i>
+                        <i class="fa-solid fa-xmark hover:cursor-pointer" @click="closeOtp()"></i>
                     </span>
                     <h1 class="text-xl font-semibold text-black mb-4">One Time Password</h1>
 
@@ -49,8 +46,8 @@ onMounted(() => {
                         <Button content="Submit" extraStyle="w-full" :disable="!isValid" :handler="verifyOTP" />
 
                     </form>
-                    <div class="text-sm text-center "><button @click="sendOTP()" type="button"
-                            class="hover:underline" :disabled="isRunning">Resend OTP</button><span> in {{
+                    <div class="text-sm text-center "><button @click="sendOTP()" type="button" class="hover:underline"
+                            :disabled="isRunning">Resend OTP</button><span> in {{
                                 formatTime(timeRemaining) }}</span></div>
 
                 </div>

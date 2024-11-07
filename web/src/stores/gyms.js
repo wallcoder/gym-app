@@ -2,8 +2,16 @@ import { storeToRefs, defineStore } from "pinia";
 import { ref } from "vue";
 import axios from 'axios';
 import { useLoaderStore } from '@/stores/loader'
+import {useTokenStore} from '@/stores/token'
+
+
+
+
 
 export const useGymStore = defineStore('gym', () => {
+    const token = useTokenStore()
+
+    const { isError } = storeToRefs(token)
     const gyms = ref([])
     const gym = ref(null)
     const loader = useLoaderStore()
@@ -27,6 +35,7 @@ export const useGymStore = defineStore('gym', () => {
 
             
         } catch (err) {
+            isError.value = true
             console.log(err)
         } finally {
             isLoadingSquare.value = false
@@ -43,6 +52,7 @@ export const useGymStore = defineStore('gym', () => {
 
 
         } catch (err) {
+            isError.value = true
             console.log(err)
         }
 
@@ -56,6 +66,7 @@ export const useGymStore = defineStore('gym', () => {
 
 
         }catch(err){
+            isError.value = true
             console.log(err)
         }
     }
@@ -67,6 +78,7 @@ export const useGymStore = defineStore('gym', () => {
             myGyms.value = response.data;
 
         }catch(err){
+            isError.value = true
             console.log(err)
         }
 
@@ -83,6 +95,7 @@ export const useGymStore = defineStore('gym', () => {
             console.log(response.data)
 
         }catch(err){
+            isError.value = true
             console.log(err)
         }
     }
@@ -95,6 +108,7 @@ export const useGymStore = defineStore('gym', () => {
             gym.value = response.data
             
         } catch (err) {
+            isError.value = true
             console.log(err)
         } finally {
             isLoadingSquare.value = false
