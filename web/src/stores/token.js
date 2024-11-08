@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore, storeToRefs } from "pinia";
 import axios from "axios";
 export const useTokenStore = defineStore('token', () => {
+  const isError = ref(false);
 
   const componentKey = ref(0);
 
@@ -42,6 +43,6 @@ export const useTokenStore = defineStore('token', () => {
   }
 
 
-  return { decodeToken, fetchUser, currentUserDetails, currentUserToken, componentKey, forceRerender }
+  return { isError, decodeToken, fetchUser, currentUserDetails, currentUserToken, componentKey, forceRerender }
 
 })

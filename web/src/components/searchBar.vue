@@ -60,7 +60,7 @@ const detectCurrentLocation = () => {
 
 <template>
     <div class="relative shadow-3 rounded-lg z-99999" v-motion-fade-visible-once>
-        <div class="bg-white h-10 tablet:w-[600px] laptop:h-10 smartphone:w-[400px] rounded-lg mb-1 flex">
+        <div class="bg-white  h-10 tablet:w-[600px] laptop:h-11 px-2  smartphone:w-[400px] rounded-lg mb-1 flex">
             <span class="flex justify-center items-center cursor-pointer"><i
                     class="fa-solid fa-magnifying-glass text-lg text-first p-2"></i></span>
             <input v-model="query" type="text" placeholder="Search Gym" @click="isOpenSugg = true"

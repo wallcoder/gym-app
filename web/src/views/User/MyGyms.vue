@@ -31,7 +31,7 @@ onMounted(async () => {
         <h1 class="text-lg font-semibold text-black">My Gyms</h1>
         <div class=" flex flex-wrap ">
 
-
+            <div class="w-[60vw] h-[35vh] flex justify-center items-center font-semibold text-sixth text-3xl " v-if="myGyms.length === 0">No Gyms</div>
             <MyGym :gyms="myGyms" />
 
 

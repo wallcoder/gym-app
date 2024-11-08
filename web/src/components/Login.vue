@@ -5,15 +5,44 @@ import { useHomeStore } from '../stores/home';
 import { onClickOutside } from '@vueuse/core';
 import Button from '../components/Button.vue';
 import ButtonLink from '../components/ButtonLink.vue';
-
+// import {decodeCredential} from 'vue3-google-login'
+// import axios from 'axios'
+// import {useGoogleAuthStore} from '@/stores/googleAuth'
+// import {useRouter} from 'vue-router'
+// const google = useGoogleAuthStore()
+// const {handleGoogleLogin} = google;
 const home = useHomeStore();
-const { modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, email, password, message } = storeToRefs(home);
-const { closeModals, handleLogin } = home;
+const { modal, isOpenLogin, isOpenRegisterGym, isOpenSignUp, email, password, message , isLogin} = storeToRefs(home);
+const { closeModals, handleLogin, callback } = home;
 onMounted(() => {
     onClickOutside(modal, () => {
         closeModals()
     });
 })
+// const router = useRouter()
+// const callback =async (response)=>{
+//     console.log("Google login response", response)
+
+//     let profile = decodeCredential(response.credential)
+
+//     // save user profile
+//     try{
+//         const response = await axios.post('/api/auth/google', {profile})
+
+        
+//     }catch(err){
+//         console.log(err)
+//     }
+//     // localStorage.setItem('user', JSON.stringify(profile))
+
+
+
+//     console.log(profile)
+//     isLogin.value = true
+    
+//     router.push('/')
+// }
+
 </script>
 
 <template>
@@ -49,9 +78,11 @@ onMounted(() => {
                             <!-- <span class="text-red text-xs font-semibold">{{ message.password }}</span> -->
                         </div>
                         <Button content="Login" buttonType="submit" extraStyle="w-full" />
-                        <ButtonLink content="Login with Google" link="/"
-                            extraStyle="w-full bg-forth text-graydark hover:bg-gray" icon="fa-brands fa-google" />
-
+                        <!-- <Button content="Login with Google" 
+                            extraStyle="w-full bg-forth text-graydark hover:bg-gray" icon="fa-brands fa-google" /> -->
+                        <div class="login">
+                            <GoogleLogin :callback="callback" class="w-full text-white font-bold py-2  rounded" prompt auto-login />
+                        </div>
                     </form>
 
                 </div>

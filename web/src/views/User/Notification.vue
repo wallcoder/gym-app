@@ -25,12 +25,13 @@ onMounted(() => {
 
 </script>
 <template>
-    <section>
+    <section class="w-full h-full">
 
-        <div class="p-2 flex flex-col w-full rounded-lg ">
+        <div class="p-2 flex flex-col w-full rounded-lg h-full">
 
             <h1 class="text-lg font-semibold text-black">Notifications</h1>
-            <NotifCard :notif="notif" />
+            <div class="w-[] h-full flex justify-center items-center font-semibold text-sixth text-3xl" v-if="notif.length === 0">No Notifications</div>
+            <NotifCard :notif="notif" v-else/>
         </div>
     </section>
 </template>
