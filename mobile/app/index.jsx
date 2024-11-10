@@ -1,15 +1,30 @@
-import { router } from "expo-router";
-import { Text, View, TouchableWithoutFeedback, Keyboard, ScrollView } from "react-native";
-import CustomButton from "../components/CustomButton";
-import { Link } from "expo-router";
-import FormField from "../components/FormField";
 import { useState } from "react";
+import { Text, View, TouchableWithoutFeedback, Keyboard, ScrollView } from "react-native";
+import { router, Link } from "expo-router";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomButton from "../components/CustomButton";
+import FormField from "../components/FormField";
 import CheckBox from "../components/checkBox";
-import axios from 'axios';
-import 'react-native-get-random-values';
 
-axios.defaults.baseURL = 'http://10.0.2.2:3000';
-// axios.defaults.baseURL = 'http://26.247.203.33:3000';
+// Set base URL for all Axios requests
+axios.defaults.baseURL = "http://10.0.2.2:3000";
+
+// Axios instance with token interceptor
+const axiosInstance = axios.create({
+  baseURL: "http://10.0.2.2:3000",
+});
+
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = await AsyncStorage.getItem("authToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default function Index() {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -19,11 +34,13 @@ export default function Index() {
   });
   const [error, setError] = useState("");
 
+  // Update form field values
   const handleChangeText = (name, value) => {
     setForm({ ...form, [name]: value });
     setError(""); 
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
     if (!form.email || !form.password) {
       setError("Please fill in all fields");
@@ -39,13 +56,30 @@ export default function Index() {
     setSubmitting(true);
 
     try {
-      const response = await axios.post('/login', {
+      const response = await axios.post("/login", {
         email: form.email,
         password: form.password,
       });
 
-      if (response.status === 200) {
+      // Log the entire response object to check its structure
+      console.log("Login response:", response);
+
+      if (response.status === 200 && response.data.token) {
+        // Store the JWT token in AsyncStorage
+        await AsyncStorage.setItem("authToken", response.data.token);
+        console.log("Stored Token:", response.data.token); // Log token from response
+
+        // Retrieve the token from AsyncStorage and log it
+        const token = await AsyncStorage.getItem("authToken");
+        if (!token) {
+          console.log("Token not found in AsyncStorage");
+        } else {
+          console.log("Token found:", token); // Log the token to check its contents
+        }
+
+        // Redirect to gyms page
         router.push("/gyms");
+
       } else {
         setError("Login failed. Please try again.");
       }
@@ -59,9 +93,9 @@ export default function Index() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
-        contentContainerStyle={{ paddingVertical: 20, alignItems: "center" }} 
+        contentContainerStyle={{ paddingVertical: 20, alignItems: "center" }}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled" 
+        keyboardShouldPersistTaps="handled"
       >
         <View className="justify-center items-center p-3">
           <Text className="text-center mt-[100px] mb-[50px] text-[20px] text-black">Log In</Text>
@@ -84,9 +118,7 @@ export default function Index() {
             secureTextEntry={true}
           />
 
-          {error ? (
-            <Text className="text-red-500 mt-[10px]">{error}</Text>
-          ) : null}
+          {error ? <Text className="text-red-500 mt-[10px]">{error}</Text> : null}
 
           <View className="mt-[14px] mb-[40px] flex flex-row justify-between w-[320px]">
             <View className="flex flex-row items-center">
@@ -102,17 +134,17 @@ export default function Index() {
             title={isSubmitting ? "Logging in..." : "Log in"}
             handlePress={handleSubmit}
             containerStyles="bg-[#52AB99] w-full"
-            disabled={isSubmitting} 
+            disabled={isSubmitting}
             textStyles="w-full text-center"
           />
 
           <CustomButton
             title="Login With Google"
             handlePress={() => router.push("/sign-in")}
-            containerStyles="bg-[#d6d6d6] mt-[8px] w-full "
+            containerStyles="bg-[#d6d6d6] mt-[8px] w-full"
             textStyles="text-black text-[16px] text-center"
-            imageStyle=" mr-[10px]"
-          /> 
+            imageStyle="mr-[10px]"
+          />
 
           <View className="flex justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-black font-pregular">Don't have an account?</Text>
@@ -128,3 +160,5 @@ export default function Index() {
     </TouchableWithoutFeedback>
   );
 }
+
+
