@@ -1,15 +1,15 @@
 <script setup >
 import { ref, watch } from 'vue'
-import {storeToRefs} from 'pinia'
+import { storeToRefs } from 'pinia'
 
-import {useGymStore } from '@/stores/gyms'
+import { useGymStore } from '@/stores/gyms'
 const gymStore = useGymStore()
-const {getAllGyms} = gymStore;
-const {allGyms, gymSearch} = storeToRefs(gymStore)
+const { getAllGyms } = gymStore;
+const { allGyms, gymSearch, totalPages, currentPage } = storeToRefs(gymStore)
 
 getAllGyms()
 
-watch(gymSearch, (newVal)=>{
+watch(gymSearch, (newVal) => {
     getAllGyms(newVal)
 })
 </script>
@@ -22,12 +22,13 @@ watch(gymSearch, (newVal)=>{
             <div class="flex justify-between">
                 <div>
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" name="" id="" class="bg-transparent p-2 outline-none" placeholder="Search Gyms" v-model="gymSearch"/>
+                    <input type="text" name="" id="" class="bg-transparent p-2 outline-none" placeholder="Search Gyms"
+                        v-model="gymSearch" />
                 </div>
                 <span>
                     <span></span>
-                    
-                    
+
+
                 </span>
             </div>
 
@@ -60,9 +61,12 @@ watch(gymSearch, (newVal)=>{
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ gym.gymPhone }}</td>
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                 <span
-                                    class="p-1.5 text-xs font-medium uppercase tracking-wider text-grey  rounded-lg bg-opacity-50" :class="gym.status=='unverified'?'bg-orange-500':'bg-green-200' ">{{ gym.status }}</span>
+                                    class="p-1.5 text-xs font-medium uppercase tracking-wider text-grey  rounded-lg bg-opacity-50"
+                                    :class="gym.status == 'unverified' ? 'bg-orange-500' : 'bg-green-200'">{{ gym.status
+                                    }}</span>
                             </td>
-                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ gym.User.firstName }} {{ gym.User.lastName }}</td>
+                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ gym.User.firstName }} {{
+                                gym.User.lastName }}</td>
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap"><i
                                     class="fa-solid fa-circle-info text-lg cursor-pointer"></i></td>
                             <!-- <td class="p-3 text-sm text-gray-700 whitespace-nowrap"><i class="fa-solid fa-circle-info text-lg"></i></td> -->
@@ -75,7 +79,7 @@ watch(gymSearch, (newVal)=>{
                 </table>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-2">
                 <div class=" space-y-3 p-4 rounded-lg shadow" v-for="gym in allGyms" :key="gym.id">
                     <div class="flex items-center space-x-2 text-sm">
                         <div>
@@ -84,7 +88,8 @@ watch(gymSearch, (newVal)=>{
                         <div class="text-gray-500">{{ gym.gymName }}</div>
                         <div>
                             <span
-                                class="p-1.5 text-xs font-medium uppercase tracking-wider text-grey  rounded-lg bg-opacity-50" :class="gym.status=='unverified'?'bg-orange-500':'bg-green-200' ">{{ gym.status }}</span>
+                                class="p-1.5 text-xs font-medium uppercase tracking-wider text-grey  rounded-lg bg-opacity-50"
+                                :class="gym.status == 'unverified' ? 'bg-orange-500' : 'bg-green-200'">{{ gym.status }}</span>
                         </div>
                     </div>
                     <div class="text-sm text-gray-700">
@@ -92,21 +97,59 @@ watch(gymSearch, (newVal)=>{
                     </div>
                     <div class="flex justify-between">
                         <div class="text-sm font-medium text-gray-700">
-                        {{ gym.gymPhone }}
+                            {{ gym.gymPhone }}
+                        </div>
+                        <div class="text-sm font-medium text-gray-700 flex items-center space-x-3">
+                            <i class="fa-solid fa-circle-info text-lg cursor-pointer"></i>
+                            <i class="fa-solid fa-delete-left text-lg cursor-pointer"></i>
+
+                        </div>
                     </div>
-                    <div class="text-sm font-medium text-gray-700 flex items-center space-x-3">
-                        <i
-                                    class="fa-solid fa-circle-info text-lg cursor-pointer"></i>
-                        <i
-                                    class="fa-solid fa-delete-left text-lg cursor-pointer"></i>
-                                    
-                    </div>
-                    </div>
-                    
+
                 </div>
 
 
             </div>
+            <div class="flex justify-center" >
+
+                <nav aria-label="Page navigation example" class="my-2">
+                    <ul class="flex items-center -space-x-px h-8 text-sm">
+                        <li>
+                            <button :disabled="currentPage === 1"
+                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 "
+                                @click="getFaqs(false, currentPage - 1)">
+                                <span class="sr-only">Next</span>
+                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M5 1 1 5l4 4" />
+                                </svg>
+                            </button>
+
+                        </li>
+                        <li v-for="page in totalPages" @click="getFaqs(false, page)" :key="page">
+                            <a href="#"
+                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
+                                :class="currentPage == page ? 'bg-gray-200' : 'bg-white'">{{
+                                    page }} </a>
+                        </li>
+
+                        <li>
+
+                            <button :disabled="currentPage === totalPages"
+                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 "
+                                @click="getFaqs(false, currentPage + 1)">
+                                <span class="sr-only">Next</span>
+                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                            </button>
+
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </section>
-</template>
+    </section></template>

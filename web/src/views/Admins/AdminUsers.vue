@@ -9,8 +9,8 @@ const {allItems, search} = storeToRefs(user)
 
 getAllUsers()
 
-watch(search, (newVal)=>{
-    getAllUsers(newVal);
+watch(search, async (newVal)=>{
+    await getAllUsers(newVal);
 })
 
 </script>

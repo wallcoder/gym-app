@@ -299,10 +299,10 @@ const Rating = sequelize.define('Rating', {
         }
     },
 
-    rating:  {
+    rating: {
         type: DataTypes.FLOAT,
         allowNull: false,
-        
+
     },
 
     comment: {
@@ -313,11 +313,11 @@ const Rating = sequelize.define('Rating', {
 
 })
 
-User.hasMany(Rating, {foreignKey: 'userId'})
-Rating.belongsTo(User, {foreignKey: 'userId'})
+User.hasMany(Rating, { foreignKey: 'userId' })
+Rating.belongsTo(User, { foreignKey: 'userId' })
 
-Gym.hasMany(Rating, {foreignKey: 'gymId'})
-Rating.belongsTo(Gym, {foreignKey: 'gymId'})
+Gym.hasMany(Rating, { foreignKey: 'gymId' })
+Rating.belongsTo(Gym, { foreignKey: 'gymId' })
 
 User.hasMany(Saved, { foreignKey: 'userId' })
 Saved.belongsTo(User, { foreignKey: 'userId' })

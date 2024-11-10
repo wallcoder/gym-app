@@ -5,6 +5,7 @@ import sequelize from "../config/db.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
+
 const secretKey = 'h75jd427#j'
 // NORMAL LOGIN
 export const userLogin = async (req, res) => {
@@ -42,6 +43,20 @@ export const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+export const authorizeAdmin = (req, res, next)=>{
+    if(req.user.role !== 'admin'){
+        return res.status(403).send('Forbidden: Admins Only')
+    }
+    next();
+}
+
+export const authorizeUser = (req, res, next)=>{
+    if(req.user.role == 'admin'){
+        return res.status(403).send('Forbidden:Users Only')
+    }
+    next()
+}
 
 
 export const findUserFromToken = async (req, res) => {

@@ -112,6 +112,8 @@ export const getAllUsers = async (req, res) => {
                     { lastName: { [Op.iLike]: term } },
                     { email: { [Op.iLike]: term } },
                     { status: { [Op.iLike]: term } },
+                    
+                    // { 'UserRole.roleName': { [Op.iLike]: term } },
                 ],
             }
             : {};
@@ -127,15 +129,16 @@ export const getAllUsers = async (req, res) => {
             include: [
                 {
                     model: UserRole,
+                    as: 'UserRole',
                     required: false,  // Allow gyms without locations
-                    where: term
-                        ? {
+                    // where: term
+                    //     ? {
 
-                            roleName: { [Op.iLike]: term },
+                    //         roleName: { [Op.iLike]: term },
 
 
-                        }
-                        : {},
+                    //     }
+                    //     : {},
                 },
 
             ],
