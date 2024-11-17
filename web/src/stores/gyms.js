@@ -2,7 +2,7 @@ import { storeToRefs, defineStore } from "pinia";
 import { ref } from "vue";
 import axios from 'axios';
 import { useLoaderStore } from '@/stores/loader'
-import {useTokenStore} from '@/stores/token'
+import { useTokenStore } from '@/stores/token'
 
 
 
@@ -25,15 +25,15 @@ export const useGymStore = defineStore('gym', () => {
     const userSavedGyms = ref([])
     const myGyms = ref([])
 
-    const getGyms = async () => {
-
+    const getGyms = async (page = 1, limit = 10, location) => {
+        console.log("from getGyms: ", location)
         isLoadingSquare.value = true
         try {
-            const response = await axios.get(`/gyms`)
-            // `/faqs?page=${page}&term=${term}&limit=4`
-            gyms.value = response.data;
+            const response = await axios.get(`/gyms?limit=${limit}&page=${page}&location=${location}`)
 
-            
+            gyms.value = response.data.gyms;
+
+
         } catch (err) {
             isError.value = true
             console.log(err)
@@ -41,10 +41,10 @@ export const useGymStore = defineStore('gym', () => {
             isLoadingSquare.value = false
         }
 
-    }
+}
+    
+    const searchGyms = async (term = '', location) => {
 
-    const searchGyms = async (term = '', location ) => {
-        
         try {
             const response = await axios.get(`/search-gyms?term=${term}&location=${location}`)
             searchedGyms.value = response.data.gyms
@@ -58,35 +58,35 @@ export const useGymStore = defineStore('gym', () => {
 
 
     }
-    const getSavedGyms = async(userId)=>{
+    const getSavedGyms = async (userId) => {
         console.log("from getSavedGyms: ", userId)
-        try{
+        try {
             const response = await axios.get(`/gyms/saved/${userId}`)
             userSavedGyms.value = response.data;
 
 
-        }catch(err){
+        } catch (err) {
             isError.value = true
             console.log(err)
         }
     }
 
-    const getMyGyms = async(userId)=>{
+    const getMyGyms = async (userId) => {
         console.log("from getMygyms: ", userId)
-        try{
+        try {
             const response = await axios.get(`/user/gyms/${userId}`)
             myGyms.value = response.data;
 
-        }catch(err){
+        } catch (err) {
             isError.value = true
             console.log(err)
         }
 
     }
 
-    const getAllGyms = async(term='', page=1,limit='10')=>{
-        try{
-            const response = await axios.get(`/admin/gyms?page=${page}&term=${term}&limit=${limit}`)
+    const getAllGyms = async (term = '', page = 1, limit = 10, all = true) => {
+        try {
+            const response = await axios.get(`/admin/gyms?page=${page}&term=${term}&limit=${limit}&all=${all}`)
             allGyms.value = response.data.allGyms;
             totalGyms.value = response.data.totalGyms;
             totalPages.value = response.data.totalPages;
@@ -94,7 +94,7 @@ export const useGymStore = defineStore('gym', () => {
 
             console.log(response.data)
 
-        }catch(err){
+        } catch (err) {
             isError.value = true
             console.log(err)
         }
@@ -103,10 +103,10 @@ export const useGymStore = defineStore('gym', () => {
     const getGymById = async (id) => {
         isLoadingSquare.value = true
         try {
-            
+
             const response = await axios.get(`/gyms/${id}`)
             gym.value = response.data
-            
+
         } catch (err) {
             isError.value = true
             console.log(err)
@@ -116,5 +116,5 @@ export const useGymStore = defineStore('gym', () => {
     }
 
 
-    return {getMyGyms, myGyms, getSavedGyms, userSavedGyms, gym, gyms, getGymById, getGyms, searchGyms, searchedGyms, currentPage, totalGyms, totalPages, getAllGyms, allGyms, gymSearch }
+    return { getMyGyms, myGyms, getSavedGyms, userSavedGyms, gym, gyms, getGymById, getGyms, searchGyms, searchedGyms, currentPage, totalGyms, totalPages, getAllGyms, allGyms, gymSearch }
 })

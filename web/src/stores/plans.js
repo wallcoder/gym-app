@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import { tryOnScopeDispose } from "@vueuse/core";
 
 export const usePlanStore = defineStore('plans', () => {
     const subscriptionPlans = ref([])
     const subPlan = ref([])
-
+    const selectedPlan = ref({})
     const userPlans = ref([])
     const getSubscriptionPlans = async () => {
         try {
@@ -19,6 +20,35 @@ export const usePlanStore = defineStore('plans', () => {
         }
     }
 
+    
+
+    const getPlanById = async(planId)=>{
+        try{
+            const response = await axios.get(`/plans/${planId}`)
+             selectedPlan.value = response.data
+        
+        }catch (err) {
+            console.log(err)
+        }
+    }
+    const getPlanByMap = async(planMapId)=>{
+        try{
+            console.log("planMap: ", planMapId)
+            const response = await axios.get(`/plan-mapping/plan/${planMapId}`)
+            selectedPlan.value = response.data
+            console.log(selectedPlan.value)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    const updatePlanMapping = async(planMapId)=>{
+        try{
+            const response = await axios.post(`/plan-mapping/recharge/${planMapId}`)
+        }catch(err){
+            console.log(err)
+        }
+    }
     const getSubscriptionPlanById = async (id) => {
         try {
 
@@ -65,5 +95,5 @@ export const usePlanStore = defineStore('plans', () => {
         return `${day}/${month}/${year}`;
     }
 
-    return { getUserPlans, userPlans, subscriptionPlans, getSubscriptionPlans, getSubscriptionPlanById, createPlanMapping, formatDate }
+    return {getPlanByMap,updatePlanMapping,selectedPlan, getPlanById, getUserPlans, userPlans, subscriptionPlans, getSubscriptionPlans, getSubscriptionPlanById, createPlanMapping, formatDate }
 })

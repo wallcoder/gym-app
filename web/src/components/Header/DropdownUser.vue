@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
 
@@ -18,12 +18,12 @@ onClickOutside(target, () => {
       @click.prevent="dropdownOpen = !dropdownOpen"
     >
       <span class="hidden text-right lg:block">
-        <span class="block text-sm font-medium text-black dark:text-white">Thomas Anree</span>
-        <span class="block text-xs font-medium">UX Designer</span>
+        <span class="block text-sm font-medium text-black dark:text-white">Biaka Vaiphei</span>
+        <span class="block text-xs font-medium">Admin</span>
       </span>
 
       <span class="h-12 w-12 rounded-full">
-        <img src="@/assets/images/user/user-01.png" alt="User" />
+        <img src="@/assets/images/pp.jpg" alt="User" class="h-12 w-12 rounded-full object-cover"/>
       </span>
 
       <svg

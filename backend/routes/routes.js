@@ -1,13 +1,13 @@
 import express from "express";
-import { delUserByEmail, getAllUsers, googleLogin, insertUser } from "../controllers/userController.js";
+import { createNotif, delUserByEmail, getAllGymMembers, getAllUsers, googleLogin, insertUser } from "../controllers/userController.js";
 import { sendOTP } from "../controllers/otp.js";
 import { verifyOTP } from "../controllers/otp.js";
 import { userLogin, findUserFromToken } from "../controllers/login.js";
-import { checkPlan, getSubscriptionPlans, getUserPlan, insertPlanMapping } from "../controllers/planController.js";
+import { checkPlan, getPlanByMap, getSubscriptionPlans, getUserPlan, insertPlanMapping, insertPlanMappingDraft, rechargePlanMapping, startPlanMapping } from "../controllers/planController.js";
 import { authenticateToken } from "../controllers/login.js";
 import { getSubscriptionPlanById } from "../controllers/planController.js";
 import { decodeToken } from "../controllers/login.js";
-import { getAllGyms, getFeatures, getMyGyms, getNotif, getSaved, getUserSavedGyms, getWorkouts, insertGym, saveGym, searchGyms } from "../controllers/gymController.js"; // New controller for gym registration
+import { addGymImage, addMembershipPlan, changeGymInfo, changeGymPp, checkGymAdmin, countData, deleteGymImage, deleteMembershipPlan, getAllGyms, getFeatures, getGymAdminFeatures, getGymAdminWorkouts, getGymTransactions, getMemberships, getMyGyms,  getNotif, getSaved, getUserSavedGyms, getWorkouts, insertGym, saveGym, searchGyms, setGymVerified, updateGymAdminFeature, updateGymAdminWorkout, updateMembershipPlan } from "../controllers/gymController.js"; // New controller for gym registration
 import { getGymById, getGyms } from "../controllers/gymController.js";
 import { PaymentGateway } from "../models/paymentGateway.js";
 import { createOrder, getPublicKey, paymentDetails, verifyPayment } from "../controllers/paymentGateway.js";
@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads'); 
+    cb(null, 'uploads');
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Generate unique filename
@@ -36,10 +36,14 @@ const upload = multer({ storage: storage });
 
 // Route for gym registration with file handling (images)
 router.post('/register-gym', upload.fields([
-  { name: 'gymImages', maxCount: 10 },    // Gym images array
-  { name: 'gymProfileImage', maxCount: 1 } // Single profile image
+  { name: 'gymImages', maxCount: 10 },
+  { name: 'gymProfileImage', maxCount: 1 },
+  { name: 'gymLicense', maxCount: 1 }
 ]), insertGym);  // Call the controller function for gym registration
 
+router.post('/notif/add', createNotif)
+
+router.post('/admin/gym/set-verified', setGymVerified)
 // SIGN UP
 router.post('/register', insertUser);
 
@@ -91,6 +95,9 @@ router.post('/store-transaction', insertTransaction)
 
 // PLAN
 router.post('/insert-plan', insertPlanMapping)
+// router.post('/insert-plan/draft', insertPlanMappingDraft)
+router.post('/plan-mapping/recharge/:planMapId', rechargePlanMapping)
+router.get('/plan-mapping/plan/:planMapId', getPlanByMap)
 
 router.get('/user/plans/:userId', getUserPlan)
 
@@ -106,4 +113,28 @@ router.get('/check-plan/:planMapId', checkPlan);
 
 // gym search
 router.get('/search-gyms', searchGyms)
+
+// gymadmin
+router.get('/gym-admin/gym/:gymId/:ownerId', checkGymAdmin)
+router.get('/gym-admin/members/:gymId', getAllGymMembers)
+router.get('/gym-admin/memberships/:gymId', getMemberships)
+router.post('/gym-admin/add-gym', upload.fields([
+  { name: 'gymImages', maxCount: 10 }
+]), addGymImage)
+router.put('/gym-admin/edit-profile-pic/:gymId', upload.fields([
+  { name: 'pp', maxCount: 1 }
+]), changeGymPp)
+router.put('/gym-admin/change-gym-info/:gymId', changeGymInfo)
+
+router.get('/gym-admin/transactions/:gymId', getGymTransactions)
+
+router.delete('/gym-admin/delete-image/:imageId/:gymId', deleteGymImage)
+router.get('/gym-admin/workouts/:gymId', getGymAdminWorkouts)
+router.get('/gym-admin/features/:gymId', getGymAdminFeatures)
+router.post('/gym-admin/update-gym-feature/:gymFeatureId/:gymId', updateGymAdminFeature)
+router.post('/gym-admin/update-gym-workout/:gymWorkoutId/:gymId', updateGymAdminWorkout)
+router.post('/gym-admin/add-membership-plan/:gymId', addMembershipPlan)
+router.post('/gym-admin/update-membership-plan/:planId', updateMembershipPlan)
+router.delete('/gym-admin/delete-membership-plan/:planId', deleteMembershipPlan)
+router.get('/gym-admin/dashboard/:gymId', countData)
 export default router;

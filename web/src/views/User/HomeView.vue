@@ -26,7 +26,7 @@ watch(
 );
 
 onMounted(async () => {
-    await getGyms();
+    
     if (route.query.showLoginModal === 'true') {
         isOpenLogin.value = true;
     }

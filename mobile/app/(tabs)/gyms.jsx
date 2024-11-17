@@ -1,10 +1,12 @@
+import { useEffect, useState, useRef } from 'react';
 import { SafeAreaView, View, Text, Animated, TouchableOpacity } from 'react-native';
-import React, { useState, useRef } from 'react';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../header';
 import AvailableGyms from '../../components/home/availableGyms';
-import { useRouter } from 'expo-router';
 import { icons } from '../../constants';
 
+// Gym data
 const gymsData = [
   {
     id: 1,
@@ -12,7 +14,7 @@ const gymsData = [
     location: 'Lowland Street, Green Valley',
     rating: 4.5,
     recommended: true,
-    image: icons.gymImage, // Replace with your placeholder image
+    image: icons.gymImage,
   },
   {
     id: 2,
@@ -20,7 +22,7 @@ const gymsData = [
     location: 'Sunset Boulevard, Uptown',
     rating: 4.7,
     recommended: false,
-    image: icons.gymImage, // Replace with another placeholder or same image
+    image: icons.gymImage,
   },
   {
     id: 3,
@@ -50,9 +52,27 @@ const gymsData = [
 
 const Gyms = () => {
   const [inputBgColor, setInputBgColor] = useState('transparent');
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication status
   const router = useRouter();
   const scrollY = useRef(new Animated.Value(0)).current;
 
+  // Check token on mount
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      if (token) {
+        console.log('Token found on Gyms page:', token);
+        setIsAuthenticated(true); // User is authenticated
+      } else {
+        console.log('No token found on Gyms page');
+        router.push("/login");  // Redirect to login if no token is found
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  // Scroll handler for input background color
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
     {
@@ -64,13 +84,18 @@ const Gyms = () => {
     }
   );
 
-  // Update handleGymPress to pass gym id to the gymDetails page
+  // Handle gym press to navigate to gym details
   const handleGymPress = (gymId) => {
     router.push({
       pathname: '/gymDetails',
-      query: { id: gymId }, // Pass gym id as query param
+      query: { id: gymId },
     });
   };
+
+  // If not authenticated, don't render the gyms content
+  if (!isAuthenticated) {
+    return <View><Text>Loading...</Text></View>;
+  }
 
   return (
     <SafeAreaView className="flex-1 p-3 pb-0">
@@ -105,3 +130,4 @@ const Gyms = () => {
 };
 
 export default Gyms;
+

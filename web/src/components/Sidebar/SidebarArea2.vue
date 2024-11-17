@@ -2,10 +2,17 @@
 import { useSidebarStore } from '@/stores/sidebar'
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
+import {storeToRefs} from 'pinia'
 import SidebarItem from './SidebarItem2.vue'
 import {RouterLink} from 'vue-router'
+import {useGymAdminStore} from '@/stores/gymAdmin'
+const gymAdmin = useGymAdminStore()
 
 const target = ref(null)
+
+const props = defineProps({
+  gymId: {type: String, required: true}
+})
 
 const sidebarStore = useSidebarStore()
 
@@ -52,15 +59,17 @@ onClickOutside(target, () => {
     <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
       <!-- Sidebar Menu -->
       <nav class="mt-5 py-4 px-4 lg:mt-0 lg:px-6">
-        <RouterLink exact-active-class="bg-graydark dark:bg-meta-4" to="/admin" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4  font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-gauge text-white" ></i> <span>Dashboard</span></RouterLink>
-        <RouterLink active-class="bg-graydark dark:bg-meta-4" to="/admin/admin-gyms" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-dumbbell text-white"></i> <span>Members</span></RouterLink>
-        <RouterLink active-class="bg-graydark dark:bg-meta-4" to="/admin/admin-users" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-users text-white"></i> <span>Membership Plans</span></RouterLink>
-        <RouterLink active-class="bg-graydark dark:bg-meta-4" to="/admin/admin-transactions" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-money-check text-white"></i> <span>My Subscription</span></RouterLink>
-        <RouterLink active-class="bg-graydark dark:bg-meta-4" to="/admin/admin-plans" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-money-bill text-white"></i> <span>My Gym</span></RouterLink>
+        <RouterLink exact-active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4  font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-gauge " ></i> <span>Dashboard</span></RouterLink>
+        <RouterLink active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}/members`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-dumbbell "></i> <span>Members</span></RouterLink>
+        <RouterLink active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}/membership-plans`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-users "></i> <span>Membership Plans</span></RouterLink>
+        <RouterLink active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}/my-gym`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-money-check "></i> <span>My Gym</span></RouterLink>
+        <!-- <RouterLink active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}/notifications`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-money-bill text-white"></i> <span>Notifications</span></RouterLink> -->
+        <RouterLink active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}/transactions`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-money-bill "></i> <span>Transactions</span></RouterLink>
+        <RouterLink active-class="bg-graydark dark:bg-meta-4" :to="`/gym-admin/${props.gymId}/workouts&features`" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-money-bill "></i> <span>Workouts & Features</span></RouterLink>
         
-        <RouterLink active-class="bg-graydark dark:bg-meta-4" to="/admin/admin-notifications" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-gauge text-white"></i> <span>Notifications</span></RouterLink>
         
-        <RouterLink active-class="bg-graydark dark:bg-meta-4" to="/admin/admin-features" class="group relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"> <i class="fa-solid fa-gauge text-white"></i> <span>Workouts & Features</span></RouterLink>
+        
+       
       </nav>
       
     </div>

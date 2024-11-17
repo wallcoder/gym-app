@@ -70,15 +70,23 @@ export const getApiKey = async (id) => {
 
 // Function to initialize the Razorpay instance with dynamic keys
 const initializeRazorpay = async (gymId) => {
-    const { apiKey, apiKeySecret, key, iv } = await getApiKey(gymId);
-    const decryptedApiKey = decrypt(apiKey, iv, key);
-    const decryptedApiKeySecret = decrypt(apiKeySecret, iv, key);
 
 
-    razorpayInstance = new Razorpay({
-        key_id: decryptedApiKey,
-        key_secret: decryptedApiKeySecret,
-    });
+    if (!gymId) {
+        razorpayInstance = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY,
+            key_secret: process.env.RAZORPAY_SECRET,
+        });
+    } else {
+        const { apiKey, apiKeySecret, key, iv } = await getApiKey(gymId);
+        const decryptedApiKey = decrypt(apiKey, iv, key);
+        const decryptedApiKeySecret = decrypt(apiKeySecret, iv, key);
+
+        razorpayInstance = new Razorpay({
+            key_id: decryptedApiKey,
+            key_secret: decryptedApiKeySecret,
+        });
+    }
 };
 
 export const getPublicKey = async (req, res) => {
@@ -116,7 +124,7 @@ export const createOrder = async (req, res) => {
         // Use the global instance to create an order
         const order = await razorpayInstance.orders.create(options);
         console.log(order);
-        
+
         // Send the order details in the response
         res.json(order);
     } catch (error) {

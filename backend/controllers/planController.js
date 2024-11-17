@@ -1,4 +1,4 @@
-import { Plan } from "../models/Gym.js";
+import { Gym, Plan } from "../models/Gym.js";
 import sequelize from "../config/db.js";
 import { PlanMapping } from "../models/Plans.js";
 import { Op } from 'sequelize';
@@ -108,6 +108,51 @@ export const getSubscriptionPlans = async (req, res) => {
 }
 
 
+export const getPlanByMap = async(req, res)=>{
+    try{
+        const {planMapId} = req.params
+
+        const findPlanMap = await PlanMapping.findOne({
+            where: {id: planMapId}
+        })
+
+        const findPlan = await Plan.findOne({
+            where: {id: findPlanMap.planId},
+            include: [{
+                model: Gym
+            }]
+        })
+
+        res.json(findPlan)
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const rechargePlanMapping = async(req,res)=>{
+    try{
+        const {planMapId} = req.params
+        
+        const findPlanMap = await PlanMapping.findOne({
+            where: {id: planMapId}
+        })
+
+        const findPlan = await Plan.findOne({
+            where: {id: findPlanMap.planId}
+        })
+
+        const dueDate = calculateDueDate(Number(findPlan.duration), 'months')
+
+        const updatePlanMapping = await PlanMapping.update({ status: 'active', expireDate: dueDate }, { where: { id: planMapId } })
+
+        res.json({ message: 'plan intiated successfully', updatePlanMapping })
+
+    }catch(err){
+        res.json(err)
+    }
+}
+
 
 
 export const getSubscriptionPlanById = async (req, res) => {
@@ -122,6 +167,83 @@ export const getSubscriptionPlanById = async (req, res) => {
     }
 }
 
+
+export const startPlanMapping = async (req, res) => {
+    try {
+
+        const { planMappingId } = req.body
+        const getPlanMapping = await PlanMapping.findOne({ where: { id: planMappingId } })
+
+        const getPlan = await Plan.findOne({ where: { id: getPlanMapping.id } })
+
+        const dueDate = calculateDueDate(Number(getPlan.duration), 'months')
+
+        const updatePlanMapping = await PlanMapping.update({ status: 'active', expireDate: dueDate }, { where: { id: planMappingId } })
+
+        res.json({ messge: 'plan intiated successfully', updatePlanMapping })
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const insertPlanMappingDraft = async (userId, planId, gymId) => {
+    try {
+
+        console.log("from planMappingDraft: ", userId, planId, gymId);
+
+        const getPlan = await Plan.findOne({ where: { id: planId } })
+
+        if (!getPlan) {
+            return res.json({ message: "plan not found" })
+
+        }
+
+        console.log(getPlan.duration)
+
+
+
+
+        const newPlanMap = await PlanMapping.create({
+            userId,
+            planId,
+            gymId,
+            status: 'draft',
+
+
+        })
+        if (!newPlanMap) {
+            console.log("no plan found")
+
+        }
+
+        const qr = await generateQRCode(newPlanMap.id)
+
+        const addQR = await PlanMapping.update(
+            {
+                qrCode: qr
+            }, {
+            where: {
+                id: newPlanMap.id
+            }
+        })
+        if (!addQR) {
+            console.log("qr cannot be created")
+
+        }
+
+
+
+
+        console.log("draft created successful")
+
+
+
+
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 export const insertPlanMapping = async (req, res) => {
     try {
@@ -138,7 +260,7 @@ export const insertPlanMapping = async (req, res) => {
         console.log(getPlan.duration)
         const dueDate = calculateDueDate(Number(getPlan.duration), 'months')
 
-        console.log("DUE DATE GEN: ", dueDate)
+
 
         const newPlanMap = await PlanMapping.create({
             userId,
@@ -179,6 +301,7 @@ export const insertPlanMapping = async (req, res) => {
         console.log(err)
     }
 }
+
 
 
 export const checkPlan = async (req, res) => {

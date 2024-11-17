@@ -10,52 +10,23 @@ const { searchGyms } = gymStore
 const { searchedGyms } = storeToRefs(gymStore)
 const api = import.meta.env.VITE_API
 const searchBar = useSearchBarStore()
-const { toggleLoc, toggleSugg } = searchBar
-const { isOpenLoc, isOpenSugg, query, hasSearched } = storeToRefs(searchBar)
-const location = ref("Aizawl")
+const { toggleLoc, toggleSugg, detectCurrentLocation } = searchBar
+const { isOpenLoc, isOpenSugg, query, hasSearched, location } = storeToRefs(searchBar)
 
-watch(query, (newQuery) => {
-    hasSearched.value = true
 
-    if (newQuery == '') {
-        hasSearched.value = false
-    } else {
-        isOpenSugg.value = true
-    }
-    searchGyms(newQuery, location.value)
-})
+// watch(query, (newQuery) => {
+//     hasSearched.value = true
 
-// Method to detect current location
-const detectCurrentLocation = () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                
-                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.address) {
-                            
-                            const city = data.address.city || data.address.town || data.address.village || 'Your location';
-                            location.value = city; 
-                            
-                            
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching location:', error);
-                    });
-            },
-            (error) => {
-                console.error('Error detecting location:', error.message);
-            }
-        );
-        isOpenLoc.value = false
-    } else {
-        alert('Geolocation is not supported by this browser.');
-    }
-}
+//     if (newQuery == '') {
+//         hasSearched.value = false
+//     } else {
+//         isOpenSugg.value = true
+//     }
+//     searchGyms(newQuery, location.value)
+// })
+
+
+
 </script>
 
 <template>
@@ -67,7 +38,8 @@ const detectCurrentLocation = () => {
                 class="text-black p-2 rounded-lg w-[80%] outline-none">
             <span class="flex items-center justify-end rounded-lg text-black p-2 w-[20%] cursor-pointer"
                 @click="toggleLoc()">
-                {{ location }}<span class=""></span><i class="fa-solid fa-location-dot text-lg text-first p-2 cursor-pointer"></i>
+                {{ location }}<span class=""></span><i
+                    class="fa-solid fa-location-dot text-lg text-first p-2 cursor-pointer"></i>
                 <i class="fa-solid text-sm px-1 fa-chevron-down transition-all duration-100 ease-in-out cursor-pointer"
                     :class="isOpenLoc ? 'rotate-180' : ''"></i>
             </span>
@@ -83,7 +55,7 @@ const detectCurrentLocation = () => {
                     <img :src="`${api}${e.profileImage}`" alt="gym" class="w-18 h-18 rounded-lg bg-slate-300 object-cover">
                     <div class="flex flex-col ml-2">
                         <h3 class="font-semibold bg-">{{ e.gymName }}</h3>
-                        <h4>Lonely Road, Aizawl</h4>
+                        <h4>{{ e.GymLocation.area }}, {{ e.GymLocation.city }}</h4>
                         <h4 class="bg-first text-white text-sm rounded w-[25%] text-center">4.2</h4>
                     </div>
                 </RouterLink>
@@ -93,7 +65,7 @@ const detectCurrentLocation = () => {
             class="w-40 tablet:w-[600px] absolute z-10 smartphone:w-[400px] text-black justify-end flex rounded-lg max-h-80 ">
             <div class="w-[40%] rounded-l-lg flex flex-col overflow-y-auto">
                 <div class="flex flex-col bg-white cursor-pointer rounded-lg">
-                    <div class="flex flex-col p-2 hover:bg-gray rounded-lg" @click="detectCurrentLocation">
+                    <div class="flex flex-col p-2 hover:bg-gray rounded-lg" @click="detectCurrentLocation(false)">
                         <h3 class="space-x-1"><i class="fa-solid fa-location-crosshairs"></i><span>Detect Current
                                 Location</span></h3>
                     </div>
@@ -101,8 +73,9 @@ const detectCurrentLocation = () => {
                         <h3 class="space-x-1"><i class="fa-solid fa-plus"></i><span>Add Location</span></h3>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
-</div></template>
+</template>
 
 <style scoped></style>

@@ -26,6 +26,7 @@ import Membership from '@/views/User/Membership.vue';
 import Profile from '@/views/User/Profile.vue';
 import MyGyms from '@/views/User/MyGyms.vue';
 import NotFound from '@/views/User/NotFound.vue';
+import Recharge from '@/views/User/Recharge.vue';
 
 import AdminLayout from '@/views/Admins/AdminLayout.vue'
 import Dashboard from '@/views/Admins/Dashboard.vue'
@@ -37,9 +38,15 @@ import AdminNotifications from '@/views/Admins/AdminNotifications.vue'
 import AdminPlans from '@/views/Admins/AdminPlans.vue'
 import AdminTransactions from '@/views/Admins/AdminTransactions.vue'
 import AdminUsers from '@/views/Admins/AdminUsers.vue'
+
 import GymAdminLayout from '@/views/GymAdmins/GymAdminLayout.vue'
-
-
+import GymAdminDashboard from '@/views/GymAdmins/GymAdminDashboard.vue'
+import GymAdminMembers from '@/views/GymAdmins/GymAdminMembers.vue'
+import GymAdminMembershipPlans from '@/views/GymAdmins/GymAdminMembershipPlans.vue'
+import GymAdminMyGym from '@/views/GymAdmins/GymAdminMyGym.vue'
+import GymAdminNotifications from '@/views/GymAdmins/GymAdminNotifications.vue'
+import GymAdminWorkoutFeatures from '@/views/GymAdmins/GymAdminWorkoutFeatures.vue'
+import GymAdminTransaction from '@/views/GymAdmins/GymAdminTransaction.vue'
 
 
 
@@ -63,10 +70,11 @@ const routes = [
 
 
   },
+  { path: '/plan/recharge/:planMapId', name: 'recharge', component: Recharge, meta: { title: 'GymPass | Recharge' }, props: true },
   {
     path: '/admin',
     component: AdminLayout,
-    children:[{
+    children: [{
       path: '',
       name: 'admin-dashboard',
       component: Dashboard,
@@ -81,7 +89,7 @@ const routes = [
       meta: {
         title: 'Admin | Calender'
       },
-      
+
     },
     {
       path: 'admin-gyms',
@@ -141,21 +149,35 @@ const routes = [
     }]
   },
   {
-    path: '/gym-admin',
-    name: 'gym-admin',
+    path: '/gym-admin/:gymId',
+   
     component: GymAdminLayout,
+    props: true,
     meta: {
-      title: 'Gym-Admin'
-    }
-    
+      title: 'Gym-Admin',
+      requiresAuth: true
+    },
+
+    children: [
+      { path: '', name: 'gym-admin-dashboard', component: GymAdminDashboard, meta: { title: 'Gym Admin | Dashboard' } },
+      { path: 'members', name: 'gym-admin-members', component: GymAdminMembers, meta: { title: 'Gym Admin | Members' } },
+      { path: 'membership-plans', name: 'gym-admin-membership-plans', component: GymAdminMembershipPlans, meta: { title: 'Gym Admin | Membership Plans' } },
+      { path: 'my-gym', name: 'gym-admin-my-gym', component: GymAdminMyGym, meta: { title: 'Gym Admin | My Gym' } },
+      { path: 'notifications', name: 'gym-admin-notification', component: GymAdminNotifications, meta: { title: 'Gym Admin | Notifications' } },
+      { path: 'workouts&features', name: 'gym-admin-workouts&features', component: GymAdminWorkoutFeatures, meta: { title: 'Gym Admin | Workouts & Features' } },
+      { path: 'transactions', name: 'gym-admin-transactions', component: GymAdminTransaction, meta: { title: 'Gym Admin | Transactions' } },
+
+
+     ]
+
   },
 
-//   import AdminFeatures from '@/views/Admins/AdminFeatures.vue'
-// import AdminMemberships from '@/views/Admins/AdminMemberships.vue'
-// import AdminNotifications from '@/views/Admins/AdminNotifications.vue'
-// import AdminPlans from '@/views/Admins/AdminPlans.vue'
-// import AdminTransactions from '@/views/Admins/AdminTransactions.vue'
-// import AdminUsers from '@/views/Admins/AdminUsers.vue'
+  //   import AdminFeatures from '@/views/Admins/AdminFeatures.vue'
+  // import AdminMemberships from '@/views/Admins/AdminMemberships.vue'
+  // import AdminNotifications from '@/views/Admins/AdminNotifications.vue'
+  // import AdminPlans from '@/views/Admins/AdminPlans.vue'
+  // import AdminTransactions from '@/views/Admins/AdminTransactions.vue'
+  // import AdminUsers from '@/views/Admins/AdminUsers.vue'
   {
     path: '/admin-fake',
 
@@ -261,11 +283,11 @@ const routes = [
     }
   },
 
-  
-  
-  
-  
-  
+
+
+
+
+
   {
     path: '/gym-registration/:planId/:planName',
     name: 'gym-registration',

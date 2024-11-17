@@ -1,10 +1,10 @@
 <script setup>
-import {useHomeStore} from '@/stores/home';
-import {storeToRefs} from 'pinia'
+import { useHomeStore } from '@/stores/home';
+import { storeToRefs } from 'pinia'
 const home = useHomeStore();
 
-const {handleSave } = home
-const { savedGyms} = storeToRefs(home)
+const { handleSave } = home
+const { savedGyms } = storeToRefs(home)
 const api = import.meta.env.VITE_API
 
 const props = defineProps({
@@ -17,10 +17,12 @@ const props = defineProps({
 </script>
 <template>
     <div class="grid grid-cols-1  smartphone-md:grid-cols-2 tablet:grid-cols-3 2xl:grid-cols-4">
-        <div v-for="gym in props.gyms" :key="gym.id" class="rounded-xl shadow-4 relative main bg-white m-2 tablet:m-3  " v-motion-fade-visible-once >
+        <div v-for="gym in props.gyms" :key="gym.id"
+            class="rounded-xl shadow-4 relative main bg-white m-2 tablet:m-3  min-w-[250px] tablet:min-w-[300px]"
+            v-motion-fade-visible-once>
 
             <RouterLink :to="`/gyms/gym/${gym.id}`">
-                <img :src="`${api}${gym.profileImage}`" alt="gym" class="rounded-xl w-full h-[200px]" />
+                <img :src="`${api}${gym.profileImage}`" alt="gym" class="rounded-xl w-full h-[200px] " />
             </RouterLink>
 
             <div
@@ -30,12 +32,13 @@ const props = defineProps({
 
             <div class="flex justify-between">
                 <div class="p-2 flex flex-col">
-                    <h2 class="text-black">{{ gym.gymName }}  </h2>
+                    <h2 class="text-black">{{ gym.gymName }} </h2>
                     <h3 class="font-medium text-sm">{{ gym.GymLocation.area }}, {{ gym.GymLocation.city }} </h3>
                     <h3 class="font-medium text-sm"><i class="fa-solid fa-star text-yellow-500"></i></h3>
                 </div>
                 <div>
-                    <i class="transition-all duration-150 ease-out fa-solid fa-bookmark  text-2xl mr-2 mt-2 cursor-pointer" @click="handleSave(gym.id)" :class="savedGyms.includes(gym.id)?'text-first':'text-sixth'"></i>
+                    <i class="transition-all duration-150 ease-out fa-solid fa-bookmark  text-2xl mr-2 mt-2 cursor-pointer"
+                        @click="handleSave(gym.id)" :class="savedGyms.includes(gym.id) ? 'text-first' : 'text-sixth'"></i>
                 </div>
             </div>
         </div>
@@ -57,5 +60,4 @@ img {
     transform: scale(1.005);
 
 
-}
-</style>
+}</style>

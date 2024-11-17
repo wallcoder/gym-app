@@ -14,7 +14,7 @@ import { useTokenStore } from '../../stores/token'
 const token = useTokenStore()
 const { decodeToken, fetchUser } = token
 const gymReg = useGymRegStore()
-const { formData, handleRegister, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout, fetchFeatures, fetchWorkouts } = gymReg;
+const { formData, handleRegister, handleGymImages, handleGymProfileImage, handleGymLicense, toggleFeature, toggleWorkout, fetchFeatures, fetchWorkouts } = gymReg;
 const { message, isFormValid, allFeatures, allWorkouts } = storeToRefs(gymReg)
 const plan = usePlanStore()
 const { getSubscriptionPlanById } = plan;
@@ -115,7 +115,7 @@ onMounted(async () => {
 
         <div class="h-auto w-[100%] md:w-[70%] lg:w-[55%] py-5 ">
 
-            <form class="mx-auto flex flex-col space-y-5" @submit.prevent="handleRegister">
+            <form class="mx-auto flex flex-col space-y-5" @submit.prevent="handleRegister(props.planId)">
                 <div class=" flex flex-col space-y-5" v-show="step === 2">
                     <h1 class="font-semibold mb-3 text-black text-2xl " v-motion-fade-visible-once>Other Gym Details</h1>
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
@@ -145,6 +145,22 @@ onMounted(async () => {
                                 
                                 <input id="dropzone-file-profile-image" type="file" class="border-none"  name="gym-profile-image"
                                     @change="handleGymProfileImage" required/>
+                           
+                        </div>
+
+
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
+                        <h1 class="font-semibold  text-black text-2xl ">Add Gym License*</h1>
+                        <p class="text-sm mb-3">Upload gym license(Only PDF is accepted)</p>
+                        <span class="text-red text-sm mb-3" v-if="message.gymLicense">{{ message.gymLicense
+                        }}</span>
+
+                        <div class="flex items-center w-full bg-forth p-4">
+                            
+                                
+                                <input id="dropzone-file-profile-image" type="file" class="border-none"  name="gym-profile-image"
+                                    @change="handleGymLicense" required/>
                            
                         </div>
 
@@ -354,7 +370,7 @@ onMounted(async () => {
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Features</h1>
                         <p class="text-sm mb-3">Select features of your gym</p>
-                        <div class="flex flex-wrap space-x-2">
+                        <div class="flex flex-wrap space-y-2 space-x-2 ">
                             <span
                                 class="border p-2 py-1 rounded-xl hover:cursor-pointer transition-all duration-100 ease-in"
                                 v-for="f in allFeatures" :key="f.id" @click="toggleFeature(f.id)" :class="{
@@ -374,7 +390,7 @@ onMounted(async () => {
                     <div class="bg-white rounded-xl p-6 shadow-6" v-motion-fade-visible-once>
                         <h1 class="font-semibold  text-black text-2xl ">Workouts</h1>
                         <p class="text-sm mb-3">Select workouts available in your gym</p>
-                        <div class="flex flex-wrap space-x-2">
+                        <div class="flex flex-wrap space-x-2 space-y-2">
                             <span
                                 class="border p-2 py-1 rounded-xl hover:cursor-pointer transition-all duration-100 ease-in"
                                 v-for="w in allWorkouts" :key="w.id" @click="toggleWorkout(w.id)" :class="{

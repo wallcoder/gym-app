@@ -1,4 +1,4 @@
-import { Gym, GymFeature, GymWorkout, GymWorkoutMapping, GymOpeningHours, GymLocation, GymImages } from "../models/Gym.js";
+import { Gym, GymFeature, GymWorkout, GymWorkoutMapping, GymOpeningHours, GymLocation, GymImages, Rating } from "../models/Gym.js";
 import { User } from "../models/User.js";
 import { Plan } from "../models/Gym.js";
 import sequelize from "../config/db.js";
@@ -12,6 +12,8 @@ import { encrypt } from "./paymentGateway.js";
 import { insertApiKey } from "./paymentGateway.js";
 import { Saved } from "../models/Gym.js";
 import { Notification } from "../models/Gym.js";
+import { insertPlanMappingDraft } from "./planController.js";
+import { Transaction } from "../models/Transaction.js";
 
 // Define storage for multer
 const storage = multer.diskStorage({
@@ -43,27 +45,260 @@ const upload = multer({
     { name: 'gymProfileImage', maxCount: 1 } // Handle 1 profile image
 ]);
 
+export const changeGymInfo = async (req, res) => {
+    try {
+        const { gymId } = req.params
+        const { phone, email } = req.body
+
+        const updateGym = await Gym.update({
+            gymPhone: phone,
+            gymEmail: email,
+
+        }, { where: { id: gymId } })
+
+        res.json(updateGym)
+
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const countData = async(req, res)=>{
+    try{
+        const {gymId} = req.params
+        const profits = await Transaction.sum('amount',{where: {receiverId: gymId, status: 'success'}})
+        const membershipPlans = await Plan.count({where: {gymId}})
+        const activeMembers = await PlanMapping.count({where: {gymId}})
+
+        res.json({profits, membershipPlans, activeMembers})
+
+        
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const setGymVerified = async (req, res) => {
+    try {
+        const { gymId } = req.body;
+        const updateGym = await Gym.update({ status: 'verified' }, { where: { id: gymId } })
+        res.json(updateGym)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const updateGymAdminWorkout = async (req, res) => {
+    try {
+
+
+        const { gymWorkoutId, gymId } = req.params
+        const check = await GymWorkoutMapping.findOne({ where: { gymWorkoutId } })
+        if (check) {
+            const delWorkout = GymWorkoutMapping.destroy({ where: { gymWorkoutId } })
+            return res.json(delWorkout)
+        }
+        const addWorkout = await  GymWorkoutMapping.create({
+            gymId,
+            gymWorkoutId
+        })
+
+        res.json(addWorkout)
+
+        
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
+
+
+    
+}
+
+export const addMembershipPlan = async(req, res)=>{
+    try{
+        const {planName, planDescription, price, version} = req.body
+        const {gymId} = req.params
+
+        const add = await Plan.create({
+            planName,
+            planDescription,
+            planType: 'membership',
+            price,
+            version,
+            gymId,
+            state: 'active'
+
+        })
+
+        res.json(add)
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const updateMembershipPlan =async(req, res)=>{
+    try{
+        const {planId} = req.params
+        const check = await Plan.findOne({where: {id: planId, state: 'active'}})
+        if(check){
+            console.log("activeee")
+            const deactivate = await Plan.update({state: 'inactive'},{where: {id: planId}})
+            return res.json(deactivate)
+        }
+        const activate = await Plan.update({state: 'active'}, {where: {id: planId}})
+        res.json(activate)
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
+} 
+
+export const deleteMembershipPlan = async(req, res)=>{
+    try{
+        const {planId} = req.params
+        const check = await PlanMapping.findOne({where: {planId}})
+
+        if(check){
+           return res.status(400).json({message: 'plan is used. cannot delete'})
+        }
+
+        const deletePlan = await Plan.destroy({where: {id: planId}})
+
+        res.json(deletePlan)
+    }catch(err){
+        console.log(err)
+    }
+}
+export const updateGymAdminFeature = async (req, res) => {
+    try {
+
+
+        const { gymFeatureId, gymId } = req.params
+        const check = await GymFeatureMapping.findOne({ where: { gymFeatureId } })
+        if (check) {
+            const delWorkout = GymFeatureMapping.destroy({ where: { gymFeatureId } })
+            return res.json(delWorkout)
+        }
+        const addFeature = await  GymFeatureMapping.create({
+            gymId,
+            gymFeatureId
+        })
+
+        res.json(addFeature)
+
+        
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
+
+
+    
+}
+
+export const changeGymPp = async (req, res) => {
+    const { gymId } = req.params;
+    const pp = req.files.pp || [];
+    const ppPath = pp.map(img => `/uploads/${img.filename}`);
+    console.log("Image Paths: ", ppPath);
+
+    const results = [];
+
+    for (const img of ppPath) {
+        try {
+            console.log(img);
+            await Gym.update(
+                { profileImage: img }, // Correct update syntax
+                { where: { id: gymId } } // Proper where clause
+            );
+            console.log(`PP ${img} added successfully.`);
+            results.push({ img, status: 'success' });
+        } catch (error) {
+            console.error(`Error adding feature ${img}:`, error);
+            results.push({ img, status: 'error', error });
+        }
+    }
+
+    // Send a consolidated response after processing all images
+    res.json({ message: 'Process completed', results });
+};
+
+
+export const deleteGymImage = async (req, res) => {
+    try {
+        const { imageId, gymId } = req.params
+        const checkImage = await GymImages.count({ where: { gymId } })
+        console.log("check image: ", checkImage)
+        if (checkImage === 1) {
+
+            return res.status(400).json({ messageDel: 'Cannot Delete!! There should be atleast 1 image' })
+        }
+        const delImage = await GymImages.destroy({ where: { id: imageId } })
+        res.json(delImage)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const addGymImage = async (req, res) => {
+    try {
+
+        const { gymId } = req.body
+        const gymImages = req.files.gymImages || [];
+        const gymImagePaths = gymImages.map(img => `/uploads/${img.filename}`);
+        console.log("Image Paths: ", gymImagePaths, " ");
+
+        for (const img of gymImagePaths) {
+            try {
+                console.log(img)
+                await GymImages.create({
+                    gymId,
+                    gymImgPath: img
+                });
+                console.log(`Workout ${img} added successfully.`);
+            } catch (error) {
+                console.error(`Error adding feature ${img}:`, error);
+            }
+
+        }
+        res.json({ message: 'successfull' })
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
+
 // Route handler using multer for parsing multipart form-data
 export const insertGym = async (req, res) => {
     try {
         // Extract gym data from the request
         console.log("hello")
         const gymData = await JSON.parse(req.body.gymData);
-
+        console.log("PLAN ID: ", req.body.planId)
         console.log(gymData)
 
         const gymImages = req.files.gymImages || [];
         const gymProfileImage = req.files.gymProfileImage ? req.files.gymProfileImage[0] : null;
+        const gymLicense = req.files.gymLicense ? req.files.gymLicense[0] : null;
+
 
         const gymImagePaths = gymImages.map(img => `/uploads/${img.filename}`);  // Store paths of gym images
         const gymProfileImagePath = gymProfileImage ? `/uploads/${gymProfileImage.filename}` : null;  // Store profile image path
-
+        const gymLicensePath = gymLicense ? `/uploads/${gymLicense.filename}` : null;
         console.log("Image Paths: ", gymImagePaths, " ", gymProfileImagePath);
+        console.log("gym license path: ", gymLicensePath)
 
         const newGym = await Gym.create({
             gymName: gymData.name,
             gymPhone: gymData.contact,
             gymEmail: gymData.email,
+            gymLicense: gymLicensePath,
             ownerId: req.body.ownerId,
             profileImage: gymProfileImagePath,
             status: 'unverified'
@@ -75,6 +310,7 @@ export const insertGym = async (req, res) => {
 
         const gymId = newGym.id;
 
+        await insertPlanMappingDraft(req.body.ownerId, req.body.planId, gymId)
 
         const newPlan1 = await Plan.create({
             planName: gymData.membershipPlans.plan1.title,
@@ -212,25 +448,44 @@ export const getAllGyms = async (req, res) => {
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 5;
         const offset = (page - 1) * limit;
+        const { all } = req.query;
         let term = req.query.term;
-
+        let gymCondition;
         // Prepare the search term for LIKE queries
         if (term) {
             term = isNaN(term) ? `%${term}%` : parseInt(term, 10);
         }
 
         // Define condition for Gym model based on term
-        const gymCondition = term
-            ? {
-                [Op.or]: [
+        if (all) {
 
-                    { gymName: { [Op.iLike]: term } },
-                    { gymPhone: { [Op.iLike]: term } },
-                    { gymEmail: { [Op.iLike]: term } },
-                    { status: { [Op.iLike]: term } },
-                ],
-            }
-            : {};
+
+            gymCondition = term
+                ? {
+                    [Op.or]: [
+
+                        { gymName: { [Op.iLike]: term } },
+                        { gymPhone: { [Op.iLike]: term } },
+                        { gymEmail: { [Op.iLike]: term } },
+                        { status: { [Op.iLike]: term } },
+                    ],
+                }
+                : {};
+        } else {
+            gymCondition = term
+                ? {
+                    [Op.or]: [
+
+                        { gymName: { [Op.iLike]: term } },
+                        { gymPhone: { [Op.iLike]: term } },
+                        { gymEmail: { [Op.iLike]: term } },
+                        { status: { [Op.iLike]: term } },
+                    ],
+
+                }
+                : { status: 'verified' };
+
+        }
 
         // Step 1: Count gyms based on gymCondition without including associations
         const totalItems = await Gym.count({ where: gymCondition });
@@ -243,7 +498,7 @@ export const getAllGyms = async (req, res) => {
             include: [
                 {
                     model: GymLocation,
-                    required: false,  // Allow gyms without locations
+                    required: false,
                     where: term
                         ? {
                             [Op.or]: [
@@ -259,10 +514,18 @@ export const getAllGyms = async (req, res) => {
                     required: false,
                     include: [{ model: GymFeature, required: false }],
                 },
-
                 { model: GymImages, required: false },
+                {
+                    model: PlanMapping,
+                    required: false, // optional: allow gyms without plans
+                    separate: true,
+                    limit: 1,
+                    where: { status: 'draft' },
+                    order: [['createdAt', 'DESC']], // get the latest draft
+                }
             ],
         });
+
 
         const totalPages = Math.ceil(totalItems / limit);
         const currentPage = page;
@@ -280,33 +543,156 @@ export const getAllGyms = async (req, res) => {
     }
 };
 
+export const checkGymAdmin = async (req, res) => {
+    try {
+        console.log("check gym: ", req.params)
+        const { gymId, ownerId } = req.params
+
+        const check = await Gym.findOne({
+            where: { id: gymId, ownerId },
+            include: [{ model: PlanMapping, where: { status: 'active' } }, { model: GymLocation }, { model: GymImages }]
+        })
+
+        if (!check) {
+            return res.json({ found: false })
+        }
+        res.json({ found: true, gymId: check.id, myGym: check })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: 'An error occurred' });
+    }
+}
+
 export const getGyms = async (req, res) => {
     try {
-        const gyms = await Gym.findAll({
-
+        console.log("get gyms: ", req.query)
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const offset = (page - 1) * limit;
+        const location = req.query.location
+        const totalGyms = await Gym.count({
+            where: { status: 'verified' },
             include: [
-                { model: GymLocation },
+                {
+                    model: GymLocation,
+                    where: { city: location, }
+                },
+                {
+                    model: PlanMapping,
+                    required: true, // optional: allow gyms without plans
+
+
+                    where: { status: 'active' },
+                    order: [['createdAt', 'DESC']],
+                },
                 { model: Plan }
             ]
         });
-        res.status(200).json(gyms);
+        const gyms = await Gym.findAll({
+            limit,
+            offset,
+            where: { status: 'verified' },
+            include: [
+                {
+                    model: GymLocation,
+                    where: { city: location }
+                },
+                {
+                    model: PlanMapping,
+                    required: true, // optional: allow gyms without plans
+                    where: { status: 'active' },
+                    order: [['createdAt', 'DESC']],
+                },
+                { model: Plan }
+            ]
+        });
+
+        console.log("gyms: ", gyms)
+        const totalPages = Math.ceil(totalGyms / limit);
+        const currentPage = page;
+        res.status(200).json({ gyms, totalPages, currentPage, totalGyms });
     } catch (err) {
+        console.log(err)
+        res.status(500).json(err);
+    }
+};
+
+export const getGymAdminFeatures = async (req, res) => {
+    try {
+        console.log("gym features: ", req.params)
+        const { gymId } = req.params
+        const features = await GymFeatureMapping.findAll({ where: { gymId } })
+        res.json(features)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
+export const getGymAdminWorkouts = async (req, res) => {
+    try {
+        console.log("gym workouts: ", req.params)
+        const { gymId } = req.params
+        const workouts = await GymWorkoutMapping.findAll({ where: { gymId } })
+        res.json(workouts)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
+
+export const getGymTransactions = async (req, res) => {
+    try {
+        console.log("get gym transactions: ", req.query)
+        const { gymId } = req.params
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const offset = (page - 1) * limit;
+        const location = req.query.location
+        const totalTransactions = await Transaction.count({
+            where: { receiverId: gymId },
+            include: [
+                {
+                    model: User,
+
+                },
+
+            ]
+        });
+        const transactions = await Transaction.findAll({
+            limit,
+            offset,
+            where: { receiverId: gymId },
+            include: [
+                {
+                    model: User,
+
+                },
+
+            ]
+        });
+
+
+        const totalPages = Math.ceil(totalTransactions / limit);
+        const currentPage = page;
+        res.status(200).json({ allItems: transactions, totalPages, currentPage, totalItems: totalTransactions });
+    } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 };
 
 
-export const getNotif = async (req, res)=>{
-    try{
+export const getNotif = async (req, res) => {
+    try {
         console.log("hello fro get notif", req.params)
-        const {userId} = req.params
+        const { userId } = req.params
 
         const notif = await Notification.findAll({
-            where: {userId}
+            where: { userId }
         })
         console.log(notif)
         res.json(notif)
-    }catch(err){
+    } catch (err) {
         console.log(err)
         res.status(500).json(err)
     }
@@ -430,21 +816,20 @@ export const searchGyms = async (req, res) => {
 
         const search = await Gym.findAll(
 
-            // {
-            //     include: [
-            //         {
-            //             model: GymLocation,
-            //             where: { city: location }
-            //         },
-
-
-            //     ]
-            // },
             {
                 where: {
                     gymName: { [Op.iLike]: term }
-                }
-            }
+                },
+                include: [
+                    {
+                        model: GymLocation,
+                        where: { city: location }
+                    },
+
+
+                ]
+            },
+
 
         )
         console.log(search)
@@ -523,6 +908,62 @@ export const getWorkouts = async (req, res) => {
 
     }
 }
+
+export const getMemberships = async (req, res) => {
+    try {
+        console.log("memberships")
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const offset = (page - 1) * limit;
+        let term = req.query.term;
+        const { gymId } = req.params
+
+        // Prepare the search term for LIKE queries
+        if (term) {
+            term = isNaN(term) ? `%${term}%` : parseInt(term, 10);
+        }
+        console.log(term)
+        // Define condition for Gym model based on term
+        const condition = {
+            planType: 'membership',
+            gymId, // Include the gymId in the filter
+            ...(term && { // Add the search condition if `term` exists
+                [Op.or]: [
+                    { planName: { [Op.iLike]: term } },
+                    { planDescription: { [Op.iLike]: term } },
+                    { state: { [Op.iLike]: term } },
+                ]
+            })
+        };
+
+        // Step 1: Count gyms based on userCondition without including associations
+        const totalItems = await Plan.count({ where: condition });
+
+        // Step 2: Fetch gyms with associations and pagination
+        const items = await Plan.findAll({
+            where: condition,
+            limit,
+            offset,
+
+        });
+
+        const totalPages = Math.ceil(totalItems / limit);
+        const currentPage = page;
+
+        console.log(items)
+
+        // Respond with paginated data
+        res.json({
+            allItems: items,
+            totalPages,
+            currentPage,
+            totalUsers: totalItems,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching users.' });
+    }
+};
 
 
 // const notif = async()=>{

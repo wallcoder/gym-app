@@ -27,6 +27,7 @@ export const userLogin = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: findUser.id, role: findUser.UserRole.roleName, firstName: findUser.firstName, lastName: findUser.lastName, googleId: findUser.googleId, imgPath: findUser.imgPath, email: findUser.email, createdAt: findUser.createdAt }, secretKey)
+    console.log("Generated Token:", token);
     res.json({ token })
 
 }

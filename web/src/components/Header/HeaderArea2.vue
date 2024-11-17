@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { useSidebarStore } from '@/stores/sidebar'
 import DarkModeSwitcher from './DarkModeSwitcher2.vue'
 import DropdownMessage from './DropdownMessage2.vue'
@@ -54,9 +54,7 @@ const sidebarStore = useSidebarStore()
         </button>
         
         <!-- Hamburger Toggle BTN -->
-        <router-link class="block flex-shrink-0 lg:hidden" to="/">
-          <img src="@/assets/images/logo/logo-icon.svg" alt="Logo" />
-        </router-link>
+       
       </div>
       <div class="hidden sm:block">
         <form action="https://formbold.com/s/unique_form_id" method="POST">
@@ -77,7 +75,7 @@ const sidebarStore = useSidebarStore()
           </li>
 
           <!-- Notification Menu Area -->
-          <DropdownNotification />
+          <!-- <DropdownNotification /> -->
           <!-- Notification Menu Area -->
 
           <!-- Chat Notification Area -->

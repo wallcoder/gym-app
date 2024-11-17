@@ -20,6 +20,10 @@ export const Gym = sequelize.define('Gym', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    gymLicense: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 
 
     ownerId: {
@@ -67,6 +71,10 @@ export const Plan = sequelize.define('Plan', {
     price: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    version: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     gymId: {
         type: DataTypes.INTEGER,
@@ -144,7 +152,7 @@ export const GymFeature = sequelize.define('GymFeature', {
     },
     featureImgPath: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
 
     }
 }, {
@@ -243,6 +251,14 @@ export const Notification = sequelize.define('Notification', {
             key: 'id'
         }
     },
+    senderId:{
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: Gym,
+            key: 'id'
+        }
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false
@@ -252,8 +268,17 @@ export const Notification = sequelize.define('Notification', {
         allowNull: false,
 
     },
+    linkContent: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     link: {
         type: DataTypes.STRING,
+        allowNull: true
+    },
+    seen:{
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: true
     }
 }, { timestamps: true })
@@ -279,7 +304,7 @@ export const Saved = sequelize.define('Saved', {
 
 }, { timestamps: true })
 
-const Rating = sequelize.define('Rating', {
+export const Rating = sequelize.define('Rating', {
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -327,6 +352,8 @@ Saved.belongsTo(Gym, { foreignKey: 'gymId' })
 
 User.hasMany(Notification, { foreignKey: 'userId' })
 Notification.belongsTo(User, { foreignKey: 'userId' })
+Gym.hasMany(Notification, {foreignKey: 'senderId'})
+Notification.belongsTo(Gym, {foreignKey: 'senderId'})
 
 Gym.hasMany(GymImages, { foreignKey: 'gymId' })
 GymImages.belongsTo(Gym, { foreignKey: 'gymId' })

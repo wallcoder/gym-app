@@ -20,7 +20,7 @@ const props = defineProps({
         
         <div v-for="gym in props.gyms" :key="gym.id" class="rounded-xl shadow-4 relative main bg-white m-2 tablet:m-3  min-w-[250px] tablet:min-w-[280px]" v-motion-fade-visible-once >
 
-            <RouterLink :to="`/gyms/gym/${gym.id}`">
+            <RouterLink :to="`/gym-admin/${gym.id}`" target="_blank">
                 <img :src="`${api}${gym.profileImage}`" alt="gym" class="rounded-xl w-full h-[200px]" />
             </RouterLink>
 

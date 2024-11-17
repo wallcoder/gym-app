@@ -1,8 +1,12 @@
 <script setup >
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-
+import AdminGymPopups from '@/components/AdminGymPopups.vue'
 import { useGymStore } from '@/stores/gyms'
+import { useAdminStore } from '@/stores/admin'
+const admin = useAdminStore();
+const { isOpen } = storeToRefs(admin)
+const { closeModals, activateGymDetails } = admin
 const gymStore = useGymStore()
 const { getAllGyms } = gymStore;
 const { allGyms, gymSearch, totalPages, currentPage } = storeToRefs(gymStore)
@@ -16,6 +20,7 @@ watch(gymSearch, (newVal) => {
 
 <template>
     <section class="flex flex-col">
+        <AdminGymPopups />
         <div
             class="p-5 bg-gray-100 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <h1 class="text-xl mb-2">Gyms</h1>
@@ -62,12 +67,13 @@ watch(gymSearch, (newVal) => {
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                 <span
                                     class="p-1.5 text-xs font-medium uppercase tracking-wider text-grey  rounded-lg bg-opacity-50"
-                                    :class="gym.status == 'unverified' ? 'bg-orange-500' : 'bg-green-200'">{{ gym.status
+                                    :class="gym.status == 'unverified' ? 'bg-orange-600' : 'bg-green-400'">{{ gym.status
                                     }}</span>
                             </td>
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ gym.User.firstName }} {{
                                 gym.User.lastName }}</td>
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap"><i
+                                    @click="activateGymDetails(gym, gym.ownerId)"
                                     class="fa-solid fa-circle-info text-lg cursor-pointer"></i></td>
                             <!-- <td class="p-3 text-sm text-gray-700 whitespace-nowrap"><i class="fa-solid fa-circle-info text-lg"></i></td> -->
                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap"><i
@@ -89,7 +95,8 @@ watch(gymSearch, (newVal) => {
                         <div>
                             <span
                                 class="p-1.5 text-xs font-medium uppercase tracking-wider text-grey  rounded-lg bg-opacity-50"
-                                :class="gym.status == 'unverified' ? 'bg-orange-500' : 'bg-green-200'">{{ gym.status }}</span>
+                                :class="gym.status == 'unverified' ? 'bg-orange-500' : 'bg-green-200'">{{ gym.status
+                                }}</span>
                         </div>
                     </div>
                     <div class="text-sm text-gray-700">
@@ -110,14 +117,14 @@ watch(gymSearch, (newVal) => {
 
 
             </div>
-            <div class="flex justify-center" >
+            <div class="flex justify-center">
 
                 <nav aria-label="Page navigation example" class="my-2">
                     <ul class="flex items-center -space-x-px h-8 text-sm">
                         <li>
                             <button :disabled="currentPage === 1"
                                 class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 "
-                                @click="getFaqs(false, currentPage - 1)">
+                                @click="getAllGyms('', currentPage - 1, 10, true)">
                                 <span class="sr-only">Next</span>
                                 <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -127,7 +134,7 @@ watch(gymSearch, (newVal) => {
                             </button>
 
                         </li>
-                        <li v-for="page in totalPages" @click="getFaqs(false, page)" :key="page">
+                        <li v-for="page in totalPages" @click="getAllGyms('', page, 10, true)" :key="page">
                             <a href="#"
                                 class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
                                 :class="currentPage == page ? 'bg-gray-200' : 'bg-white'">{{
@@ -138,7 +145,7 @@ watch(gymSearch, (newVal) => {
 
                             <button :disabled="currentPage === totalPages"
                                 class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 "
-                                @click="getFaqs(false, currentPage + 1)">
+                                @click="getAllGyms('', currentPage + 1, 10, true)">
                                 <span class="sr-only">Next</span>
                                 <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">

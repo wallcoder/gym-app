@@ -13,6 +13,7 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     const { currentUserToken } = storeToRefs(token);
     const allFeatures = ref([])
     const allWorkouts = ref([])
+    
 
     const formData = reactive({
         name: '',
@@ -24,6 +25,7 @@ export const useGymRegStore = defineStore('useGymReg', () => {
 
         gymImages: [],
         gymProfileImage: [],
+        gymLicense: [],
         openingHours: {
             morning: { start: '', end: '' },
             evening: { start: '', end: '' }
@@ -44,7 +46,8 @@ export const useGymRegStore = defineStore('useGymReg', () => {
         email: '',
         phone: '',
         gymImages: '',
-        gymProfileImage: ''
+        gymProfileImage: '',
+        gymLicense: '',
     });
 
     const emailValue = computed(() => formData.email);
@@ -104,8 +107,30 @@ export const useGymRegStore = defineStore('useGymReg', () => {
         }
     };
 
-    const handleRegister = async () => {
+
+    const handleGymLicense = (event) => {
+        const files = event.target.files;
+        message.value.gymLicense = '';
+    
+        const validFiles = Array.from(files).filter(file => {
+            const isValidType = file.type === 'application/pdf';
+            if (!isValidType) {
+                message.value.gymLicense = `Invalid file type: ${file.name}. Only PDF files are allowed.`;
+            }
+            return isValidType;
+        });
+    
+        if (validFiles.length > 0) {
+            console.log("validddd")
+            formData.gymLicense = validFiles;
+        } else {
+            formData.gymLicense = [];
+        }
+    };
+
+    const handleRegister = async (planId) => {
         try {
+            console.log("from handle register: ", planId)
             await decodeToken();
 
             const formDataToSend = new FormData();
@@ -117,6 +142,9 @@ export const useGymRegStore = defineStore('useGymReg', () => {
 
             if (formData.gymProfileImage.length > 0) {
                 formDataToSend.append('gymProfileImage', formData.gymProfileImage[0]);
+            }
+            if (formData.gymLicense.length > 0) {
+                formDataToSend.append('gymLicense', formData.gymLicense[0]);
             }
 
             formDataToSend.append('gymData', JSON.stringify({
@@ -136,6 +164,7 @@ export const useGymRegStore = defineStore('useGymReg', () => {
             }));
 
             formDataToSend.append('ownerId', currentUserToken.value.userId);
+            formDataToSend.append('planId', planId);
 
             const response = await axios.post('/register-gym', formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' }, timeout: 20000
@@ -193,6 +222,6 @@ export const useGymRegStore = defineStore('useGymReg', () => {
     }
 
     return {
-        formData, handleRegister, message, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout, fetchFeatures, fetchWorkouts, allFeatures, allWorkouts
+        formData, handleRegister, handleGymLicense, message, handleGymImages, handleGymProfileImage, toggleFeature, toggleWorkout, fetchFeatures, fetchWorkouts, allFeatures, allWorkouts
     };
 });

@@ -6,7 +6,9 @@ import GymCard from '@/components/GymCard.vue'
 import ButtonLink from '@/components/ButtonLink.vue'
 import { storeToRefs } from 'pinia'
 import { useGymStore } from '@/stores/gyms'
-
+import { useSearchBarStore } from '@/stores/searchBar'
+const searchBar = useSearchBarStore()
+const { location } = storeToRefs(searchBar)
 
 
 const gymStore = useGymStore();
@@ -14,7 +16,7 @@ const { gyms } = storeToRefs(gymStore)
 const { getGyms } = gymStore;
 
 onMounted(async () => {
-    await getGyms();
+    getGyms(1,20, location.value);
     
 })
 </script>
