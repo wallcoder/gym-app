@@ -1,6 +1,14 @@
 import sequelize from "./config/db.js";
 import { GymFeature, GymWorkout } from "./models/Gym.js";
-
+import { UserRole } from "./models/User.js";
+const admin  = async()=>{
+    try{
+        const seed = await UserRole.bulkCreate([{roleName: 'admin', roleDescription: 'GymPass Admin'},{roleName: 'gym-admin', roleDescription: 'Gym Admin'}])
+    }catch(err){
+        console.log(err)
+    }
+}
+admin()
 const seedWorkout = async () => {
     try {
         const seed = await GymWorkout.bulkCreate([
@@ -58,5 +66,5 @@ const seedFeature = async () => {
         console.log(err)
     }
 }
-seedWorkout()
-seedFeature()
+// seedWorkout()
+// seedFeature()

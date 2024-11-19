@@ -227,10 +227,11 @@ export const useHomeStore = defineStore('home', () => {
 
     
 
-    const handleLogin = async () => {
+    const handleLogin = async (event, roleId=2) => {
         try {
+            console.log(roleId)
             console.log(email.value, password.value);
-            const response = await axios.post('/login', { email: email.value, password: password.value });
+            const response = await axios.post('/login', { email: email.value, password: password.value, roleId});
             const token = response.data.token;
 
             // Store the token in localStorage

@@ -1,12 +1,13 @@
 <script setup>
-import {RouterView} from 'vue-router'
-    import HeaderArea from '@/components/Header/HeaderArea.vue'
-    import SidebarArea from '@/components/Sidebar/SidebarArea.vue'
+import { RouterView } from 'vue-router'
+import HeaderArea from '@/components/Header/HeaderArea.vue'
+import SidebarArea from '@/components/Sidebar/SidebarArea.vue'
 </script>
 <template>
-    <div class="flex h-screen overflow-hidden">
+  <div class="flex h-screen overflow-hidden">
     <!-- ===== Sidebar Start ===== -->
      
+
     <SidebarArea />
     <!-- ===== Sidebar End ===== -->
 
@@ -15,11 +16,11 @@ import {RouterView} from 'vue-router'
       <!-- ===== Header Start ===== -->
       <HeaderArea />
       <!-- ===== Header End ===== -->
-       <div class="p-4">
+      <div class="p-4">
         <RouterView />
-    </div>
+      </div>
       <!-- ===== Main Content Start ===== -->
-      
+
       <!-- ===== Main Content End ===== -->
     </div>
   </div>
