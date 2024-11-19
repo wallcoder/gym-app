@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads'); // Save to uploads folder
+    cb(null, 'uploads'); 
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Generate unique filename

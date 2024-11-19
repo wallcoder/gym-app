@@ -44,6 +44,8 @@ export const useHomeStore = defineStore('home', () => {
     const conPassword = ref('');
     const emailId = ref('')
     const currPassword = ref('');
+    const adminEmail = ref('');
+    const adminPassword = ref('');
     const message = ref({
 
         email: '',
@@ -73,6 +75,8 @@ export const useHomeStore = defineStore('home', () => {
         isOpenChangePassword.value = false
         isOpenDeleteAccount.value = false
         isOpenRate.value = false
+        adminEmail.value = false
+        adminPassword.value = false
         currPassword.value = ''
         if (clearEmail) {
             email.value = ''
@@ -219,6 +223,9 @@ export const useHomeStore = defineStore('home', () => {
 
 
     }
+
+
+    
 
     const handleLogin = async () => {
         try {

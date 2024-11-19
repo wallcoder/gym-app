@@ -37,6 +37,7 @@ import AdminNotifications from '@/views/Admins/AdminNotifications.vue'
 import AdminPlans from '@/views/Admins/AdminPlans.vue'
 import AdminTransactions from '@/views/Admins/AdminTransactions.vue'
 import AdminUsers from '@/views/Admins/AdminUsers.vue'
+import GymAdminLayout from '@/views/GymAdmins/GymAdminLayout.vue'
 
 
 
@@ -139,7 +140,15 @@ const routes = [
       },
     }]
   },
-
+  {
+    path: '/gym-admin',
+    name: 'gym-admin',
+    component: GymAdminLayout,
+    meta: {
+      title: 'Gym-Admin'
+    }
+    
+  },
 
 //   import AdminFeatures from '@/views/Admins/AdminFeatures.vue'
 // import AdminMemberships from '@/views/Admins/AdminMemberships.vue'

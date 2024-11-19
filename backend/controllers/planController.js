@@ -7,7 +7,7 @@ import QRCode from 'qrcode';
 
 // Function to generate QR code
 const generateQRCode = async (planMapId) => {
-    const url = `http://localhost:3000/check-plan/${planMapId}`;
+    const url = `https://3ce0-117-209-90-77.ngrok-free.app/check-plan/${planMapId}`;
 
     try {
         // Generate the QR code
@@ -43,7 +43,7 @@ cron.schedule('*/5 * * * *', async () => {
             }
         );
 
-        
+
     } catch (error) {
         console.error('Error while updating expired plans:', error);
     }
@@ -54,7 +54,7 @@ cron.schedule('*/5 * * * *', async () => {
 function calculateDueDate(duration, durationType) {
     // Use the present date as the start date
     let date = new Date();
-
+    console.log("current date: ", date)
     // Add the duration to the date based on the duration type
     switch (durationType) {
         case 'days':
@@ -90,6 +90,7 @@ function calculateDueDate(duration, durationType) {
 }
 
 
+console.log(calculateDueDate(1, 'months'))
 
 export const getSubscriptionPlans = async (req, res) => {
     try {
@@ -134,7 +135,8 @@ export const insertPlanMapping = async (req, res) => {
 
         }
 
-        const dueDate = calculateDueDate(getPlan.duration, "months")
+        console.log(getPlan.duration)
+        const dueDate = calculateDueDate(Number(getPlan.duration), 'months')
 
         console.log("DUE DATE GEN: ", dueDate)
 
@@ -206,16 +208,16 @@ export const checkPlan = async (req, res) => {
 }
 
 
-export const getUserPlan = async(req, res)=>{
-    const {userId} = req.params;
-    try{
+export const getUserPlan = async (req, res) => {
+    const { userId } = req.params;
+    try {
         const userPlan = await PlanMapping.findAll({
-            where: {userId},
-            include: {model: Plan, where: {planType: 'membership'}}
+            where: { userId },
+            include: { model: Plan, where: { planType: 'membership' } }
         })
 
         res.json(userPlan)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 }
