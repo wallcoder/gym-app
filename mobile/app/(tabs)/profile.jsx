@@ -44,7 +44,6 @@ const ProfileScreen = () => {
     router.push('/editProfile');
   };
 
-
   return (
     <SafeAreaView className="flex-1 p-3">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -91,8 +90,3 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
-
-
-
-
-

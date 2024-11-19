@@ -2,7 +2,7 @@
 import sequelize from "../config/db.js";
 import { DataTypes } from "sequelize";
 import { User } from "./User.js";
-import { Plan } from "./Gym.js";
+import { Gym, Plan } from "./Gym.js";
 
 export const PlanMapping = sequelize.define('PlanMapping', {
     userId: {
@@ -23,6 +23,15 @@ export const PlanMapping = sequelize.define('PlanMapping', {
         }
     },
 
+    gymId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: Gym,
+            key: 'id'
+        }
+    },
+
     status: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -32,7 +41,7 @@ export const PlanMapping = sequelize.define('PlanMapping', {
 
     expireDate: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: true
     },
 
     qrCode: {
@@ -47,3 +56,6 @@ User.hasMany(PlanMapping, { foreignKey: 'userId' })
 PlanMapping.belongsTo(User, { foreignKey: 'userId' })
 Plan.hasMany(PlanMapping, { foreignKey: 'planId' })
 PlanMapping.belongsTo(Plan, { foreignKey: 'planId' })
+
+Gym.hasMany(PlanMapping, { foreignKey: 'gymId' })
+PlanMapping.belongsTo(Gym, { foreignKey: 'gymId' })

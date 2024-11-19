@@ -9,11 +9,12 @@ import bcrypt from 'bcrypt'
 const secretKey = 'h75jd427#j'
 // NORMAL LOGIN
 export const userLogin = async (req, res) => {
-    const { email, password } = req.body;
-
-    console.log("userlogin: ", email, password)
+    const { email, password, roleId } = req.body;
+    
+   
+    console.log("userlogin: ", email, password, roleId)
     const findUser = await User.findOne({
-        where: { email: email },
+        where: { email: email, roleId },
         include: [{
             model: UserRole,
 

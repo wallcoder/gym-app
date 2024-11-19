@@ -4,13 +4,34 @@ import { Op } from 'sequelize';
 import dotenv from 'dotenv';
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken'
+import { Notification, Plan } from '../models/Gym.js';
 
 dotenv.config();
 const secretKey = process.env.SECRET_KEY
 
 import { User, UserRole } from '../models/User.js';
+import { PlanMapping } from '../models/Plans.js';
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+}
+
+export const createNotif = async (req, res) => {
+    const { userId, title, message, link, linkContent } = req.body
+    console.log(req.body)
+    try {
+        const addRow = Notification.create({
+            userId,
+            title,
+            message,
+            link,
+            linkContent
+        })
+
+        res.json(addRow)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
 }
 
 export const googleLogin = async (req, res) => {
@@ -112,7 +133,7 @@ export const getAllUsers = async (req, res) => {
                     { lastName: { [Op.iLike]: term } },
                     { email: { [Op.iLike]: term } },
                     { status: { [Op.iLike]: term } },
-                    
+
                     // { 'UserRole.roleName': { [Op.iLike]: term } },
                 ],
             }
@@ -152,6 +173,83 @@ export const getAllUsers = async (req, res) => {
         // Respond with paginated data
         res.json({
             allItems: gyms,
+            totalPages,
+            currentPage,
+            totalUsers: totalItems,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching users.' });
+    }
+};
+
+export const getAllGymMembers = async (req, res) => {
+    try {
+        console.log("membersss")
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const offset = (page - 1) * limit;
+        let term = req.query.term;
+        const { gymId } = req.params
+
+        // Prepare the search term for LIKE queries
+        if (term) {
+            term = isNaN(term) ? `%${term}%` : parseInt(term, 10);
+        }
+        console.log(term)
+        // Define condition for Gym model based on term
+        const condition = term
+            ? {
+                [Op.or]: [
+                    { firstName: { [Op.iLike]: term } },
+                    { lastName: { [Op.iLike]: term } },
+                    { email: { [Op.iLike]: term } },
+                    { status: { [Op.iLike]: term } },
+
+                    // { 'UserRole.roleName': { [Op.iLike]: term } },
+                ],
+            }
+            : {};
+
+        // Step 1: Count gyms based on userCondition without including associations
+        const totalItems = await User.count({ where: condition });
+
+        // Step 2: Fetch gyms with associations and pagination
+        const items = await User.findAll({
+            where: condition,
+            limit,
+            offset,
+            include: [
+                {
+                    model: UserRole,
+                    as: 'UserRole',
+                    required: false,  // Allow gyms without locations
+                    // where: term
+                    //     ? {
+
+                    //         roleName: { [Op.iLike]: term },
+
+
+                    //     }
+                    //     : {},
+                },
+                {
+                    model: PlanMapping,
+                    include: { model: Plan, where: { planType: 'membership', gymId} }
+                },
+
+
+            ],
+        });
+
+        const totalPages = Math.ceil(totalItems / limit);
+        const currentPage = page;
+
+        console.log(items)
+
+        // Respond with paginated data
+        res.json({
+            allItems: items,
             totalPages,
             currentPage,
             totalUsers: totalItems,
